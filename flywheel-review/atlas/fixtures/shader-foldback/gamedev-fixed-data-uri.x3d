@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<X3D profile="Immersive" version="4.0"><head><component name="Shaders" level="1"/></head><Scene>
+<Shape><Appearance><ComposedShader language="GLSL">
+<ShaderPart DEF="BoundGameVertex" type="VERTEX"><![CDATA[data:x-shader/x-vertex,#version 300 es
+in vec4 x3d_Vertex;
+void main() { gl_Position = x3d_Vertex; }
+]]></ShaderPart>
+</ComposedShader></Appearance><Box/></Shape>
+</Scene></X3D>

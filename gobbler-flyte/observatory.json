@@ -1,0 +1,544 @@
+{
+  "demo": {
+    "artifacts": [
+      {
+        "content": "ShaderPart raw GLSL teaching mutant; reconstructed from fm/1",
+        "id": "demo:candidate",
+        "kind": "scene",
+        "sha256": "c7fc634a131249409ec25a005daf621efdb13b21395c7881b75685c1d41dde66",
+        "synthetic": true
+      },
+      {
+        "content": "Synthetic runner observes raw shader source treated as URL",
+        "id": "demo:repro",
+        "kind": "reproduction",
+        "sha256": "5434f75f422095e5d051de5e7f57227df86f92fb921e32f936fcb4472ae9a298",
+        "subjectRef": "demo:candidate",
+        "synthetic": true,
+        "verdict": "observed-failure"
+      },
+      {
+        "content": "Reject a ShaderPart literal that lacks an explicit shader data URL",
+        "id": "demo:guard",
+        "kind": "guard",
+        "sha256": "85e61ef90af0596b80ae7c732381e735462146bc91a83fc2d31c41b13cc9e479",
+        "synthetic": true
+      },
+      {
+        "content": "Synthetic raw-source mutant is rejected",
+        "guardRef": "demo:guard",
+        "id": "demo:negative",
+        "kind": "control",
+        "sha256": "cdfb28456d902dfbfae39872c3480718c97526eb3bf2421ee923006c924dff33",
+        "synthetic": true,
+        "verdict": "mutant-rejected"
+      },
+      {
+        "content": "Synthetic data:x-shader/x-fragment fixture is accepted",
+        "guardRef": "demo:guard",
+        "id": "demo:positive",
+        "kind": "control",
+        "sha256": "a2bc8f135d8c23045262bd50030b0ed831a1910faf96bae81713b0c664fe92cd",
+        "synthetic": true,
+        "verdict": "valid-accepted"
+      },
+      {
+        "content": "synthetic-music-scene-1",
+        "id": "demo:music-scene",
+        "kind": "scene",
+        "sha256": "1af086595f7f3f0c2e0e292c312252afb8f21880bb8d0063cc94b5b2cef2a9b9",
+        "synthetic": true
+      },
+      {
+        "content": "Synthetic Music scene passes the explicit shader URL guard",
+        "guardRef": "demo:guard",
+        "id": "demo:reuse",
+        "inputRef": "demo:music-scene",
+        "inputSha256": "1af086595f7f3f0c2e0e292c312252afb8f21880bb8d0063cc94b5b2cef2a9b9",
+        "kind": "reuse",
+        "sha256": "3340c76a04da098cc78e51c9b483e483b6922b1bde8b9a91f74eaded6f72e15e",
+        "synthetic": true,
+        "target": "music",
+        "verdict": "accepted"
+      }
+    ],
+    "events": [
+      {
+        "artifactRefs": [
+          "demo:candidate"
+        ],
+        "domain": "gamedev",
+        "id": "demo:e1",
+        "label": "A scene proposes a new effect",
+        "state": "candidate"
+      },
+      {
+        "artifactRefs": [
+          "demo:candidate"
+        ],
+        "domain": "data",
+        "id": "demo:e2",
+        "label": "A witness isolates the failure",
+        "runRefs": [
+          "demo:repro"
+        ],
+        "state": "reproduced"
+      },
+      {
+        "artifactRefs": [
+          "demo:guard"
+        ],
+        "domain": "ontology",
+        "guardRefs": [
+          "demo:guard"
+        ],
+        "id": "demo:e3",
+        "label": "Two controls show the guard can discriminate",
+        "runRefs": [
+          "demo:negative",
+          "demo:positive"
+        ],
+        "state": "guarded"
+      },
+      {
+        "artifactRefs": [
+          "demo:reuse"
+        ],
+        "domain": "music",
+        "guardRefs": [
+          "demo:guard"
+        ],
+        "id": "demo:e4",
+        "label": "A distinct domain consumes the guarded result",
+        "runRefs": [
+          "demo:reuse"
+        ],
+        "state": "reused"
+      }
+    ],
+    "incident": {
+      "artifactRefs": [
+        "demo:candidate"
+      ],
+      "id": "demo:shader-source",
+      "scope": "Reconstructed teaching example inspired by archived nodes; no archived run is replayed.",
+      "sourceRefs": [
+        "fm/1",
+        "law/7",
+        "law/44"
+      ],
+      "sourceRoles": {
+        "fm/1": "shader source failure",
+        "law/44": "two-sided control discipline",
+        "law/7": "originating foldback law linked by paidForBy"
+      },
+      "title": "A shader failure becomes a reusable guard"
+    },
+    "label": "SYNTHETIC TEACHING REPLAY",
+    "result": {
+      "eventCount": 4,
+      "meaning": "protocol-checked synthetic reuse; no archived or live transfer is established",
+      "state": "reused",
+      "verifiedReuses": 1
+    },
+    "states": [
+      "candidate",
+      "reproduced",
+      "guarded",
+      "reused"
+    ],
+    "synthetic": true
+  },
+  "domains": [
+    {
+      "color": [
+        0.48,
+        0.67,
+        1
+      ],
+      "evidence": "proposed",
+      "id": "ontology",
+      "inputs": [
+        "typed entities",
+        "source assertions"
+      ],
+      "label": "Ontology",
+      "outputs": [
+        "SHACL constraints",
+        "queryable meanings"
+      ],
+      "repositories": [
+        "x3d.onto"
+      ],
+      "role": "Name what a scene means"
+    },
+    {
+      "color": [
+        0.98,
+        0.35,
+        0.65
+      ],
+      "evidence": "proposed",
+      "id": "ml",
+      "inputs": [
+        "versioned corpus",
+        "held-out tasks"
+      ],
+      "label": "ML",
+      "outputs": [
+        "candidate scenes",
+        "scoped evaluations"
+      ],
+      "repositories": [
+        "x3d.ML",
+        "x3d.lab"
+      ],
+      "role": "Generate, rank, and challenge candidates"
+    },
+    {
+      "color": [
+        0.69,
+        0.45,
+        1
+      ],
+      "evidence": "proposed",
+      "id": "maths",
+      "inputs": [
+        "equations",
+        "numerical tolerances"
+      ],
+      "label": "Maths",
+      "outputs": [
+        "reference solutions",
+        "interactive explanations"
+      ],
+      "repositories": [
+        "x3d.STEM"
+      ],
+      "role": "Make structure and invariants visible"
+    },
+    {
+      "color": [
+        0.22,
+        0.88,
+        1
+      ],
+      "evidence": "proposed",
+      "id": "stem",
+      "inputs": [
+        "reference solutions",
+        "learner questions"
+      ],
+      "label": "STEM",
+      "outputs": [
+        "instrumented worlds",
+        "learning records"
+      ],
+      "repositories": [
+        "x3d.STEM",
+        "x3d.docs"
+      ],
+      "role": "Turn curiosity into repeatable experiments"
+    },
+    {
+      "color": [
+        1,
+        0.7,
+        0.23
+      ],
+      "evidence": "proposed",
+      "id": "gameplay",
+      "inputs": [
+        "mechanics",
+        "human feedback"
+      ],
+      "label": "Gameplay",
+      "outputs": [
+        "play traces",
+        "failure discoveries"
+      ],
+      "repositories": [
+        "x3d.demo"
+      ],
+      "role": "Invite people to discover through play"
+    },
+    {
+      "color": [
+        0.92,
+        0.38,
+        1
+      ],
+      "evidence": "proposed",
+      "id": "gamedev",
+      "inputs": [
+        "scene assets",
+        "interaction contracts"
+      ],
+      "label": "Game development",
+      "outputs": [
+        "tested mechanics",
+        "portable scenes"
+      ],
+      "repositories": [
+        "x3d.loom",
+        "x3d.demo"
+      ],
+      "role": "Build reusable world-making systems"
+    },
+    {
+      "color": [
+        1,
+        0.41,
+        0.2
+      ],
+      "evidence": "proposed",
+      "id": "physics",
+      "inputs": [
+        "units and geometry",
+        "initial conditions"
+      ],
+      "label": "Physics",
+      "outputs": [
+        "trajectories",
+        "error envelopes"
+      ],
+      "repositories": [
+        "x3d.physics"
+      ],
+      "role": "Compare simulated motion with a witness"
+    },
+    {
+      "color": [
+        1,
+        0.34,
+        0.76
+      ],
+      "evidence": "proposed",
+      "id": "music",
+      "inputs": [
+        "scores",
+        "events and timing"
+      ],
+      "label": "Music",
+      "outputs": [
+        "audio artifacts",
+        "listening judgments"
+      ],
+      "repositories": [
+        "x3d.music"
+      ],
+      "role": "Give structures a sound a person can judge"
+    },
+    {
+      "color": [
+        0.24,
+        1,
+        0.67
+      ],
+      "evidence": "proposed",
+      "id": "data",
+      "inputs": [
+        "run artifacts",
+        "content hashes"
+      ],
+      "label": "Data intensity",
+      "outputs": [
+        "datasets",
+        "lineage and queries"
+      ],
+      "repositories": [
+        "x3d.ML",
+        "x3d.xray"
+      ],
+      "role": "Keep reusable evidence findable"
+    },
+    {
+      "color": [
+        1,
+        0.77,
+        0.4
+      ],
+      "evidence": "proposed",
+      "id": "heritage",
+      "inputs": [
+        "credited sources",
+        "rights and context"
+      ],
+      "label": "Heritage",
+      "outputs": [
+        "contextualized scenes",
+        "human interpretations"
+      ],
+      "repositories": [
+        "x3d.Mashtots"
+      ],
+      "role": "Connect cultural sources with living worlds"
+    },
+    {
+      "color": [
+        0.3,
+        0.86,
+        0.8
+      ],
+      "evidence": "proposed",
+      "id": "blender-io",
+      "inputs": [
+        "Blender scene",
+        "export settings"
+      ],
+      "label": "Blender IO hub",
+      "outputs": [
+        "X3D assets",
+        "round-trip loss reports"
+      ],
+      "repositories": [
+        "x3d-blender-io"
+      ],
+      "role": "Move authored scenes through explicit contracts"
+    },
+    {
+      "color": [
+        0.93,
+        0.92,
+        0.43
+      ],
+      "evidence": "proposed",
+      "id": "architecture",
+      "inputs": [
+        "building elements",
+        "spatial relationships"
+      ],
+      "label": "Architecture",
+      "outputs": [
+        "inspectable spaces",
+        "semantic validation"
+      ],
+      "repositories": [
+        "x3d.demo",
+        "x3d.onto"
+      ],
+      "role": "Give spaces geometry, meaning, and provenance"
+    }
+  ],
+  "schema": "flywheel.observatory/1",
+  "snapshot": {
+    "counts": {
+      "Chapter": 23,
+      "Claim": 84,
+      "Dataset": 1,
+      "Diagnostic": 35,
+      "Drill": 177,
+      "FailureClass": 11,
+      "FailureMode": 160,
+      "Grade": 3,
+      "Heuristic": 359,
+      "Instrument": 355,
+      "Law": 44,
+      "Number": 591,
+      "OpenQuestion": 18,
+      "Pin": 66,
+      "Repo": 10,
+      "Source": 34,
+      "SourceDocument": 37,
+      "Theme": 10,
+      "Tool": 68,
+      "ToolVersion": 84,
+      "TrapRule": 11
+    },
+    "edgeCount": 7222,
+    "integrity": {
+      "checks": [
+        {
+          "check": "receipt-sha256",
+          "file": "atlas-claims.jsonl",
+          "ok": true,
+          "sha256": "d1683d47d43421df82a16ebf67da86f51e30e346ac7554505461a1f3739e70d0"
+        },
+        {
+          "check": "receipt-sha256",
+          "file": "atlas-panel.json",
+          "ok": true,
+          "sha256": "d0b954f0375329c3cc074b2bc528f518747480850519e1c3bd278e8a83e30940"
+        },
+        {
+          "check": "receipt-sha256",
+          "file": "atlas-vocab.ttl",
+          "ok": true,
+          "sha256": "bdb532fc5d0275a2f7fd9efb573609553c97355f20705db9b343425cfb9b3d1d"
+        },
+        {
+          "check": "receipt-sha256",
+          "file": "atlas-world.x3d",
+          "ok": true,
+          "sha256": "12eec9019728f5910dc8d035c9f5749b8d8d33f3944aa5ddc922163a222a8777"
+        },
+        {
+          "check": "receipt-sha256",
+          "file": "atlas.json",
+          "ok": true,
+          "sha256": "552d8497f3abff4a3dfabd3ee35ac6c784105a901920417bf6468da7dfe6a6a7"
+        },
+        {
+          "check": "receipt-sha256",
+          "file": "atlas.jsonld",
+          "ok": true,
+          "sha256": "235e3a88957d9c4e1fd0e8394642b3d53189284a7b9fe8a4b4552973530991e8"
+        },
+        {
+          "check": "receipt-sha256",
+          "file": "atlas.ttl",
+          "ok": true,
+          "sha256": "94475c394e079f148fc126ff8319e9796d7aea6ac1a37dfedce04b5d20b01486"
+        },
+        {
+          "check": "receipt-sha256",
+          "file": "findings.json",
+          "ok": true,
+          "sha256": "d642a1d82958a5f3ec4d0cef6a1daaa05d49d74e03d3f1c26584443f234b5cc6"
+        },
+        {
+          "check": "unique-node-and-edge-identities",
+          "ok": true
+        },
+        {
+          "check": "all-edge-endpoints-resolve",
+          "ok": true
+        },
+        {
+          "check": "metadata-counts-match-records",
+          "ok": true
+        }
+      ],
+      "status": "checked-local"
+    },
+    "kind": "archive",
+    "limits": [
+      "This is the supplied archive snapshot, not a current GitHub inventory.",
+      "Verified quotes are archived claim verdicts; original experiments were not rerun.",
+      "Receipt hashes check local consistency, not authenticity or an external trust anchor.",
+      "Domain assignments are proposed interfaces; their activity and cross-domain transfer are unmeasured.",
+      "No RDF semantic parity, renderer, physics, ML, or human-review check is performed by this kernel."
+    ],
+    "metricDefinitions": {
+      "confirmedNumbers": "Number nodes graded grade/C in the archive, without re-promoting the underlying experiment.",
+      "quotedNumbers": "Number targets of supports edges from Claim nodes carrying archived verdict=verified.",
+      "unlinkedFailureModes": "FailureMode nodes without a paidForBy, fixedByLaw, or mentions edge to a Law in either direction; an ID join is not proof of a fix.",
+      "unlinkedHeuristics": "Heuristic nodes without an outgoing evidencedBy edge."
+    },
+    "metrics": {
+      "confirmedNumbers": 541,
+      "confirmedQuotedNumbers": 32,
+      "numbers": 591,
+      "quotedNumbers": 34,
+      "unlinkedFailureModes": 95,
+      "unlinkedHeuristics": 317
+    },
+    "nodeCount": 2181,
+    "pins": {
+      "x3d.docs": "ff0565e5a248ca391d68527716a58a821f25d152",
+      "x3d.loom": "ba301533d7b66eb8fe5e691524a551ef01c58de1"
+    },
+    "sha256": "552d8497f3abff4a3dfabd3ee35ac6c784105a901920417bf6468da7dfe6a6a7",
+    "source": "flywheel-review/atlas/out/atlas.json"
+  }
+}

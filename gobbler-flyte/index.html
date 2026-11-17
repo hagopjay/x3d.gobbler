@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#060b16"><link rel="icon" href="data:,">
+<title>Gobbler · The Evidence Loom</title>
+<link rel="stylesheet" href="../vendor/x_ite/x_ite.css">
+<link rel="stylesheet" href="observatory.css">
+<script src="../vendor/x_ite/x_ite.min.js"></script>
+<script type="module" src="observatory.js"></script>
+</head>
+<body>
+<div class="ambient" aria-hidden="true"></div>
+<header>
+ <a class="brand" href="index.html"><span class="sigil">G</span><span>GOBBLER<span class="light"> / ATLAS</span><small>THE EVIDENCE LOOM · X3D EXPLORATORY SYSTEM</small></span></a>
+ <div class="header-right"><span class="status-dot"></span><span id="load-status" role="status">Opening the loom…</span><a href="../flywheel-review/ATLAS-INSIGHTS.html">Read the Atlas ↗</a></div>
+</header>
+<main>
+ <div class="intro"><p class="eyebrow">01 / A MACHINE FOR ACCUMULATING UNDERSTANDING</p><h1>Many feathers.<br>One learning organism.</h1><p>Let a failure in one world become<br>a capability in the next.</p></div>
+ <x3d-canvas id="world" splashScreen="false" notifications="false" contentScale="auto" aria-label="Interactive X3D Gobbler with twelve flywheel feathers"></x3d-canvas>
+ <div class="scene-caption" aria-hidden="true">THE GOBBLER AGENT<span>Feathers carry domains. The loom carries memory.</span></div>
+ <aside class="left-panel" aria-label="Snapshot and learning controls">
+  <div class="tabs" role="tablist" aria-label="Inspection mode"><button role="tab" data-tab="snapshot" aria-selected="true">Evidence</button><button role="tab" data-tab="foldback" aria-selected="false">Foldback</button><button role="tab" data-tab="search" aria-selected="false">Find</button></div>
+  <section id="snapshot-tab" class="tab-content">
+   <p class="eyebrow">PINNED ARCHIVE / RECOUNTED HERE</p>
+   <div class="big-stat"><strong id="node-count">—</strong><span>entities in the Atlas</span></div>
+   <div class="stat-pair"><div><b id="edge-count">—</b><span>typed edges</span></div><div><b id="law-count">—</b><span>laws</span></div></div>
+   <div class="hairline"></div><div class="metric-label"><span>Numbers with an archived verified quote</span><b id="quote-fraction">—</b></div><div class="meter"><i id="quote-bar"></i></div>
+   <p class="muted">A source quotation confirms what was written. Repeating the experiment is a separate witness.</p>
+   <div class="snapshot-note"><span class="tiny-dot"></span><b id="hash-state">Checking archive…</b><p>Snapshot bytes, graph links, and recorded hashes. Domain transfers remain proposed.</p></div>
+   <button class="text-button" id="show-limits">Inspect evidence & limits ↗</button>
+  </section>
+  <section id="foldback-tab" class="tab-content" hidden>
+   <p class="eyebrow amber">SYNTHETIC TEACHING REPLAY</p><h2>One failure.<br>Four useful returns.</h2><p class="muted">A shader-source incident becomes a guarded technique for a music world.</p>
+   <ol id="replay-steps"></ol><button class="primary" id="advance">Begin the foldback →</button><button class="text-button" id="reset-replay">Reset sequence</button><button class="text-button" id="inspect-guard">Inspect the executed local shader guard ↗</button>
+   <p id="replay-status" class="muted" aria-live="polite">Step through a protocol example. These are invented records, not an archived run.</p>
+  </section>
+  <section id="search-tab" class="tab-content" hidden>
+   <p class="eyebrow">INSIDE THE PINNED KNOWLEDGE GRAPH</p><label for="query">An ID, a tool, a surprising idea</label><input id="query" type="search" placeholder="fm/1, ShaderPart, physics…" autocomplete="off"><p id="search-state" class="muted">Search loads the local Atlas. No external service.</p><div id="search-results"></div>
+  </section>
+ </aside>
+ <aside class="dossier" aria-label="Selected feather details">
+  <div class="dossier-top"><span class="eyebrow">FEATHER <span id="feather-index">01</span> / 12</span><span class="outline-badge">PROPOSED INTERFACE</span></div>
+  <div class="domain-mark" id="domain-mark">01</div><h2 id="domain-name">Ontology</h2><p id="domain-role">Name what a scene means</p>
+  <div class="io"><div><span>TAKES IN</span><ul id="domain-inputs"></ul></div><div><span>RETURNS</span><ul id="domain-outputs"></ul></div></div>
+  <div class="hairline"></div><p class="eyebrow">A POSSIBLE CROSS-DOMAIN BRIDGE</p><p id="bridge-story"></p><div class="repo-tags" id="repo-tags"></div>
+  <button class="text-button" id="focus-domain">Approach this flywheel ↗</button><br><button class="text-button" id="related-records">Explore related Atlas records ↗</button>
+  <p class="muted fine">Feather colour identifies a domain. Rotation and particles are illustrative, independent of measured activity.</p>
+ </aside>
+ <nav class="feather-nav" id="feathers" aria-label="Choose a domain feather"></nav>
+ <div class="controls"><div><button id="front">Whole organism</button><button id="close">Loom heart</button><button id="orbit">Perspective</button></div><div><button id="pause" aria-pressed="false">Ⅱ Pause</button><button id="labels" aria-pressed="true">Labels</button><button id="detail" aria-pressed="true">Detail</button><button id="sound" aria-pressed="false">♪ Sound</button></div></div>
+</main>
+<footer><span><b>ARCHIVE EVIDENCE</b> <span id="snapshot-pin">Loading source pins</span></span><span id="cadence">UI cadence —</span><a href="cinematic.html">Original cinematic ↗</a></footer>
+<dialog id="inspector"><div class="dialog-top"><p class="eyebrow" id="inspector-kind">EVIDENCE INSPECTOR</p><button id="close-inspector" aria-label="Close inspector">✕</button></div><h2 id="inspector-title"></h2><div id="inspector-body"></div></dialog>
+<audio id="score" src="loop.wav" loop preload="none"></audio>
+<noscript>This prototype needs JavaScript and WebGL2. See the Atlas insight document for the full technical reading.</noscript>
+</body></html>

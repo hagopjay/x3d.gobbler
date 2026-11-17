@@ -1,0 +1,2059 @@
+{
+ "counts": {
+  "Chapter": 23,
+  "Claim": 84,
+  "Dataset": 1,
+  "Diagnostic": 35,
+  "Drill": 177,
+  "FailureClass": 11,
+  "FailureMode": 160,
+  "Grade": 3,
+  "Heuristic": 359,
+  "Instrument": 355,
+  "Law": 44,
+  "Number": 591,
+  "OpenQuestion": 18,
+  "Pin": 66,
+  "Repo": 10,
+  "Source": 34,
+  "SourceDocument": 37,
+  "Theme": 10,
+  "Tool": 68,
+  "ToolVersion": 84,
+  "TrapRule": 11
+ },
+ "edges": {
+  "atPin": 628,
+  "carriedFrom": 1,
+  "caughtBy": 35,
+  "citesPin": 95,
+  "citesSource": 179,
+  "derivedFrom": 2,
+  "evidenceGrade": 39,
+  "evidencedBy": 64,
+  "fixedByLaw": 25,
+  "grade": 1054,
+  "hasTrap": 11,
+  "inChapter": 1211,
+  "inClass": 160,
+  "inTheme": 44,
+  "measuredWith": 591,
+  "mentions": 134,
+  "ofRepo": 66,
+  "ofTool": 84,
+  "paidForBy": 50,
+  "quotedFrom": 1442,
+  "recurredAs": 2,
+  "requires": 55,
+  "resolvedInstrument": 591,
+  "supports": 84,
+  "topOfClass": 33,
+  "usesTool": 542
+ },
+ "edge total": 7222,
+ "parity": [
+  {
+   "what": "laws vs chapter 02's statement",
+   "atlas": 44,
+   "expected": 44,
+   "ok": true
+  },
+  {
+   "what": "failure modes vs chapter 02's statement",
+   "atlas": 160,
+   "expected": 160,
+   "ok": true
+  },
+  {
+   "what": "failure classes vs chapter 02's statement",
+   "atlas": 11,
+   "expected": 11,
+   "ok": true
+  },
+  {
+   "what": "chapters vs Appendix C's statement",
+   "atlas": 23,
+   "expected": 23,
+   "ok": true
+  },
+  {
+   "what": "numbers vs Appendix C's statement",
+   "atlas": 591,
+   "expected": 591,
+   "ok": true
+  },
+  {
+   "what": "numbers vs Appendix C's rows",
+   "atlas": 591,
+   "expected": 591,
+   "ok": true
+  },
+  {
+   "what": "number grades vs Appendix C's statement",
+   "atlas": {
+    "C": 541,
+    "L": 44,
+    "S": 6
+   },
+   "expected": {
+    "C": 541,
+    "L": 44,
+    "S": 6
+   },
+   "ok": true
+  },
+  {
+   "what": "heuristics vs Appendix D's statement",
+   "atlas": 359,
+   "expected": 359,
+   "ok": true
+  },
+  {
+   "what": "heuristics vs Appendix D's rows",
+   "atlas": 359,
+   "expected": 359,
+   "ok": true
+  },
+  {
+   "what": "heuristic grades vs Appendix D's statement",
+   "atlas": {
+    "C": 296,
+    "L": 56,
+    "S": 7
+   },
+   "expected": {
+    "C": 296,
+    "L": 56,
+    "S": 7
+   },
+   "ok": true
+  },
+  {
+   "what": "drills vs Appendix E's statement",
+   "atlas": 177,
+   "expected": 177,
+   "ok": true
+  },
+  {
+   "what": "drills vs Appendix E's rows",
+   "atlas": 177,
+   "expected": 177,
+   "ok": true
+  },
+  {
+   "what": "drills with a recorded run vs Appendix E's statement",
+   "atlas": 164,
+   "expected": 164,
+   "ok": true
+  },
+  {
+   "what": "instrument strings vs Appendix A's statement",
+   "atlas": 355,
+   "expected": 355,
+   "ok": true
+  },
+  {
+   "what": "instrument strings vs Appendix A's rows",
+   "atlas": 355,
+   "expected": 355,
+   "ok": true
+  },
+  {
+   "what": "pins cited by chapters vs Appendix F's statement",
+   "atlas": 60,
+   "expected": 60,
+   "ok": true
+  },
+  {
+   "what": "pins cited by chapters vs Appendix F's rows",
+   "atlas": 60,
+   "expected": 60,
+   "ok": true
+  },
+  {
+   "what": "claims vs Appendix G's statement",
+   "atlas": 84,
+   "expected": 84,
+   "ok": true
+  },
+  {
+   "what": "claim verdicts vs Appendix G's statement",
+   "atlas": {
+    "verified": 83,
+    "check": 0,
+    "reworded": 0,
+    "unchecked": 1
+   },
+   "expected": {
+    "verified": 83,
+    "check": 0,
+    "reworded": 0,
+    "unchecked": 1
+   },
+   "ok": true
+  }
+ ],
+ "ids missing from one side": [],
+ "grades": {
+  "numbers": {
+   "C": 541,
+   "L": 44,
+   "S": 6
+  },
+  "heuristics": {
+   "C": 296,
+   "L": 56,
+   "S": 7
+  }
+ },
+ "laws by linked failure modes": [
+  {
+   "law": 44,
+   "headline": "A check is shown able to fail, and a number is not Confirmed until a second reader has tried to break it",
+   "failure modes": 13,
+   "check": "code",
+   "diagnostics": 1
+  },
+  {
+   "law": 26,
+   "headline": "Suspect the witness first",
+   "failure modes": 6,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 30,
+   "headline": "Nothing transfers across dimension or geometry unmeasured",
+   "failure modes": 4,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 40,
+   "headline": "A fallback must say so",
+   "failure modes": 4,
+   "check": "code",
+   "diagnostics": 1
+  },
+  {
+   "law": 4,
+   "headline": "If you can't make it again, you don't know what it is",
+   "failure modes": 3,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 11,
+   "headline": "Ask once, cache forever",
+   "failure modes": 2,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 17,
+   "headline": "Evidence is bound to the exact candidate",
+   "failure modes": 2,
+   "check": "code",
+   "diagnostics": 4
+  },
+  {
+   "law": 28,
+   "headline": "Explore the worst case before declaring a limit; then fix the instrument, not the threshold",
+   "failure modes": 2,
+   "check": "code",
+   "diagnostics": 1
+  },
+  {
+   "law": 29,
+   "headline": "One cause at a time",
+   "failure modes": 2,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 32,
+   "headline": "The runtime's contracts are part of the build",
+   "failure modes": 2,
+   "check": "code",
+   "diagnostics": 0
+  },
+  {
+   "law": 36,
+   "headline": "A pass names what it saw",
+   "failure modes": 2,
+   "check": "code",
+   "diagnostics": 2
+  },
+  {
+   "law": 37,
+   "headline": "An artefact that claims to stand alone is tested alone",
+   "failure modes": 2,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 38,
+   "headline": "One master, many renderers",
+   "failure modes": 2,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 42,
+   "headline": "Determinism is claimed per step and per host",
+   "failure modes": 2,
+   "check": "code",
+   "diagnostics": 5
+  },
+  {
+   "law": 43,
+   "headline": "A tolerance is written before the run; an excursion is a waiver, not a pass",
+   "failure modes": 2,
+   "check": "code",
+   "diagnostics": 4
+  },
+  {
+   "law": 2,
+   "headline": "Valid is not visible",
+   "failure modes": 1,
+   "check": "code",
+   "diagnostics": 0
+  },
+  {
+   "law": 3,
+   "headline": "Many witnesses, blind spots that don't overlap",
+   "failure modes": 1,
+   "check": "code",
+   "diagnostics": 2
+  },
+  {
+   "law": 7,
+   "headline": "Every mistake pays rent once",
+   "failure modes": 1,
+   "check": "code",
+   "diagnostics": 0
+  },
+  {
+   "law": 8,
+   "headline": "Gates are fixed like code",
+   "failure modes": 1,
+   "check": "code",
+   "diagnostics": 0
+  },
+  {
+   "law": 12,
+   "headline": "Budget is a witness",
+   "failure modes": 1,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 13,
+   "headline": "Unknown is not zero; no witness, no tie",
+   "failure modes": 1,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 19,
+   "headline": "A control must fail for the intended reason",
+   "failure modes": 1,
+   "check": "code",
+   "diagnostics": 2
+  },
+  {
+   "law": 21,
+   "headline": "Invariants admit; they do not confirm intent",
+   "failure modes": 1,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 22,
+   "headline": "Certify the space, not the number",
+   "failure modes": 1,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 23,
+   "headline": "Display precision is part of the scientific budget",
+   "failure modes": 1,
+   "check": "code",
+   "diagnostics": 2
+  },
+  {
+   "law": 24,
+   "headline": "Open what you hash",
+   "failure modes": 1,
+   "check": "code",
+   "diagnostics": 1
+  },
+  {
+   "law": 25,
+   "headline": "Independent witnesses need independent assumptions",
+   "failure modes": 1,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 27,
+   "headline": "Like with like",
+   "failure modes": 1,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 31,
+   "headline": "One clock, one owner",
+   "failure modes": 1,
+   "check": "code",
+   "diagnostics": 0
+  },
+  {
+   "law": 33,
+   "headline": "Read your own checklist",
+   "failure modes": 1,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 39,
+   "headline": "A look may add, never assert",
+   "failure modes": 1,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 41,
+   "headline": "A replaced engine is shown off, in every host that has it, and its leaks are listed",
+   "failure modes": 1,
+   "check": "code",
+   "diagnostics": 1
+  },
+  {
+   "law": 1,
+   "headline": "Generator, not file",
+   "failure modes": 0,
+   "check": "code",
+   "diagnostics": 1
+  },
+  {
+   "law": 5,
+   "headline": "Say how sure you are",
+   "failure modes": 0,
+   "check": "code",
+   "diagnostics": 2
+  },
+  {
+   "law": 6,
+   "headline": "Models speak in S",
+   "failure modes": 0,
+   "check": "code",
+   "diagnostics": 3
+  },
+  {
+   "law": 9,
+   "headline": "The metric will be attacked",
+   "failure modes": 0,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 10,
+   "headline": "Truth gates when the world is real",
+   "failure modes": 0,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 14,
+   "headline": "Add layers, never replace",
+   "failure modes": 0,
+   "check": "code",
+   "diagnostics": 1
+  },
+  {
+   "law": 15,
+   "headline": "Name the instrument behind every number",
+   "failure modes": 0,
+   "check": "code",
+   "diagnostics": 0
+  },
+  {
+   "law": 16,
+   "headline": "Nothing leaves without \"send\"",
+   "failure modes": 0,
+   "check": "code",
+   "diagnostics": 1
+  },
+  {
+   "law": 18,
+   "headline": "A gate is code that cannot be switched off",
+   "failure modes": 0,
+   "check": "code",
+   "diagnostics": 0
+  },
+  {
+   "law": 20,
+   "headline": "Fold back small, with the counterexample",
+   "failure modes": 0,
+   "check": "code",
+   "diagnostics": 0
+  },
+  {
+   "law": 34,
+   "headline": "Every result states its scope and its reproduction level",
+   "failure modes": 0,
+   "check": "code",
+   "diagnostics": 0
+  },
+  {
+   "law": 35,
+   "headline": "A signature proves a key, not an author",
+   "failure modes": 0,
+   "check": "code",
+   "diagnostics": 0
+  }
+ ],
+ "laws with no failure mode cited by number": [
+  1,
+  5,
+  6,
+  9,
+  10,
+  14,
+  15,
+  16,
+  18,
+  20,
+  34,
+  35
+ ],
+ "failure modes linked to no law": {
+  "count": 95,
+  "ids": [
+   2,
+   3,
+   4,
+   5,
+   7,
+   8,
+   9,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18,
+   19,
+   20,
+   21,
+   22,
+   23,
+   24,
+   25,
+   26,
+   27,
+   28,
+   29,
+   30,
+   32,
+   34,
+   35,
+   37,
+   38,
+   39,
+   42,
+   43,
+   44,
+   45,
+   47,
+   48,
+   49,
+   50,
+   55,
+   57,
+   58,
+   59,
+   60,
+   61,
+   62,
+   63,
+   66,
+   71,
+   73,
+   74,
+   75,
+   77,
+   78,
+   81,
+   83,
+   84,
+   85,
+   89,
+   90,
+   92,
+   96,
+   101,
+   102,
+   104,
+   107,
+   108,
+   109,
+   110,
+   111,
+   112,
+   113,
+   117,
+   118,
+   119,
+   120,
+   124,
+   125,
+   126,
+   130,
+   131,
+   134,
+   135,
+   136,
+   138,
+   139,
+   140,
+   141,
+   142,
+   143,
+   144,
+   145,
+   146
+  ]
+ },
+ "failure classes": [
+  {
+   "class": "K1",
+   "name": "K1: the witness measured the wrong thing or the wrong state",
+   "failure modes": 23,
+   "linked to no law": 14
+  },
+  {
+   "class": "K2",
+   "name": "K2: gates and controls that cannot fail",
+   "failure modes": 15,
+   "linked to no law": 8
+  },
+  {
+   "class": "K3",
+   "name": "K3: evidence binding, freshness, provenance, claim scope",
+   "failure modes": 12,
+   "linked to no law": 5
+  },
+  {
+   "class": "K4",
+   "name": "K4: valid is not visible; XSD, standard and runtime disagree",
+   "failure modes": 13,
+   "linked to no law": 10
+  },
+  {
+   "class": "K5",
+   "name": "K5: runtime, page and host contracts",
+   "failure modes": 22,
+   "linked to no law": 14
+  },
+  {
+   "class": "K6",
+   "name": "K6: reproducibility and build hygiene",
+   "failure modes": 11,
+   "linked to no law": 9
+  },
+  {
+   "class": "K7",
+   "name": "K7: science and numerics",
+   "failure modes": 20,
+   "linked to no law": 5
+  },
+  {
+   "class": "K8",
+   "name": "K8: physics engines and stepped simulation",
+   "failure modes": 14,
+   "linked to no law": 9
+  },
+  {
+   "class": "K9",
+   "name": "K9: rendering, look and multi-renderer parity",
+   "failure modes": 14,
+   "linked to no law": 11
+  },
+  {
+   "class": "K10",
+   "name": "K10: data identity and truth",
+   "failure modes": 6,
+   "linked to no law": 5
+  },
+  {
+   "class": "K11",
+   "name": "K11: process, budget and governance",
+   "failure modes": 10,
+   "linked to no law": 5
+  }
+ ],
+ "process-only laws ranked by failures": [
+  {
+   "law": 26,
+   "headline": "Suspect the witness first",
+   "failure modes": 6,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 30,
+   "headline": "Nothing transfers across dimension or geometry unmeasured",
+   "failure modes": 4,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 4,
+   "headline": "If you can't make it again, you don't know what it is",
+   "failure modes": 3,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 11,
+   "headline": "Ask once, cache forever",
+   "failure modes": 2,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 29,
+   "headline": "One cause at a time",
+   "failure modes": 2,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 37,
+   "headline": "An artefact that claims to stand alone is tested alone",
+   "failure modes": 2,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 38,
+   "headline": "One master, many renderers",
+   "failure modes": 2,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 12,
+   "headline": "Budget is a witness",
+   "failure modes": 1,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 13,
+   "headline": "Unknown is not zero; no witness, no tie",
+   "failure modes": 1,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 21,
+   "headline": "Invariants admit; they do not confirm intent",
+   "failure modes": 1,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 22,
+   "headline": "Certify the space, not the number",
+   "failure modes": 1,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 25,
+   "headline": "Independent witnesses need independent assumptions",
+   "failure modes": 1,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 27,
+   "headline": "Like with like",
+   "failure modes": 1,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 33,
+   "headline": "Read your own checklist",
+   "failure modes": 1,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 39,
+   "headline": "A look may add, never assert",
+   "failure modes": 1,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 9,
+   "headline": "The metric will be attacked",
+   "failure modes": 0,
+   "check": "process",
+   "diagnostics": 0
+  },
+  {
+   "law": 10,
+   "headline": "Truth gates when the world is real",
+   "failure modes": 0,
+   "check": "process",
+   "diagnostics": 0
+  }
+ ],
+ "check kinds": {
+  "code": 27,
+  "process": 17
+ },
+ "diagnostics": [
+  {
+   "code": "CANDIDATE_CHANGED_DURING_WITNESS",
+   "laws": [
+    17
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "COVERAGE_REQUIRED",
+   "laws": [],
+   "failure modes": []
+  },
+  {
+   "code": "DEVELOPMENT_WITNESS",
+   "laws": [
+    17
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "EMPTY_CANDIDATE",
+   "laws": [
+    36
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "EMPTY_PROFILE",
+   "laws": [
+    3
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "EVIDENCE_DRIFT",
+   "laws": [
+    17
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "LEAK_RESIDUE",
+   "laws": [
+    16
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "MISSING_WITNESS",
+   "laws": [
+    3
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "MODEL_TRUTH_PROMOTION",
+   "laws": [
+    6
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "PHYS_CONTROL_SURVIVED",
+   "laws": [
+    44
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "PHYS_ENGINE_DRIFT",
+   "laws": [
+    42
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "PHYS_FALSE_GREEN",
+   "laws": [
+    43
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "PHYS_HASH_DRIFT",
+   "laws": [
+    42
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "PHYS_LIMITS_UNPROVEN",
+   "laws": [],
+   "failure modes": [
+    156
+   ]
+  },
+  {
+   "code": "PHYS_LIMIT_WIDENED",
+   "laws": [
+    28,
+    43
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "PHYS_LOSS_UNREPORTED",
+   "laws": [
+    40
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "PHYS_NO_RUNS",
+   "laws": [
+    36
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "PHYS_REPLAY_MISSING",
+   "laws": [
+    42
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "PHYS_REPLAY_STEPS",
+   "laws": [
+    42
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "PHYS_TAKEOVER_UNPROVEN",
+   "laws": [
+    41
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "PHYS_TRACE_TAMPERED",
+   "laws": [
+    42
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "PHYS_WAIVERS_OVER_CAP",
+   "laws": [
+    43
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "PHYS_WAIVER_INCOMPLETE",
+   "laws": [
+    43
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "PICTURE_GRADING",
+   "laws": [
+    6
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "RECEIPT_EXISTS",
+   "laws": [
+    14
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "SCI_DISPLAY_CLIPPING",
+   "laws": [
+    23
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "SCI_DISPLAY_QUANTIZATION",
+   "laws": [
+    23
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "SCI_PUBLICATION_UNDECODABLE",
+   "laws": [
+    24
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "STALE_PICTURE_REVIEW",
+   "laws": [
+    6
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "STALE_WITNESS",
+   "laws": [
+    1,
+    17
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "SURVIVING_CONTROL",
+   "laws": [
+    19
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "UNKNOWN_GRADE",
+   "laws": [
+    5
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "UNMEASURED_REQUIRED_WITNESS",
+   "laws": [
+    5
+   ],
+   "failure modes": []
+  },
+  {
+   "code": "WITNESS_NOT_PASS",
+   "laws": [],
+   "failure modes": []
+  },
+  {
+   "code": "WRONG_DIAGNOSTIC",
+   "laws": [
+    19
+   ],
+   "failure modes": []
+  }
+ ],
+ "trap rules": [
+  {
+   "trap": "anchor-download-hosted",
+   "failure modes": [
+    113
+   ]
+  },
+  {
+   "trap": "color-emissive-white",
+   "failure modes": [
+    5
+   ]
+  },
+  {
+   "trap": "color-keys-sparse",
+   "failure modes": [
+    109
+   ]
+  },
+  {
+   "trap": "color-range",
+   "failure modes": [
+    4
+   ]
+  },
+  {
+   "trap": "loop-seam",
+   "failure modes": [
+    112
+   ]
+  },
+  {
+   "trap": "movie-not-still",
+   "failure modes": [
+    8
+   ]
+  },
+  {
+   "trap": "route-before-def",
+   "failure modes": [
+    3
+   ]
+  },
+  {
+   "trap": "shader-raw-source",
+   "failure modes": [
+    1
+   ]
+  },
+  {
+   "trap": "splat-bbox",
+   "failure modes": [
+    9
+   ]
+  },
+  {
+   "trap": "xite-light-zero-pop",
+   "failure modes": [
+    110
+   ]
+  },
+  {
+   "trap": "xite-transparent-shadow",
+   "failure modes": [
+    111
+   ]
+  }
+ ],
+ "recurrences": [
+  [
+   13,
+   55
+  ],
+  [
+   88,
+   94
+  ]
+ ],
+ "number instruments": {
+  "as written": 453,
+  "inferred from the row above": 138
+ },
+ "Confirmed numbers with no pin and no versioned tool in their instrument": {
+  "count": 122,
+  "ids": [
+   "N-ANM-7",
+   "N-ANM-13",
+   "N-BAB-10",
+   "N-BAB-54",
+   "N-BAB-55",
+   "N-BAB-56",
+   "N-BAB-65",
+   "N-BAB-87",
+   "N-BAB-88",
+   "N-BAB-89",
+   "N-BAB-93",
+   "N-BAB-94",
+   "N-BAB-100",
+   "N-BAB-101",
+   "N-BAB-102",
+   "N-BAB-103",
+   "N-BLE-20",
+   "N-CAS-3",
+   "N-CAS-4",
+   "N-CAS-8",
+   "N-CAS-9",
+   "N-CAS-10",
+   "N-CAS-11",
+   "N-CAS-12",
+   "N-CAS-13",
+   "N-CAS-16",
+   "N-CAS-20",
+   "N-CAS-21",
+   "N-CAS-22",
+   "N-CAS-23",
+   "N-CAS-27",
+   "N-ENG-6",
+   "N-ENG-14",
+   "N-GLT-3",
+   "N-GLT-5",
+   "N-GLT-6",
+   "N-GLT-7",
+   "N-GLT-16",
+   "N-JEV-2",
+   "N-JEV-3",
+   "N-JEV-5",
+   "N-JEV-8",
+   "N-JEV-9",
+   "N-JEV-22",
+   "N-JEV-24",
+   "N-JEV-33",
+   "N-JEV-34",
+   "N-LAW-15",
+   "N-MCP-5",
+   "N-MCP-11",
+   "N-MET-2",
+   "N-MET-3",
+   "N-MET-4",
+   "N-MET-5",
+   "N-MET-6",
+   "N-MET-7",
+   "N-MET-8",
+   "N-MET-9",
+   "N-MET-10",
+   "N-MET-11",
+   "N-MET-12",
+   "N-TRC-13",
+   "N-TRC-14",
+   "N-TRC-15",
+   "N-TRC-22",
+   "N-UNR-3",
+   "N-UNR-4",
+   "N-UNR-6",
+   "N-UNR-7",
+   "N-UNR-8",
+   "N-UNR-10",
+   "N-UNR-11",
+   "N-UNR-12",
+   "N-UNR-17",
+   "N-UNR-18",
+   "N-UNR-28",
+   "N-UNR-29",
+   "N-UNR-30",
+   "N-UNR-31",
+   "N-UNR-32",
+   "N-UNR-33",
+   "N-UNR-35",
+   "N-UNR-36",
+   "N-UNR-37",
+   "N-UNR-38",
+   "N-UNR-39",
+   "N-WGC-4",
+   "N-WGC-5",
+   "N-WGC-6",
+   "N-WGC-7",
+   "N-WGC-8",
+   "N-WGC-9",
+   "N-WGC-10",
+   "N-WGC-11",
+   "N-WGC-12",
+   "N-WGC-13",
+   "N-WGC-14",
+   "N-WGC-15",
+   "N-WGC-16",
+   "N-WGC-17",
+   "N-XIT-3",
+   "N-XIT-9",
+   "N-XIT-19",
+   "N-XIT-21",
+   "N-XRY-4",
+   "N-YJS-10",
+   "N-YJS-11",
+   "N-YJS-12",
+   "N-YJS-13",
+   "N-YJS-14",
+   "N-YJS-15",
+   "N-YJS-16",
+   "N-YJS-17",
+   "N-ZOD-2",
+   "N-ZOD-3",
+   "N-ZOD-8",
+   "N-ZOD-9",
+   "N-ZOD-10",
+   "N-ZOD-11",
+   "N-ZOD-12",
+   "N-ZOD-13",
+   "N-ZOD-16"
+  ]
+ },
+ "tool versions under the numbers": {
+  "X_ITE": {
+   "16.4.3": 3,
+   "16.5.1": 6,
+   "16.6.0": 75,
+   "16.7.0": 10,
+   "16.7.1": 6
+  },
+  "Chromium": {
+   "153": 40,
+   "153.0.8010.12": 42,
+   "159": 1
+  },
+  "Python": {
+   "3": 3,
+   "3.13.18": 29
+  },
+  "three.js": {
+   "r187": 31
+  },
+  "Node": {
+   "22": 4,
+   "22.23.4": 20
+  },
+  "numpy": {
+   "2.5.3": 8,
+   "2.5.4": 3,
+   "2.5.5": 1
+  },
+  "Khronos glTF-Validator": {
+   "2.0.0-dev.3.10": 12
+  },
+  "driver": {
+   "580.82.07": 10
+  },
+  "bpy": {
+   "5.3.0.": 9
+  },
+  "Cycles": {
+   "5.2.3": 8
+  },
+  "x3d_s1": {
+   "0.1.0": 5,
+   "0.2.0": 3
+  },
+  "libxml2": {
+   "2.14.6.": 5
+  },
+  "X3DUOM": {
+   "4.0": 1,
+   "4.1": 4
+  },
+  "rdflib": {
+   "7.6.0": 5
+  },
+  "pyshacl": {
+   "0.40.2.": 5
+  }
+ },
+ "pins under the numbers": {
+  "x3d.loom": {
+   "162ab18": 44,
+   "b6a3650": 24,
+   "bfeba57": 8,
+   "4887a98": 7,
+   "108a282": 7,
+   "95eda37": 6,
+   "38530ab": 5,
+   "c80cecd": 3,
+   "80388ce": 3,
+   "7c818e3": 3,
+   "72a4bca": 2,
+   "1192dd4": 2,
+   "0752865": 2,
+   "be7c481": 2,
+   "0244784": 1,
+   "babba96": 1,
+   "60824ce": 1,
+   "9f969d2": 1,
+   "cd71796": 1,
+   "d8e02ef": 1,
+   "56340c2": 1,
+   "5f59349": 1,
+   "a9640eb": 1
+  },
+  "x3d_mcp": {
+   "b4efcd3": 67,
+   "dcf0815": 5,
+   "74da0ec": 4,
+   "535fdac": 3,
+   "fbe165f": 3,
+   "13121b6": 1,
+   "60b9474": 1,
+   "c6681fe": 1,
+   "e55375f": 1
+  },
+  "x3d-blender-io": {
+   "ab99988": 25,
+   "044bea3": 1
+  },
+  "x3d.xray": {
+   "8fa6845": 20
+  },
+  "x3d.docs": {
+   "f172f67": 9,
+   "3aab064": 1,
+   "a9b5f33": 1
+  },
+  "x3d.ml": {
+   "305fd60": 7,
+   "8e2e8da": 3
+  },
+  "x3d.demo": {
+   "d10b457": 5,
+   "9c96896": 2
+  },
+  "x3d.castle": {
+   "d70e00c": 5
+  },
+  "castle-engine": {
+   "48ce617": 5
+  }
+ },
+ "unnamed instrument parts": [
+  [
+   "read",
+   8
+  ],
+  [
+   "320 x 240",
+   6
+  ],
+  [
+   "grep",
+   5
+  ],
+  [
+   "as reported",
+   4
+  ],
+  [
+   "not re-run",
+   4
+  ],
+  [
+   "inline Python",
+   4
+  ],
+  [
+   "Python ast",
+   3
+  ],
+  [
+   "ls",
+   3
+  ],
+  [
+   "core11.py",
+   3
+  ],
+  [
+   "RTX PRO 6000 Blackwell SE",
+   3
+  ],
+  [
+   "x3dgltf matrix",
+   3
+  ],
+  [
+   "seed 20261029",
+   2
+  ],
+  [
+   "python parse",
+   2
+  ],
+  [
+   "count",
+   2
+  ],
+  [
+   "loomkit physics",
+   2
+  ],
+  [
+   "stated in the repo",
+   2
+  ],
+  [
+   "loomkit 162ab18",
+   2
+  ],
+  [
+   "not reproduced",
+   2
+  ],
+  [
+   "list_tools()",
+   2
+  ],
+  [
+   "X_ITE 16.4.3 to 16.7.1",
+   2
+  ],
+  [
+   "wc -l",
+   2
+  ],
+  [
+   "driver.py status",
+   2
+  ],
+  [
+   "NODES.json",
+   2
+  ],
+  [
+   "numpy",
+   2
+  ],
+  [
+   "640 x 360",
+   2
+  ]
+ ],
+ "instrument strings fully named": 81,
+ "heuristics whose evidence cites no id": {
+  "by grade": {
+   "C": 263,
+   "L": 47,
+   "S": 7
+  },
+  "Confirmed": [
+   "H-ANM-1",
+   "H-ANM-10",
+   "H-ANM-11",
+   "H-ANM-2",
+   "H-ANM-3",
+   "H-ANM-4",
+   "H-ANM-5",
+   "H-ANM-7",
+   "H-ANM-8",
+   "H-ANM-9",
+   "H-BAB-10",
+   "H-BAB-11",
+   "H-BAB-12",
+   "H-BAB-13",
+   "H-BAB-14",
+   "H-BAB-15",
+   "H-BAB-16",
+   "H-BAB-17",
+   "H-BAB-18",
+   "H-BAB-2",
+   "H-BAB-20",
+   "H-BAB-21",
+   "H-BAB-22",
+   "H-BAB-23",
+   "H-BAB-24",
+   "H-BAB-25",
+   "H-BAB-26",
+   "H-BAB-27",
+   "H-BAB-28",
+   "H-BAB-29",
+   "H-BAB-3",
+   "H-BAB-30",
+   "H-BAB-31",
+   "H-BAB-32",
+   "H-BAB-36",
+   "H-BAB-37",
+   "H-BAB-38",
+   "H-BAB-39",
+   "H-BAB-4",
+   "H-BAB-40",
+   "H-BAB-41",
+   "H-BAB-42",
+   "H-BAB-6",
+   "H-BAB-70",
+   "H-BAB-71",
+   "H-BAB-72",
+   "H-BAB-73",
+   "H-BAB-74",
+   "H-BAB-75",
+   "H-BAB-76",
+   "H-BAB-77",
+   "H-BAB-78",
+   "H-BAB-79",
+   "H-BAB-80",
+   "H-BAB-81",
+   "H-BAB-82",
+   "H-BAB-83",
+   "H-BAB-84",
+   "H-BAB-85",
+   "H-BAB-86",
+   "H-BAB-87",
+   "H-BAB-88",
+   "H-BAB-89",
+   "H-BAB-9",
+   "H-BAB-90",
+   "H-BAB-91",
+   "H-BAB-92",
+   "H-BAB-93",
+   "H-BAB-94",
+   "H-BAB-95",
+   "H-BAB-96",
+   "H-BLE-1",
+   "H-BLE-10",
+   "H-BLE-11",
+   "H-BLE-12",
+   "H-BLE-13",
+   "H-BLE-2",
+   "H-BLE-3",
+   "H-BLE-5",
+   "H-BLE-6",
+   "H-BLE-7",
+   "H-CAS-1",
+   "H-CAS-10",
+   "H-CAS-11",
+   "H-CAS-13",
+   "H-CAS-14",
+   "H-CAS-15",
+   "H-CAS-2",
+   "H-CAS-3",
+   "H-CAS-4",
+   "H-CAS-5",
+   "H-CAS-6",
+   "H-CAS-8",
+   "H-CAS-9",
+   "H-ENG-1",
+   "H-ENG-2",
+   "H-ENG-3",
+   "H-ENG-4",
+   "H-ENG-5",
+   "H-ENG-6",
+   "H-ENG-7",
+   "H-ENG-8",
+   "H-GLT-1",
+   "H-GLT-2",
+   "H-GLT-7",
+   "H-GLT-8",
+   "H-GTO-1",
+   "H-GTO-10",
+   "H-GTO-11",
+   "H-GTO-13",
+   "H-GTO-14",
+   "H-GTO-2",
+   "H-GTO-3",
+   "H-GTO-4",
+   "H-GTO-5",
+   "H-GTO-6",
+   "H-GTO-7",
+   "H-GTO-8",
+   "H-GTO-9",
+   "H-JEV-1",
+   "H-JEV-10",
+   "H-JEV-11",
+   "H-JEV-12",
+   "H-JEV-13",
+   "H-JEV-14",
+   "H-JEV-15",
+   "H-JEV-16",
+   "H-JEV-17",
+   "H-JEV-18",
+   "H-JEV-19",
+   "H-JEV-20",
+   "H-JEV-6",
+   "H-JEV-7",
+   "H-JEV-9",
+   "H-MCP-1",
+   "H-MCP-10",
+   "H-MCP-12",
+   "H-MCP-2",
+   "H-MCP-3",
+   "H-MCP-4",
+   "H-MCP-5",
+   "H-MCP-6",
+   "H-MCP-7",
+   "H-MCP-8",
+   "H-MCP-9",
+   "H-MET-5",
+   "H-MET-8",
+   "H-PHY-10",
+   "H-PHY-12",
+   "H-PHY-14",
+   "H-PHY-15",
+   "H-PHY-16",
+   "H-PHY-17",
+   "H-PHY-18",
+   "H-PHY-19",
+   "H-PHY-21",
+   "H-PHY-22",
+   "H-PHY-23",
+   "H-PHY-24",
+   "H-PHY-6",
+   "H-PHY-9",
+   "H-PTR-1",
+   "H-PTR-4",
+   "H-PTR-7",
+   "H-PTR-8",
+   "H-PTR-9",
+   "H-SEM-1",
+   "H-SEM-11",
+   "H-SEM-2",
+   "H-SEM-3",
+   "H-SEM-4",
+   "H-SEM-5",
+   "H-SEM-6",
+   "H-SEM-7",
+   "H-SEM-8",
+   "H-SEM-9",
+   "H-TRC-1",
+   "H-TRC-10",
+   "H-TRC-11",
+   "H-TRC-12",
+   "H-TRC-14",
+   "H-TRC-2",
+   "H-TRC-3",
+   "H-TRC-4",
+   "H-TRC-5",
+   "H-TRC-6",
+   "H-TRC-7",
+   "H-TRC-8",
+   "H-TRC-9",
+   "H-UNR-1",
+   "H-UNR-12",
+   "H-UNR-13",
+   "H-UNR-14",
+   "H-UNR-15",
+   "H-UNR-16",
+   "H-UNR-17",
+   "H-UNR-18",
+   "H-UNR-2",
+   "H-UNR-20",
+   "H-UNR-3",
+   "H-UNR-6",
+   "H-UNR-8",
+   "H-UNR-9",
+   "H-VAL-1",
+   "H-VAL-10",
+   "H-VAL-11",
+   "H-VAL-12",
+   "H-VAL-2",
+   "H-VAL-3",
+   "H-VAL-4",
+   "H-VAL-5",
+   "H-VAL-6",
+   "H-VAL-7",
+   "H-VAL-8",
+   "H-VAL-9",
+   "H-WGC-1",
+   "H-WGC-10",
+   "H-WGC-12",
+   "H-WGC-2",
+   "H-WGC-3",
+   "H-WGC-4",
+   "H-WGC-5",
+   "H-WGC-6",
+   "H-WGC-7",
+   "H-WGC-8",
+   "H-WGC-9",
+   "H-XIT-11",
+   "H-XIT-12",
+   "H-XIT-2",
+   "H-XIT-3",
+   "H-XIT-4",
+   "H-XIT-5",
+   "H-XIT-6",
+   "H-XIT-7",
+   "H-XIT-8",
+   "H-XRY-1",
+   "H-XRY-10",
+   "H-XRY-12",
+   "H-XRY-2",
+   "H-XRY-3",
+   "H-XRY-4",
+   "H-XRY-5",
+   "H-XRY-6",
+   "H-XRY-7",
+   "H-XRY-8",
+   "H-YJS-1",
+   "H-YJS-2",
+   "H-YJS-3",
+   "H-YJS-4",
+   "H-YJS-5",
+   "H-YJS-6",
+   "H-YJS-9",
+   "H-ZOD-1",
+   "H-ZOD-10",
+   "H-ZOD-11",
+   "H-ZOD-12",
+   "H-ZOD-2",
+   "H-ZOD-3",
+   "H-ZOD-4",
+   "H-ZOD-5",
+   "H-ZOD-7",
+   "H-ZOD-8",
+   "H-ZOD-9"
+  ]
+ },
+ "numbers cited most": [
+  {
+   "id": "N-JEV-20",
+   "times": 2,
+   "quantity": "recorded model calls (17 and 24 October); valid; draw; cut at the output limit; valid amon"
+  },
+  {
+   "id": "N-TH-4",
+   "times": 2,
+   "quantity": "hint loop alone, repaired cases"
+  },
+  {
+   "id": "N-TH-1",
+   "times": 1,
+   "quantity": "non-background pixel fraction, visible.x3d"
+  },
+  {
+   "id": "N-TH-2",
+   "times": 1,
+   "quantity": "non-background pixel fraction, blank.x3d (valid, faces away)"
+  },
+  {
+   "id": "N-TH-5",
+   "times": 1,
+   "quantity": "repair_x3d alone, repaired cases, at b4efcd3"
+  },
+  {
+   "id": "N-TH-6",
+   "times": 1,
+   "quantity": "repair_x3d alone, repaired cases, at 535fdac"
+  },
+  {
+   "id": "N-TH-8",
+   "times": 1,
+   "quantity": "injected route faults caught, gate vs XSD alone"
+  },
+  {
+   "id": "N-TH-10",
+   "times": 1,
+   "quantity": "unchanged seeds flagged by the gate"
+  },
+  {
+   "id": "N-TH-9",
+   "times": 1,
+   "quantity": "injected displaced part caught"
+  },
+  {
+   "id": "N-TH-14",
+   "times": 1,
+   "quantity": "model repair with hints vs plain errors, first round"
+  }
+ ],
+ "numbers cited by nothing": 562,
+ "traceability": {
+  "numbers": 591,
+  "numbers with a ledger quote": 35,
+  "numbers with a verified quote": 34,
+  "Confirmed numbers": 541,
+  "Confirmed numbers with a verified quote": 32,
+  "heuristics with a ledger quote": 1,
+  "chapters with a ledger": [
+   "22",
+   "23"
+  ],
+  "by chapter": {
+   "01": {
+    "numbers": 21,
+    "quoted": 0,
+    "verified": 0
+   },
+   "02": {
+    "numbers": 20,
+    "quoted": 0,
+    "verified": 0
+   },
+   "03": {
+    "numbers": 21,
+    "quoted": 0,
+    "verified": 0
+   },
+   "04": {
+    "numbers": 22,
+    "quoted": 0,
+    "verified": 0
+   },
+   "05": {
+    "numbers": 24,
+    "quoted": 0,
+    "verified": 0
+   },
+   "06": {
+    "numbers": 21,
+    "quoted": 0,
+    "verified": 0
+   },
+   "07": {
+    "numbers": 24,
+    "quoted": 0,
+    "verified": 0
+   },
+   "08": {
+    "numbers": 103,
+    "quoted": 0,
+    "verified": 0
+   },
+   "09": {
+    "numbers": 28,
+    "quoted": 0,
+    "verified": 0
+   },
+   "10": {
+    "numbers": 24,
+    "quoted": 0,
+    "verified": 0
+   },
+   "11": {
+    "numbers": 16,
+    "quoted": 0,
+    "verified": 0
+   },
+   "12": {
+    "numbers": 47,
+    "quoted": 0,
+    "verified": 0
+   },
+   "13": {
+    "numbers": 28,
+    "quoted": 0,
+    "verified": 0
+   },
+   "14": {
+    "numbers": 12,
+    "quoted": 0,
+    "verified": 0
+   },
+   "15": {
+    "numbers": 14,
+    "quoted": 0,
+    "verified": 0
+   },
+   "16": {
+    "numbers": 18,
+    "quoted": 0,
+    "verified": 0
+   },
+   "17": {
+    "numbers": 17,
+    "quoted": 0,
+    "verified": 0
+   },
+   "18": {
+    "numbers": 15,
+    "quoted": 0,
+    "verified": 0
+   },
+   "19": {
+    "numbers": 24,
+    "quoted": 0,
+    "verified": 0
+   },
+   "20": {
+    "numbers": 17,
+    "quoted": 0,
+    "verified": 0
+   },
+   "21": {
+    "numbers": 17,
+    "quoted": 0,
+    "verified": 0
+   },
+   "22": {
+    "numbers": 34,
+    "quoted": 13,
+    "verified": 12
+   },
+   "23": {
+    "numbers": 24,
+    "quoted": 22,
+    "verified": 22
+   }
+  },
+  "claims by kind of source": {
+   "external": 1,
+   "repo": 82,
+   "self": 1
+  },
+  "claims on a prose statement (Q- ids)": 0,
+  "pins the claims stand on": [
+   "x3d.loom@34bc760",
+   "x3d.loom@7a7d657",
+   "x3d.loom@be7c481",
+   "x3d.ml@305fd60",
+   "x3d_mcp@dcf0815",
+   "x3d_mcp@e55375f"
+  ],
+  "carried numbers": [
+   [
+    "H-JEV-3",
+    "N-VAL-8"
+   ]
+  ]
+ },
+ "atlas claims written": 1360,
+ "drills not run": [
+  "D-ANM-5 Break the HSV rule",
+  "D-BLE-8 Grade a Survey claim",
+  "D-CAS-7 Design the TimeSensor origin fixture",
+  "D-GLT-6 Find the animation start fault without Blender",
+  "D-LAW-8 Apply the checklist to a described project",
+  "D-MCP-7 Do it through a real client",
+  "D-MET-4 Pin audit",
+  "D-MET-5 Teach-back",
+  "D-PTR-5 Break a light conversion",
+  "D-PTR-6 Isolate the e1 gap",
+  "D-TH-1 Score five pipelines",
+  "D-UNR-6 Write the pass and fail line for a gate",
+  "D-XRY-8 Classify five looks by the grade function"
+ ],
+ "pins": {
+  "total": 66,
+  "cited by chapters": 60,
+  "named only inside an instrument or a source cell": [
+   "x3d.loom@7a7d657",
+   "x3d_mcp@327c5c4",
+   "x3d_mcp@fa0b389",
+   "x3d_mcp@fbe165f",
+   "x3d_mcp@ffbc20f"
+  ]
+ },
+ "x3d.loom commits the chapters read": [
+  "0244784",
+  "0752865",
+  "108a282",
+  "1192dd4",
+  "162ab18",
+  "1d1109e",
+  "1e884b6",
+  "34bc760",
+  "38530ab",
+  "3acc825",
+  "4887a98",
+  "56340c2",
+  "5f59349",
+  "60824ce",
+  "72a4bca",
+  "7a7d657",
+  "7c69356",
+  "7c818e3",
+  "80388ce",
+  "8a1e769",
+  "95eda37",
+  "9f969d2",
+  "a6e3d31",
+  "a9640eb",
+  "b6a3650",
+  "babba96",
+  "be7c481",
+  "bfeba57",
+  "c80cecd",
+  "c9b7695",
+  "cd71796",
+  "d8e02ef",
+  "ed1bed8"
+ ],
+ "x3d.loom commit this Atlas read": "ba30153",
+ "findings": {
+  "reference to an id that does not exist": [
+   {
+    "node": "fm/147",
+    "ref": "law/123",
+    "where": "LOOM-v1 §8 failure"
+   }
+  ],
+  "table row with unescaped pipes, cells rejoined": [
+   {
+    "where": "LOOM-v1.md:479",
+    "row": 87,
+    "cells": 6
+   }
+  ]
+ }
+}

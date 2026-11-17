@@ -1,0 +1,170 @@
+{
+  "atlas": {
+    "path": "atlas/out/atlas.json",
+    "pins": {
+      "x3d.docs": "ff0565e5a248ca391d68527716a58a821f25d152",
+      "x3d.loom": "ba301533d7b66eb8fe5e691524a551ef01c58de1"
+    },
+    "sha256": "552d8497f3abff4a3dfabd3ee35ac6c784105a901920417bf6468da7dfe6a6a7"
+  },
+  "authoredFixtures": true,
+  "controlsPassed": true,
+  "guard": {
+    "code": "atlas/shader_guard.py",
+    "id": "shader-raw-source/narrow-1",
+    "sha256": "1b55293cbcc5ebc3b496e835acbdb68f9e65fcec11f3852a0c5b3f4ce7542b60"
+  },
+  "limits": [
+    "No shaders were fetched, compiled, linked, or rendered.",
+    "Passing does not establish X3D schema validity or shader correctness.",
+    "The consumer is an authored music-labelled fixture, not a live music repository integration.",
+    "Raw GLSL recognition uses a narrow high-confidence marker set, not a complete GLSL parser.",
+    "Hashes bind the local bytes and source records; no external trust anchor is supplied."
+  ],
+  "localTransfer": {
+    "accepted": true,
+    "consumer": "music",
+    "consumerSha256": "e57aa466bcbe39686c4e14793114485eca5171f5fc219762e12767601c17ecef",
+    "distinctDomains": true,
+    "origin": "gamedev"
+  },
+  "ok": true,
+  "results": [
+    {
+      "diagnostics": [
+        {
+          "channel": "text",
+          "code": "SHADER_RAW_SOURCE",
+          "message": "Raw GLSL occupies a URL channel; use an explicit data URI or a shader-file URL.",
+          "node": "RawGameVertex"
+        }
+      ],
+      "domain": "gamedev",
+      "expectationMet": true,
+      "expectedAccepted": false,
+      "file": "atlas/fixtures/shader-foldback/gamedev-raw-cdata.x3d",
+      "ok": false,
+      "references": [
+        {
+          "channel": "text",
+          "kind": "raw-glsl",
+          "node": "RawGameVertex",
+          "sha256": "72386e10854137ae32b729ed42dbf470a8da0c63db02826fb35733e00c8af1b3"
+        }
+      ],
+      "role": "negative-control",
+      "sha256": "11ffe524e47be86a8437fa9d903312397f215c480aa46d4d7d727358a05174ea",
+      "shaderParts": 1
+    },
+    {
+      "diagnostics": [
+        {
+          "channel": "url",
+          "code": "SHADER_RAW_SOURCE",
+          "message": "Raw GLSL occupies a URL channel; use an explicit data URI or a shader-file URL.",
+          "node": "RawGameURL"
+        }
+      ],
+      "domain": "gamedev",
+      "expectationMet": true,
+      "expectedAccepted": false,
+      "file": "atlas/fixtures/shader-foldback/gamedev-raw-url.x3d",
+      "ok": false,
+      "references": [
+        {
+          "channel": "url",
+          "kind": "raw-glsl",
+          "node": "RawGameURL",
+          "sha256": "2576c1563716561c698e5919f2a8c9c810edc41697cd8152a951f4152314d29b"
+        }
+      ],
+      "role": "negative-control",
+      "sha256": "222a6bf66634c508b6709f6f172c5043e74d1c5b0e7bc15922adf609269ff59b",
+      "shaderParts": 1
+    },
+    {
+      "diagnostics": [],
+      "domain": "gamedev",
+      "expectationMet": true,
+      "expectedAccepted": true,
+      "file": "atlas/fixtures/shader-foldback/gamedev-fixed-data-uri.x3d",
+      "ok": true,
+      "references": [
+        {
+          "channel": "text",
+          "kind": "data-uri",
+          "node": "BoundGameVertex",
+          "sha256": "07106fdbe1e820a55ff8ab224c431b20085b5a543a5d51414c9bc9143fa54f1e"
+        }
+      ],
+      "role": "positive-control",
+      "sha256": "e468a4631621a6e394ac572514581eac1637d986839154cdc11ac63453944b50",
+      "shaderParts": 1
+    },
+    {
+      "diagnostics": [],
+      "domain": "gamedev",
+      "expectationMet": true,
+      "expectedAccepted": true,
+      "file": "atlas/fixtures/shader-foldback/positive-https-relative.x3d",
+      "ok": true,
+      "references": [
+        {
+          "channel": "url",
+          "kind": "external-url",
+          "node": "ExternalVertex",
+          "sha256": "1d8c71bfc9a170e71b8bcb82c0d5c4efb20dcbc3318a976797c6b4df4aa8aa97"
+        },
+        {
+          "channel": "url",
+          "kind": "relative-or-other-url",
+          "node": "ExternalVertex",
+          "sha256": "585187b3ed24405f36d07cc5c21b345cdb7aabf9d15b9073135401708c3ee38e"
+        },
+        {
+          "channel": "url",
+          "kind": "relative-or-other-url",
+          "node": "RelativeFragment",
+          "sha256": "151be5a20445a40839f8ec9b4fa9dff2ab86b760d2854915632716d70385d8ef"
+        }
+      ],
+      "role": "positive-control",
+      "sha256": "a60bcc3424574a07feedb0c69683aede41fc5b6896cabfd0156f906dbe155ccc",
+      "shaderParts": 2
+    },
+    {
+      "diagnostics": [],
+      "domain": "music",
+      "expectationMet": true,
+      "expectedAccepted": true,
+      "file": "atlas/fixtures/shader-foldback/music-independent-data-uri.x3d",
+      "ok": true,
+      "references": [
+        {
+          "channel": "url",
+          "kind": "data-uri",
+          "node": "MusicSpectrum",
+          "sha256": "96ae73cc21e166ec0e62a2b6acd7971e8acc9f146716d114fbb8d1efc36ec28d"
+        }
+      ],
+      "role": "distinct-domain-consumer",
+      "sha256": "e57aa466bcbe39686c4e14793114485eca5171f5fc219762e12767601c17ecef",
+      "shaderParts": 1
+    }
+  ],
+  "schema": "flywheel.local-guard-run/1",
+  "scope": "Executed local structural guard on newly authored fixtures. This is not the synthetic teaching replay.",
+  "sources": [
+    {
+      "definedAt": "https://github.com/hagopjay/x3d.loom/blob/ba301533d7b66eb8fe5e691524a551ef01c58de1/LOOM-v1.md?plain=1#L393",
+      "id": "fm/1",
+      "recordSha256": "cee687bdbadaf55f72d6c23b790ede3719a4c9bcc5dbbcf1f484372409faf432"
+    },
+    {
+      "definedAt": "https://github.com/hagopjay/x3d.loom/blob/ba301533d7b66eb8fe5e691524a551ef01c58de1/LOOM-v1.md?plain=1#L97",
+      "id": "law/7",
+      "recordSha256": "68d72f2578c12ce3fa23de84ccdfe3528af0a68d8b1b9526e2ee4edeb5e9a150"
+    }
+  ],
+  "synthetic": false
+}

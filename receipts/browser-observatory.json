@@ -1,0 +1,115 @@
+{
+ "schema": "gobbler.browser-check/1",
+ "page": "gobbler-flyte/index.html",
+ "browser": "Chromium 153.0.8010.12",
+ "gl": "software (SwiftShader)",
+ "checks": [
+  {
+   "name": "page boots past \"Opening the loom\"",
+   "ok": true,
+   "detail": {
+    "status": "Archive snapshot · 12 proposed domains",
+    "ms": 7273
+   }
+  },
+  {
+   "name": "X3D scene is loaded in X_ITE",
+   "ok": true,
+   "detail": {
+    "nodes": 180,
+    "spec": null,
+    "version": "16.7.0"
+   }
+  },
+  {
+   "name": "WebGL canvas exists with size",
+   "ok": true,
+   "detail": {
+    "w": 922,
+    "h": 668
+   }
+  },
+  {
+   "name": "evidence counters filled from Atlas",
+   "ok": true,
+   "detail": {
+    "nodes": "2,181",
+    "edges": "7,222",
+    "laws": "44",
+    "hash": "Build: 8/8 recorded hashes match"
+   }
+  },
+  {
+   "name": "twelve feather buttons",
+   "ok": true,
+   "detail": 12
+  },
+  {
+   "name": "feather selection updates dossier",
+   "ok": true,
+   "detail": [
+    "Ontology",
+    "Game development",
+    "Architecture"
+   ]
+  },
+  {
+   "name": "foldback replay advances",
+   "ok": true,
+   "detail": "CANDIDATE · A game effect proposes raw GLSL as a ShaderPart URL. This teaching artifact has not pass"
+  },
+  {
+   "name": "Atlas search returns results for fm/1",
+   "ok": true,
+   "detail": {
+    "hits": 18,
+    "state": "72 matches · showing 18 · SHA-256 matched"
+   }
+  },
+  {
+   "name": "pause toggles aria-pressed",
+   "ok": true
+  },
+  {
+   "name": "scene area is not a flat colour",
+   "ok": true,
+   "detail": {
+    "distinctQuantisedColours": 232
+   }
+  },
+  {
+   "name": "page stays live (rAF > 1/s under software GL)",
+   "ok": true,
+   "detail": 60.3
+  },
+  {
+   "name": "mobile width has no horizontal page scroll",
+   "ok": true,
+   "detail": {
+    "overflowPx": 0
+   }
+  },
+  {
+   "name": "no uncaught page errors",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "name": "no console errors",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "name": "no failed requests",
+   "ok": true,
+   "detail": []
+  }
+ ],
+ "consoleErrors": [],
+ "pageErrors": [],
+ "failedRequests": [],
+ "bootMs": 7273,
+ "loadStatus": "Archive snapshot · 12 proposed domains",
+ "cadenceRafPerSecSoftwareGL": 60.3,
+ "ok": true
+}

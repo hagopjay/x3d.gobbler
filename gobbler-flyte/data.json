@@ -1,0 +1,173 @@
+{
+ "synthetic": true,
+ "note": "Art piece. Every figure is invented by a seeded generator; none is a measurement.",
+ "wheels": [
+  {
+   "name": "STEM",
+   "color": [
+    0.25,
+    0.85,
+    1.0
+   ],
+   "momentum": 0.651,
+   "turns": 2587,
+   "worlds": 168,
+   "receipts": 111,
+   "period": 7.49
+  },
+  {
+   "name": "Physics",
+   "color": [
+    1.0,
+    0.45,
+    0.2
+   ],
+   "momentum": 0.913,
+   "turns": 452,
+   "worlds": 231,
+   "receipts": 443,
+   "period": 4.87
+  },
+  {
+   "name": "Music",
+   "color": [
+    0.95,
+    0.3,
+    0.75
+   ],
+   "momentum": 0.934,
+   "turns": 1079,
+   "worlds": 236,
+   "receipts": 495,
+   "period": 4.66
+  },
+  {
+   "name": "Architecture",
+   "color": [
+    0.95,
+    0.85,
+    0.35
+   ],
+   "momentum": 0.751,
+   "turns": 676,
+   "worlds": 192,
+   "receipts": 286,
+   "period": 6.49
+  },
+  {
+   "name": "3D printing",
+   "color": [
+    0.45,
+    1.0,
+    0.55
+   ],
+   "momentum": 0.807,
+   "turns": 3684,
+   "worlds": 205,
+   "receipts": 556,
+   "period": 5.93
+  },
+  {
+   "name": "Games",
+   "color": [
+    0.6,
+    0.45,
+    1.0
+   ],
+   "momentum": 0.452,
+   "turns": 1368,
+   "worlds": 120,
+   "receipts": 75,
+   "period": 9.48
+  },
+  {
+   "name": "Education",
+   "color": [
+    0.3,
+    1.0,
+    0.9
+   ],
+   "momentum": 0.679,
+   "turns": 6046,
+   "worlds": 174,
+   "receipts": 390,
+   "period": 7.21
+  },
+  {
+   "name": "Heritage",
+   "color": [
+    1.0,
+    0.65,
+    0.3
+   ],
+   "momentum": 0.853,
+   "turns": 3346,
+   "worlds": 216,
+   "receipts": 602,
+   "period": 5.47
+  },
+  {
+   "name": "Ontology",
+   "color": [
+    0.55,
+    0.7,
+    1.0
+   ],
+   "momentum": 0.416,
+   "turns": 1490,
+   "worlds": 111,
+   "receipts": 282,
+   "period": 9.84
+  }
+ ],
+ "views": [
+  [
+   "V_tour",
+   "The tour"
+  ],
+  [
+   "V_front",
+   "Before the fan"
+  ],
+  [
+   "V_above",
+   "From above"
+  ],
+  [
+   "V0",
+   "STEM"
+  ],
+  [
+   "V1",
+   "Physics"
+  ],
+  [
+   "V2",
+   "Music"
+  ],
+  [
+   "V3",
+   "Architecture"
+  ],
+  [
+   "V4",
+   "3D printing"
+  ],
+  [
+   "V5",
+   "Games"
+  ],
+  [
+   "V6",
+   "Education"
+  ],
+  [
+   "V7",
+   "Heritage"
+  ],
+  [
+   "V8",
+   "Ontology"
+  ]
+ ]
+}

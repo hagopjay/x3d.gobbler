@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<X3D profile="Immersive" version="4.0"><head><component name="Shaders" level="1"/></head><Scene>
+<Shape><Appearance><ComposedShader language="GLSL">
+<ShaderPart DEF="MusicSpectrum" type="FRAGMENT" url='"data:x-shader/x-fragment,precision highp float; out vec4 outputColor; void main() { outputColor = vec4(0.2,0.7,1.0,1.0); }"'/>
+</ComposedShader></Appearance><Cylinder/></Shape>
+</Scene></X3D>

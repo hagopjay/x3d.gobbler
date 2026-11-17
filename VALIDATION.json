@@ -1,0 +1,73 @@
+{
+  "schema": "flywheel.verification/1",
+  "scope": "local-code-and-artifact-consistency",
+  "ok": true,
+  "checks": [
+    {
+      "name": "kernel and snapshot regression tests",
+      "ok": true
+    },
+    {
+      "name": "compiled archive view matches source bytes",
+      "ok": true
+    },
+    {
+      "name": "scene generator rebuilds to identical bytes",
+      "ok": true
+    },
+    {
+      "name": "new scene XML and named references",
+      "ok": true,
+      "errors": []
+    },
+    {
+      "name": "one scene selector for every manifest feather",
+      "ok": true
+    },
+    {
+      "name": "scene binds Atlas and domain manifest digests",
+      "ok": true
+    },
+    {
+      "name": "animation keys and tuple counts",
+      "ok": true,
+      "errors": []
+    },
+    {
+      "name": "browser controls resolve scene names",
+      "ok": true,
+      "missing": []
+    },
+    {
+      "name": "browser controls resolve document IDs",
+      "ok": true,
+      "missing": []
+    },
+    {
+      "name": "entry page local assets exist",
+      "ok": true,
+      "missing": []
+    },
+    {
+      "name": "scene has no Script or external URL",
+      "ok": true
+    },
+    {
+      "name": "committed single-file export is current",
+      "ok": true
+    },
+    {
+      "name": "leak sweep",
+      "ok": true,
+      "out": "leak sweep clean: 249 tracked files"
+    }
+  ],
+  "notRun": [
+    "browser rendering and interaction (see receipts/browser-*.json, run by tools/browser_check.cjs)",
+    "X3D XSD/field typing",
+    "GPU timing or visual fidelity",
+    "audio listening",
+    "original experiments and full Atlas witness",
+    "current GitHub inventory or PR publication"
+  ]
+}

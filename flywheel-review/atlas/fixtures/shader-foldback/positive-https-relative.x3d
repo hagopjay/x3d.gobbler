@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<X3D profile="Immersive" version="4.0"><head><component name="Shaders" level="1"/></head><Scene>
+<Shape><Appearance><ComposedShader language="GLSL">
+<ShaderPart DEF="ExternalVertex" type="VERTEX" url='"https://example.org/shaders/vertex.glsl" "shaders/local-vertex.glsl"'/>
+<ShaderPart DEF="RelativeFragment" type="FRAGMENT" url='"../shared/fragment.glsl"'/>
+</ComposedShader></Appearance><Box/></Shape>
+</Scene></X3D>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<X3D profile="Immersive" version="4.0"><head><component name="Shaders" level="1"/></head><Scene>
+<Shape><Appearance><ComposedShader language="GLSL">
+<ShaderPart DEF="RawGameURL" type="FRAGMENT" url='"void main() { outputColor = vec4(1.0); }"'/>
+</ComposedShader></Appearance><Sphere/></Shape>
+</Scene></X3D>

@@ -1,0 +1,331 @@
+{
+ "base": "ba301533d7b66eb8fe5e691524a551ef01c58de1",
+ "same_incident": [
+  [
+   2,
+   1,
+   "both cite LEC 1 for a valid scene that draws white"
+  ],
+  [
+   7,
+   1,
+   "the law's incident is the trap shader-raw-source, which is failure mode 1's fix"
+  ],
+  [
+   9,
+   11,
+   "both cite LEC 8 for the optimiser that declares profile Full"
+  ],
+  [
+   17,
+   12,
+   "both cite LS1 A01: a stale browser pass authorised changed code"
+  ],
+  [
+   18,
+   13,
+   "both cite LS1 A02 and IFC: asserts stripped under -O"
+  ],
+  [
+   34,
+   89,
+   "the law cites the teardown's F01 record; failure mode 89's source is that record"
+  ],
+  [
+   32,
+   78,
+   "the law's evidence already names it; patch 1 writes out 'failure mode 78'"
+  ]
+ ],
+ "readings": {
+  "2": [
+   [
+    2
+   ],
+   "valid X3D, invalid GLSL: a case of shipping on '0 errors'"
+  ],
+  "3": [
+   [
+    2,
+    7
+   ],
+   "the fork passes and X_ITE drops the ROUTE (law 2); the fix is a trap rule (law 7)"
+  ],
+  "27": [
+   [
+    2
+   ],
+   "metadata valid but unattached at runtime"
+  ],
+  "57": [
+   [
+    3
+   ],
+   "the browser passed what the Meaning witness refuses: two witnesses, different blind spots"
+  ],
+  "73": [
+   [
+    3
+   ],
+   "loaded in X_ITE, refused by the Meaning witness"
+  ],
+  "102": [
+   [
+    3
+   ],
+   "X_ITE draws what the XSD refuses; the fix runs both"
+  ],
+  "141": [
+   [
+    3
+   ],
+   "the XSD passed while the semantic validator found errors; the fix runs both"
+  ],
+  "44": [
+   [
+    4
+   ],
+   "the platform was an undeclared input of the rebuild"
+  ],
+  "4": [
+   [
+    7
+   ],
+   "the fix is a trap rule"
+  ],
+  "5": [
+   [
+    7
+   ],
+   "the fix is a trap rule"
+  ],
+  "8": [
+   [
+    7
+   ],
+   "the fix is a trap rule"
+  ],
+  "9": [
+   [
+    7
+   ],
+   "the fix is a trap rule"
+  ],
+  "109": [
+   [
+    7
+   ],
+   "the fix is a trap rule"
+  ],
+  "110": [
+   [
+    7
+   ],
+   "the fix is a trap rule"
+  ],
+  "111": [
+   [
+    7
+   ],
+   "the fix is a trap rule"
+  ],
+  "112": [
+   [
+    7
+   ],
+   "the fix is a trap rule"
+  ],
+  "113": [
+   [
+    7
+   ],
+   "the fix is a page trap rule"
+  ],
+  "24": [
+   [
+    15
+   ],
+   "CPU time called GPU time, idle frames called fps: a number without its instrument"
+  ],
+  "42": [
+   [
+    15
+   ],
+   "verdicts spread over five validator commits: unpinned verdicts"
+  ],
+  "47": [
+   [
+    17
+   ],
+   "a 'valid' badge shown on changed bytes; the fix rebinds claims to the current bytes"
+  ],
+  "55": [
+   [
+    18
+   ],
+   "the recurrence of failure mode 13: a gate that vanishes under -O"
+  ],
+  "66": [
+   [
+    19
+   ],
+   "a negative control that could not fail at a symmetric view"
+  ],
+  "96": [
+   [
+    19
+   ],
+   "controls checked that a rule fired, not what it reported"
+  ],
+  "71": [
+   [
+    23
+   ],
+   "a display precision fixed in advance failed its witness"
+  ],
+  "142": [
+   [
+    25
+   ],
+   "an engine cross-checked against itself: no independent assumption"
+  ],
+  "19": [
+   [
+    26
+   ],
+   "the witness read its own overlays"
+  ],
+  "20": [
+   [
+    26
+   ],
+   "the image difference came from the UI, not the scene"
+  ],
+  "30": [
+   [
+    26
+   ],
+   "a loading overlay made an empty frame look full"
+  ],
+  "85": [
+   [
+    26
+   ],
+   "a detector with the wrong geometry, trusted before a known-answer test"
+  ],
+  "108": [
+   [
+    26
+   ],
+   "witnesses that measured their own sampling or renderer"
+  ],
+  "124": [
+   [
+    27
+   ],
+   "a stepped engine judged against the continuum answer: unlike with unlike"
+  ],
+  "59": [
+   [
+    28
+   ],
+   "an approximation failed its gate; the fix forbids widening the threshold after the run"
+  ],
+  "7": [
+   [
+    31
+   ],
+   "X_ITE has no public scene clock; the fix gives time one owner"
+  ],
+  "131": [
+   [
+    31
+   ],
+   "scene clocks ran ahead of physics; the fix makes clocks follow physics"
+  ],
+  "49": [
+   [
+    32
+   ],
+   "page code assumed textures resolve against the scene URL"
+  ],
+  "61": [
+   [
+    32
+   ],
+   "page code assumed the hidden attribute wins over CSS display"
+  ],
+  "77": [
+   [
+    32
+   ],
+   "a page global collided with the browser's window.top"
+  ],
+  "84": [
+   [
+    32
+   ],
+   "evidence code assumed a viewpoint change is instant; X_ITE glides for a second"
+  ],
+  "101": [
+   [
+    32
+   ],
+   "page code assumed X_ITE starts in a hidden tab"
+  ],
+  "104": [
+   [
+    32
+   ],
+   "a post pass assumed when X_ITE's canvas holds a drawn frame"
+  ],
+  "117": [
+   [
+    32
+   ],
+   "a context-lost handler assumed it spoke for the current canvas"
+  ],
+  "118": [
+   [
+    32
+   ],
+   "page code assumed X_ITE can be torn down"
+  ],
+  "130": [
+   [
+    32
+   ],
+   "page code assumed createX3DFromString settles in WebKit"
+  ],
+  "144": [
+   [
+    32
+   ],
+   "tests assumed the default headless browser can run the page"
+  ],
+  "58": [
+   [
+    33
+   ],
+   "the -I trap of failure mode 43, hit a second time"
+  ],
+  "81": [
+   [
+    36
+   ],
+   "an empty sample passed vacuously: a pass that saw nothing"
+  ],
+  "92": [
+   [
+    36
+   ],
+   "a page that never ran passed every pattern rule"
+  ],
+  "126": [
+   [
+    44
+   ],
+   "a CCD-on test alone proved nothing; the fix keeps a control that must fail"
+  ]
+ }
+}

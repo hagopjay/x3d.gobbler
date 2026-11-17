@@ -1,0 +1,3 @@
+gobbler-flyte/observatory.x3d | XSD valid: True [] | semantic: ('0', '0', '81')
+gobbler-flyte/scene.x3d | XSD valid: True [] | semantic: ('0', '0', '21')
+flywheel-review/atlas/out-r1/atlas-world.x3d | XSD valid: True [] | semantic: ('0', '0', '1470')

@@ -1,0 +1,46 @@
+name: ci
+on: [push, pull_request]
+permissions: {contents: read}
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.13'}
+      - run: python verify.py          # tests, scene rebuild, standalone is current, leak sweep
+      - run: python tools/fetch_pins.py
+      - name: Atlas rebuilds byte-identical from the pinned x3d.docs
+        run: |
+          cp -r flywheel-review/atlas/out /tmp/out-orig
+          (cd flywheel-review/atlas && python build_atlas.py >/dev/null)
+          for f in atlas.json atlas.jsonld atlas.ttl atlas-vocab.ttl atlas-claims.jsonl findings.json; do cmp flywheel-review/atlas/out/$f /tmp/out-orig/$f; done
+  witness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.13'}
+      - run: python tools/fetch_pins.py
+      - name: x3d_mcp validator at the commit the receipts name
+        run: |
+          git clone -q https://github.com/hagopjay/x3d_mcp.git ../x3d_mcp
+          pip install -q -e ../x3d_mcp rdflib
+      - name: full witness into out-r1
+        run: |
+          mkdir -p flywheel-review/atlas/out-r1
+          cd flywheel-review/atlas
+          export ATLAS_OUT=$PWD/out-r1 X3D_MCP_DIR=$GITHUB_WORKSPACE/../x3d_mcp
+          python build_atlas.py >/dev/null && python fly_atlas.py >/dev/null && python check_atlas.py --offline
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: npm i --no-save playwright && npx playwright install --with-deps chromium
+      - run: node tools/browser_check.cjs --out /tmp/shots
+      - run: node tools/browser_check.cjs --page Gobbler-Evidence-Loom.html --allow-missing-assets --out /tmp/shots-sa
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: shots, path: /tmp/shots*}

@@ -1,0 +1,185 @@
+{
+ "checks": [
+  {
+   "changed": [],
+   "files": 6,
+   "name": "rebuild gives the same bytes",
+   "ok": true
+  },
+  {
+   "name": "every count matches what the sources state",
+   "ok": true,
+   "red": [],
+   "rows": 19
+  },
+  {
+   "name": "Turtle and JSON-LD are the same graph",
+   "ok": true,
+   "only_jsonld": 0,
+   "only_turtle": 0,
+   "triples_jsonld": 23273,
+   "triples_turtle": 23273
+  },
+  {
+   "blank": 0,
+   "name": "one subject per node, no blank nodes",
+   "nodes": 2181,
+   "ok": true,
+   "subjects": 2181
+  },
+  {
+   "dangling": 0,
+   "examples": [],
+   "name": "every edge ends on a node",
+   "ok": true
+  },
+  {
+   "name": "every class and property used is declared",
+   "ok": true,
+   "undeclared": [],
+   "used": 101
+  },
+  {
+   "classes": 21,
+   "name": "SPARQL class counts equal the builder's",
+   "ok": true
+  },
+  {
+   "name": "numbers per X_ITE version: SPARQL equals the builder",
+   "ok": true,
+   "sparql": "{\"16.4.3\": 3, \"16.5.1\": 6, \"16.6.0\": 75, \"16.7.0\": 10, \"16.7.1\": 6}"
+  },
+  {
+   "builder": 32,
+   "name": "Confirmed numbers with a verified quote: SPARQL equals the builder",
+   "ok": true,
+   "sparql": 32
+  },
+  {
+   "name": "process-only laws: SPARQL equals the builder",
+   "ok": true,
+   "sparql": 17
+  },
+  {
+   "name": "every quoted row reaches a pinned file",
+   "ok": true,
+   "rows": 1442
+  },
+  {
+   "by_type": {
+    "class": {
+     "verified": 11
+    },
+    "drill": {
+     "verified": 177
+    },
+    "fm": {
+     "verified": 160
+    },
+    "heuristic": {
+     "verified": 359
+    },
+    "law": {
+     "verified": 44
+    },
+    "number": {
+     "verified": 591
+    },
+    "question": {
+     "verified": 18
+    }
+   },
+   "check": 0,
+   "claims": 1360,
+   "name": "the family's checker verifies every Atlas claim at its pin",
+   "not_verified": [],
+   "offline": true,
+   "ok": true,
+   "read": {
+    "pinned": 1360
+   },
+   "reworded": 0,
+   "unchecked": 0,
+   "verified": 1360
+  },
+  {
+   "missing": [],
+   "name": "every copied row has a claim",
+   "ok": true,
+   "rows": 1360,
+   "with_claim": 1360
+  },
+  {
+   "name": "three planted faults are rejected",
+   "ok": true,
+   "verdicts": "{\"a value that is not in its quote\": \"check\", \"a quote hinted at the wrong line\": \"check\", \"a quote that is not in the source\": \"check\"}"
+  },
+  {
+   "files": 2,
+   "name": "scene: rebuild gives the same bytes",
+   "ok": true
+  },
+  {
+   "atlas": "552d8497f3ab",
+   "head": "552d8497f3ab",
+   "name": "scene: drawn from this atlas.json (sha256 in its head)",
+   "ok": true
+  },
+  {
+   "kinds": {
+    "Chapter": 23,
+    "Dataset": 1,
+    "Drill": 177,
+    "Failure mode": 160,
+    "Heuristic": 359,
+    "Law": 44,
+    "Number": 591,
+    "Pin": 6,
+    "Tool version": 5
+   },
+   "name": "scene: one sensor per row, each with a description and a panel answer",
+   "ok": true,
+   "panel": 1366,
+   "sensors": 1366
+  },
+  {
+   "early": [],
+   "name": "scene: no Script, no USE before its DEF",
+   "ok": true,
+   "routes": 2,
+   "shapes": 1593
+  },
+  {
+   "name": "scene: x3d_mcp says XSD valid, 0 semantic errors, 0 warnings",
+   "ok": true,
+   "semantic": "('0', '0', '1470')",
+   "x3d_mcp": "fa5dccf",
+   "xsd": "True"
+  }
+ ],
+ "engine": {
+  "checker": "x3d.docs docs/tools-shared/claims_lib.py",
+  "claims_lib_sha256": "6bfcfadd3a217dfcb784c667f4effb79cb56b29d89ca3539e85f1ff1dd31cba2",
+  "python": "3.13.18",
+  "rdflib": "7.6.0",
+  "schema": "claims/0.1",
+  "strict_pins": true,
+  "x3d_mcp_local_checkout": "fa5dccf"
+ },
+ "inputs": {
+  "x3d.docs": "ff0565e5a248ca391d68527716a58a821f25d152",
+  "x3d.loom": "ba301533d7b66eb8fe5e691524a551ef01c58de1"
+ },
+ "ok": true,
+ "schema": "atlas.receipt/0",
+ "sha256": {
+  "atlas-claims.jsonl": "d1683d47d43421df82a16ebf67da86f51e30e346ac7554505461a1f3739e70d0",
+  "atlas-panel.json": "d0b954f0375329c3cc074b2bc528f518747480850519e1c3bd278e8a83e30940",
+  "atlas-vocab.ttl": "bdb532fc5d0275a2f7fd9efb573609553c97355f20705db9b343425cfb9b3d1d",
+  "atlas-world.x3d": "eedd542638b35e3bbd8f964c02ab79328412682ec2c81130f620994a1d0e7d5d",
+  "atlas.json": "552d8497f3abff4a3dfabd3ee35ac6c784105a901920417bf6468da7dfe6a6a7",
+  "atlas.jsonld": "235e3a88957d9c4e1fd0e8394642b3d53189284a7b9fe8a4b4552973530991e8",
+  "atlas.ttl": "94475c394e079f148fc126ff8319e9796d7aea6ac1a37dfedce04b5d20b01486",
+  "findings.json": "d642a1d82958a5f3ec4d0cef6a1daaa05d49d74e03d3f1c26584443f234b5cc6"
+ }
+}

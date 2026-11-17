@@ -1,0 +1,107 @@
+@prefix atlas: <https://x3datlas.example/0#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+<https://x3datlas.example/0> a owl:Ontology ; rdfs:label "The Atlas vocabulary, version 0" .
+
+atlas:Law a rdfs:Class ; rdfs:label "Law" ; rdfs:comment "A numbered law of the Loom (LOOM-v1.md section 3)." .
+atlas:FailureMode a rdfs:Class ; rdfs:label "FailureMode" ; rdfs:comment "A numbered failure someone paid for, with its fix (LOOM-v1.md section 8)." .
+atlas:FailureClass a rdfs:Class ; rdfs:label "FailureClass" ; rdfs:comment "Chapter 02's grouping of the failure modes, K1 to K11. A reading, not a Loom id." .
+atlas:Theme a rdfs:Class ; rdfs:label "Theme" ; rdfs:comment "Chapter 02's grouping of the laws, A to J." .
+atlas:Diagnostic a rdfs:Class ; rdfs:label "Diagnostic" ; rdfs:comment "A stable diagnostic code raised by loomkit or a witness." .
+atlas:TrapRule a rdfs:Class ; rdfs:label "TrapRule" ; rdfs:comment "A named trap rule of the validator." .
+atlas:OpenQuestion a rdfs:Class ; rdfs:label "OpenQuestion" ; rdfs:comment "A numbered open question (LOOM-v1.md section 10)." .
+atlas:Number a rdfs:Class ; rdfs:label "Number" ; rdfs:comment "A measured or carried quantity in a chapter's Numbers register." .
+atlas:Heuristic a rdfs:Class ; rdfs:label "Heuristic" ; rdfs:comment "A rule of thumb in a chapter's Heuristics table." .
+atlas:Drill a rdfs:Class ; rdfs:label "Drill" ; rdfs:comment "An exercise with a task, a verify command and an answer key." .
+atlas:Chapter a rdfs:Class ; rdfs:label "Chapter" ; rdfs:comment "A chapter of the learning base." .
+atlas:Instrument a rdfs:Class ; rdfs:label "Instrument" ; rdfs:comment "An instrument string exactly as written in a Numbers register." .
+atlas:Tool a rdfs:Class ; rdfs:label "Tool" ; rdfs:comment "A program named inside an instrument string." .
+atlas:ToolVersion a rdfs:Class ; rdfs:label "ToolVersion" ; rdfs:comment "A tool at a named version." .
+atlas:Pin a rdfs:Class ; rdfs:label "Pin" ; rdfs:comment "A repository at a commit." .
+atlas:Repo a rdfs:Class ; rdfs:label "Repo" ; rdfs:comment "A repository, by name." .
+atlas:SourceDocument a rdfs:Class ; rdfs:label "SourceDocument" ; rdfs:comment "A file at a commit: repo@sha:path. The same idea as x3dprov's SourceDocument." .
+atlas:Claim a rdfs:Class ; rdfs:label "Claim" ; rdfs:comment "One line of a chapter's claim ledger (claims/0.1): a value, the quote that holds it, its source, and the checker's verdict from the receipt." .
+atlas:Source a rdfs:Class ; rdfs:label "Source" ; rdfs:comment "A source id cited by LOOM-v1.md (defined in the Loom's SOURCES.md, not read here)." .
+atlas:Grade a rdfs:Class ; rdfs:label "Grade" ; rdfs:comment "C, L or S." .
+atlas:Dataset a rdfs:Class ; rdfs:label "Dataset" ; rdfs:comment "This graph." .
+
+atlas:n a owl:DatatypeProperty ; rdfs:label "n" ; rdfs:comment "The stable number of a law, failure mode, question or chapter." .
+atlas:headline a owl:DatatypeProperty ; rdfs:label "headline" .
+atlas:text a owl:DatatypeProperty ; rdfs:label "text" .
+atlas:forbids a owl:DatatypeProperty ; rdfs:label "forbids" .
+atlas:paidForByText a owl:DatatypeProperty ; rdfs:label "paidForByText" ; rdfs:comment "LOOM-v1 section 3, column 'Paid for by', as written." .
+atlas:evidenceText a owl:DatatypeProperty ; rdfs:label "evidenceText" ; rdfs:comment "Chapter 02, column 'evidence', as written." .
+atlas:violation a owl:DatatypeProperty ; rdfs:label "violation" ; rdfs:comment "Chapter 02, column 'typical violation'." .
+atlas:checkText a owl:DatatypeProperty ; rdfs:label "checkText" ; rdfs:comment "Chapter 02, column 'check', as written." .
+atlas:checkKind a owl:DatatypeProperty ; rdfs:label "checkKind" ; rdfs:comment "'code' when a mechanical check exists in the kit, 'process' when only review does." .
+atlas:failure a owl:DatatypeProperty ; rdfs:label "failure" .
+atlas:fix a owl:DatatypeProperty ; rdfs:label "fix" .
+atlas:sourceText a owl:DatatypeProperty ; rdfs:label "sourceText" .
+atlas:quantity a owl:DatatypeProperty ; rdfs:label "quantity" .
+atlas:value a owl:DatatypeProperty ; rdfs:label "value" ; rdfs:comment "The value as written; not parsed." .
+atlas:instrumentText a owl:DatatypeProperty ; rdfs:label "instrumentText" .
+atlas:sourceCell a owl:DatatypeProperty ; rdfs:label "sourceCell" .
+atlas:runDate a owl:DatatypeProperty ; rdfs:label "runDate" .
+atlas:instrumentResolution a owl:DatatypeProperty ; rdfs:label "instrumentResolution" ; rdfs:comment "'as written', 'inferred from the row above' or 'unresolved'." .
+atlas:rule a owl:DatatypeProperty ; rdfs:label "rule" .
+atlas:evidence a owl:DatatypeProperty ; rdfs:label "evidence" .
+atlas:retired a owl:DatatypeProperty ; rdfs:label "retired" .
+atlas:title a owl:DatatypeProperty ; rdfs:label "title" .
+atlas:level a owl:DatatypeProperty ; rdfs:label "level" .
+atlas:task a owl:DatatypeProperty ; rdfs:label "task" .
+atlas:verify a owl:DatatypeProperty ; rdfs:label "verify" .
+atlas:answer a owl:DatatypeProperty ; rdfs:label "answer" .
+atlas:checkedText a owl:DatatypeProperty ; rdfs:label "checkedText" .
+atlas:status a owl:DatatypeProperty ; rdfs:label "status" ; rdfs:comment "'ran' or 'not run'." .
+atlas:checkedOn a owl:DatatypeProperty ; rdfs:label "checkedOn" .
+atlas:code a owl:DatatypeProperty ; rdfs:label "code" .
+atlas:say a owl:DatatypeProperty ; rdfs:label "say" .
+atlas:file a owl:DatatypeProperty ; rdfs:label "file" .
+atlas:asWritten a owl:DatatypeProperty ; rdfs:label "asWritten" .
+atlas:relative a owl:DatatypeProperty ; rdfs:label "relative" ; rdfs:comment "True when the string points at another row ('same')." .
+atlas:notes a owl:DatatypeProperty ; rdfs:label "notes" ; rdfs:comment "Parts of an instrument string the builder could not name as a tool, a pin or a date." .
+atlas:version a owl:DatatypeProperty ; rdfs:label "version" .
+atlas:repoName a owl:DatatypeProperty ; rdfs:label "repoName" .
+atlas:sha a owl:DatatypeProperty ; rdfs:label "sha" .
+atlas:origins a owl:DatatypeProperty ; rdfs:label "origins" .
+atlas:line a owl:DatatypeProperty ; rdfs:label "line" ; rdfs:comment "Line in the source file at the pin." .
+atlas:path a owl:DatatypeProperty ; rdfs:label "path" .
+atlas:claimValue a owl:DatatypeProperty ; rdfs:label "claimValue" ; rdfs:comment "The claimed value, as JSON." .
+atlas:quote a owl:DatatypeProperty ; rdfs:label "quote" ; rdfs:comment "The words the value was read from, as published in the ledger." .
+atlas:sourceRef a owl:DatatypeProperty ; rdfs:label "sourceRef" ; rdfs:comment "The ledger's source string: repo@sha:path, self:, external: or private:." .
+atlas:sourceKind a owl:DatatypeProperty ; rdfs:label "sourceKind" .
+atlas:cell a owl:DatatypeProperty ; rdfs:label "cell" ; rdfs:comment "Which register cell holds the value." .
+atlas:verdict a owl:DatatypeProperty ; rdfs:label "verdict" ; rdfs:comment "verified, check, reworded or unchecked: the checker's word, read from the receipt." .
+atlas:quoteLine a owl:DatatypeProperty ; rdfs:label "quoteLine" ; rdfs:comment "Line of the quote in its source, from the receipt." .
+atlas:loomSha a owl:DatatypeProperty ; rdfs:label "loomSha" .
+atlas:docsSha a owl:DatatypeProperty ; rdfs:label "docsSha" .
+atlas:loomSha256 a owl:DatatypeProperty ; rdfs:label "loomSha256" .
+atlas:inputFiles a owl:DatatypeProperty ; rdfs:label "inputFiles" .
+atlas:paidForBy a owl:ObjectProperty ; rdfs:label "paidForBy" ; rdfs:comment "Law to failure mode: cited in the law's 'paid for by' or 'evidence' column." .
+atlas:fixedByLaw a owl:ObjectProperty ; rdfs:label "fixedByLaw" ; rdfs:comment "Failure mode to law: the fix column cites the law." .
+atlas:caughtBy a owl:ObjectProperty ; rdfs:label "caughtBy" ; rdfs:comment "Law or failure mode to the diagnostic that catches it." .
+atlas:hasTrap a owl:ObjectProperty ; rdfs:label "hasTrap" ; rdfs:comment "Failure mode to the trap rule named in its fix." .
+atlas:recurredAs a owl:ObjectProperty ; rdfs:label "recurredAs" ; rdfs:comment "Failure mode to the later failure mode it recurred as." .
+atlas:inTheme a owl:ObjectProperty ; rdfs:label "inTheme" .
+atlas:inClass a owl:ObjectProperty ; rdfs:label "inClass" .
+atlas:topOfClass a owl:ObjectProperty ; rdfs:label "topOfClass" ; rdfs:comment "Class to one of its three costliest failure modes (chapter 02's choice)." .
+atlas:inChapter a owl:ObjectProperty ; rdfs:label "inChapter" .
+atlas:grade a owl:ObjectProperty ; rdfs:label "grade" .
+atlas:evidenceGrade a owl:ObjectProperty ; rdfs:label "evidenceGrade" ; rdfs:comment "A grade cited in a law's evidence." .
+atlas:measuredWith a owl:ObjectProperty ; rdfs:label "measuredWith" ; rdfs:comment "Number to its instrument string as written." .
+atlas:resolvedInstrument a owl:ObjectProperty ; rdfs:label "resolvedInstrument" ; rdfs:comment "Number to the instrument it stands on, after following 'same'." .
+atlas:usesTool a owl:ObjectProperty ; rdfs:label "usesTool" .
+atlas:ofTool a owl:ObjectProperty ; rdfs:label "ofTool" .
+atlas:atPin a owl:ObjectProperty ; rdfs:label "atPin" .
+atlas:ofRepo a owl:ObjectProperty ; rdfs:label "ofRepo" .
+atlas:evidencedBy a owl:ObjectProperty ; rdfs:label "evidencedBy" ; rdfs:comment "Heuristic to a number, drill, law or failure mode cited in its evidence column." .
+atlas:mentions a owl:ObjectProperty ; rdfs:label "mentions" ; rdfs:comment "Any other citation of a stable id." .
+atlas:citesPin a owl:ObjectProperty ; rdfs:label "citesPin" .
+atlas:requires a owl:ObjectProperty ; rdfs:label "requires" ; rdfs:comment "Chapter to a prerequisite chapter." .
+atlas:supports a owl:ObjectProperty ; rdfs:label "supports" ; rdfs:comment "Claim to the number or heuristic it gives a quote for." .
+atlas:carriedFrom a owl:ObjectProperty ; rdfs:label "carriedFrom" ; rdfs:comment "A number taken from another row (the ledger's 'from'); its grade may not rise." .
+atlas:citesSource a owl:ObjectProperty ; rdfs:label "citesSource" .

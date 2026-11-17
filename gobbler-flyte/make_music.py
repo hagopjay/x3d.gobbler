@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+"""A 90-second loop for Mission Control, synthesised offline (numpy only).
+160 BPM: one bar is 1.5 s (the heart's beat), four bars are 6 s (one shockwave cycle), 60 bars are one tour.
+v2 adds a sung lead melody, a harmony a third below, a counter-line and richer chords (sevenths and ninths).
+Everything is added into a circular buffer, so the loop has no seam. Nobody has listened to it yet."""
+import math, pathlib, subprocess, wave
+import numpy as np
+SR, BEAT, BARS = 44100, 0.375, 60          # 160 BPM (v1 was 150)
+N = int(round(BARS * 4 * BEAT * SR)); L = np.zeros(N); R = np.zeros(N)
+rng = np.random.default_rng(9)
+D = 146.83
+SCALE = [0, 2, 3, 5, 7, 8, 10]                       # D natural minor
+def hz(deg, octave=0): return D * 2 ** ((SCALE[deg % 7] + 12 * (deg // 7 + octave)) / 12)
+def put(sig, t, pan=0.0, gain=1.0):
+    i = int(round(t * SR)) % N; idx = (i + np.arange(len(sig))) % N
+    np.add.at(L, idx, sig * gain * math.sqrt(0.5 * (1 - pan))); np.add.at(R, idx, sig * gain * math.sqrt(0.5 * (1 + pan)))
+def env(n, a, d): t = np.arange(n) / SR; return np.minimum(t / a, 1) * np.exp(-np.maximum(t - a, 0) / d)
+def tone(fr, dur, a=0.005, d=0.3, harm=(1, 0.5, 0.25), detune=0.0):
+    n = int(dur * SR); t = np.arange(n) / SR; s = sum(h * np.sin(2 * math.pi * fr * (k + 1) * (1 + detune * k) * t) for k, h in enumerate(harm))
+    return s * env(n, a, d)
+def kick():
+    n = int(0.45 * SR); t = np.arange(n) / SR; ph = 2 * math.pi * (45 * t + (150 - 45) * 0.03 * (1 - np.exp(-t / 0.03)))
+    return np.sin(ph) * np.exp(-t / 0.16)
+def hat(d=0.03): n = int(0.12 * SR); x = rng.standard_normal(n); x = np.diff(x, prepend=0); return x * np.exp(-np.arange(n) / SR / d)
+def pad(freqs, dur):
+    n = int(dur * SR); t = np.arange(n) / SR; s = np.zeros(n)
+    for fr in freqs:
+        for dt in (-0.004, 0, 0.004): s += np.sin(2 * math.pi * fr * (1 + dt) * t + rng.uniform(0, 6.28)) + 0.3 * np.sin(4 * math.pi * fr * (1 + dt) * t)
+    e = np.minimum(t / 1.6, 1) * np.minimum((dur - t) / 1.6, 1); return s * e / (3 * len(freqs))
+def riser(dur):
+    n = int(dur * SR); x = rng.standard_normal(n); t = np.arange(n) / n; y = np.zeros(n); a = 0.0
+    for i in range(n): a += (0.002 + 0.25 * t[i] ** 3) * (x[i] - a); y[i] = a
+    return y * t ** 2
+PROG = [(0, 2, 4), (5, 7, 9), (2, 4, 6), (6, 8, 10)]   # Dm, Bb, F, C: one chord per four bars
+MOTIF = [0, 2, 4, 7, 9, 7, 4, 2, 4]                    # nine notes for nine wheels
+bar = 4 * BEAT
+for b in range(BARS):
+    t0 = b * bar; ch = PROG[(b // 4) % 4]; sec = b // 4          # fifteen 4-bar sections
+    full = sec in (4, 5, 6, 7, 8, 9, 12, 13, 14); build = sec in (2, 3, 11); quiet = sec in (0, 1, 10)
+    if b % 4 == 0: put(pad([hz(d, -1) for d in ch] + [hz(ch[0], -2)], 4 * bar + 3.2), t0 - 0.2, 0, 0.5)
+    if b % 4 == 0: put(tone(hz(ch[0], -3), 1.4, 0.01, 0.8, (1, 0.3)), t0, 0, 0.9 if not quiet else 0.5)      # the shockwave's note
+    for q in range(4):
+        t = t0 + q * BEAT
+        if full or (build and q % 2 == 0): put(kick(), t, 0, 0.95)
+        if full: put(hat(), t + BEAT / 2, 0.3, 0.16)
+        if full or build:
+            put(tone(hz(ch[0], -2), BEAT * 0.9, 0.004, 0.16, (1, 0.6, 0.3, 0.15)), t + BEAT / 2, 0, 0.42)
+    if not quiet or sec == 1:
+        for s in range(16):
+            deg = ch[0] + MOTIF[(s + b * 7) % 9]
+            g = 0.16 if full else 0.1
+            put(tone(hz(deg, 0), 0.5, 0.003, 0.14, (1, 0.35, 0.12)), t0 + s * BEAT / 4, 0.7 * math.sin(s * 0.9 + b), g)
+            if full and s % 4 == 2: put(tone(hz(deg + 2, 1), 0.9, 0.002, 0.4, (1, 0.2)), t0 + s * BEAT / 4, -0.6 * math.sin(s + b), 0.07)
+    if b % 2 == 0:
+        put(tone(hz(ch[2] + (b // 2) % 3, 1), 2.6, 0.01, 1.1, (1, 0.25, 0.4, 0.1), 0.002), t0 + bar * 0.5, 0.5 * (-1) ** (b // 2), 0.09 if quiet else 0.06)
+# ---- v2: melody and harmony ------------------------------------------------------------------
+def lead(fr, dur, vib=5.2, depth=0.006, bright=0.5):
+    n = int(dur * SR); t = np.arange(n) / SR; ph = 2 * math.pi * fr * (t + depth * (1 - np.exp(-t / 0.25)) * np.sin(2 * math.pi * vib * t) / (2 * math.pi * vib) * 2 * math.pi)
+    sig = np.sin(ph) + bright * 0.5 * np.sin(2 * ph) + bright * 0.28 * np.sin(3 * ph) + bright * 0.12 * np.sin(4 * ph)
+    e = np.minimum(t / 0.045, 1) * np.minimum((dur - t) / 0.09, 1) * (0.75 + 0.25 * np.exp(-t / 0.5)); return sig * np.clip(e, 0, 1)
+# a four-bar phrase per chord, in scale steps above the chord root: (step, beats)
+PHRASES = [[(4, 2), (2, 1), (3, 1), (4, 1.5), (5, 0.5), (4, 2), (7, 2), (6, 1), (4, 1), (5, 1), (4, 1), (2, 2)],
+           [(2, 1.5), (3, 0.5), (4, 2), (6, 1), (5, 1), (4, 2), (4, 1), (5, 1), (7, 2), (6, 1.5), (5, 0.5), (4, 2)],
+           [(7, 2), (6, 1), (5, 1), (4, 3), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 3), (9, 1)],
+           [(8, 2), (7, 1), (6, 1), (5, 2), (4, 2), (2, 1), (4, 1), (5, 1), (6, 1), (7, 4)]]
+for sec in range(15):
+    ch = PROG[sec % 4]; t = sec * 4 * bar; role = "rest" if sec in (0, 3, 11) else "soft" if sec in (1, 2, 10) else "full"
+    if role == "rest": continue
+    g = 0.2 if role == "full" else 0.11; climax = sec in (8, 9, 13, 14)
+    for step, beats in PHRASES[(sec + (2 if sec >= 8 else 0)) % 4]:
+        d = beats * BEAT; deg = ch[0] + step
+        put(lead(hz(deg, 0), d * 0.97, bright=0.6 if role == "full" else 0.3), t, -0.15, g)
+        if sec >= 5: put(lead(hz(deg - 2, 0), d * 0.97, vib=4.6, bright=0.3), t, 0.35, g * 0.55)          # a third below
+        if climax: put(lead(hz(deg, 1), d * 0.97, vib=5.8, bright=0.25), t, 0.1, g * 0.3)                # the octave above
+        t += d
+    if role == "full":                                                                                 # a slow counter-line in the tenor
+        for k, step in enumerate((0, 2, 4, 2)):
+            put(lead(hz(ch[0] + step, -1), bar * 0.98, vib=3.5, bright=0.2), sec * 4 * bar + k * bar, 0.55 * (-1) ** k, 0.1)
+    # sevenths and ninths over the pad, entering one bar in
+    put(pad([hz(ch[0] + 6, -1), hz(ch[0] + 8, -1)], 3 * bar + 2.4), sec * 4 * bar + bar - 0.2, 0, 0.22 if role == "full" else 0.3)
+for sec in (3, 11): put(riser(4 * bar), sec * 4 * bar, 0, 0.5)
+for sec in (4, 12): put(tone(hz(0, -3), 3.5, 0.005, 1.4, (1, 0.4)), sec * 4 * bar, 0, 1.0); put(hat(0.5) * 0.6, sec * 4 * bar, 0, 0.5)
+# a soft echo, circular like everything else
+for buf, other in ((L, R), (R, L)):
+    dly = int(0.3 * SR); buf += 0.22 * np.roll(other, dly) + 0.1 * np.roll(buf, 2 * dly)
+peak = max(np.abs(L).max(), np.abs(R).max()); L, R = (np.tanh(1.6 * x / peak) / math.tanh(1.6) * 0.89 for x in (L, R))
+out = pathlib.Path(__file__).resolve().parent
+pcm = (np.stack([L, R], 1) * 32767).astype("<i2")
+with wave.open(str(out / "loop.wav"), "wb") as w: w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR); w.writeframes(pcm.tobytes())
+rms = lambda x: 20 * math.log10(float(np.sqrt(np.mean(x ** 2))))
+seam = float(abs(L[0] - L[-1])); print(f"{N / SR:.2f} s, peak {20 * math.log10(max(np.abs(L).max(), np.abs(R).max())):.1f} dBFS, RMS L {rms(L):.1f} R {rms(R):.1f} dBFS, seam step {seam:.4f}")
+for s in range(15):
+    a, b = int(s * 6.0 * SR), int((s + 1) * 6.0 * SR); print(f"  section {s:2d} RMS {rms(L[a:b]):6.1f} dBFS", end="\n" if s % 3 == 2 else "")

@@ -1,0 +1,146 @@
+{
+  "checks": [
+    {
+      "name": "snapshot JSON readable",
+      "ok": true
+    },
+    {
+      "atlasInputs": {
+        "x3d.docs": "ff0565e5a248ca391d68527716a58a821f25d152",
+        "x3d.loom": "ba301533d7b66eb8fe5e691524a551ef01c58de1"
+      },
+      "name": "receipt pins match graph pins",
+      "ok": true,
+      "receiptInputs": {
+        "x3d.docs": "ff0565e5a248ca391d68527716a58a821f25d152",
+        "x3d.loom": "ba301533d7b66eb8fe5e691524a551ef01c58de1"
+      },
+      "requirement": "Both inputs must be nonempty string maps with identical repository pins."
+    },
+    {
+      "matched": [
+        "atlas-claims.jsonl",
+        "atlas-panel.json",
+        "atlas-vocab.ttl",
+        "atlas-world.x3d",
+        "atlas.json",
+        "atlas.jsonld",
+        "atlas.ttl",
+        "findings.json"
+      ],
+      "mismatches": [],
+      "missingHashes": [],
+      "name": "archived output hashes match",
+      "ok": true,
+      "requirement": "The receipt must cover exactly the eight canonical Atlas outputs.",
+      "unexpectedHashes": []
+    },
+    {
+      "duplicates": [],
+      "invalidRows": [],
+      "name": "graph node IDs are unique and typed",
+      "nodes": 2181,
+      "ok": true
+    },
+    {
+      "dangling": [],
+      "edges": 7222,
+      "malformedRows": [],
+      "name": "graph edges resolve",
+      "ok": true
+    },
+    {
+      "counts": {
+        "Chapter": 23,
+        "Claim": 84,
+        "Dataset": 1,
+        "Diagnostic": 35,
+        "Drill": 177,
+        "FailureClass": 11,
+        "FailureMode": 160,
+        "Grade": 3,
+        "Heuristic": 359,
+        "Instrument": 355,
+        "Law": 44,
+        "Number": 591,
+        "OpenQuestion": 18,
+        "Pin": 66,
+        "Repo": 10,
+        "Source": 34,
+        "SourceDocument": 37,
+        "Theme": 10,
+        "Tool": 68,
+        "ToolVersion": 84,
+        "TrapRule": 11
+      },
+      "name": "graph totals match embedded metadata",
+      "ok": true,
+      "predicateCounts": {
+        "atPin": 628,
+        "carriedFrom": 1,
+        "caughtBy": 35,
+        "citesPin": 95,
+        "citesSource": 179,
+        "derivedFrom": 2,
+        "evidenceGrade": 39,
+        "evidencedBy": 64,
+        "fixedByLaw": 25,
+        "grade": 1054,
+        "hasTrap": 11,
+        "inChapter": 1211,
+        "inClass": 160,
+        "inTheme": 44,
+        "measuredWith": 591,
+        "mentions": 134,
+        "ofRepo": 66,
+        "ofTool": 84,
+        "paidForBy": 50,
+        "quotedFrom": 1442,
+        "recurredAs": 2,
+        "requires": 55,
+        "resolvedInstrument": 591,
+        "supports": 84,
+        "topOfClass": 33,
+        "usesTool": 542
+      }
+    },
+    {
+      "duplicates": [],
+      "entries": 1360,
+      "expectedRows": 1360,
+      "malformedRows": [],
+      "missing": [],
+      "name": "copied rows each have one ledger entry",
+      "ok": true,
+      "unexpected": []
+    },
+    {
+      "definitions": 1524,
+      "duplicateDefs": [],
+      "invalidRoutes": [],
+      "mismatchedUses": [],
+      "name": "scene named references resolve",
+      "ok": true,
+      "routes": 2,
+      "unresolvedUses": []
+    },
+    {
+      "name": "scene has X3D root and no Script",
+      "ok": true,
+      "scripts": 0
+    }
+  ],
+  "limits": [
+    "Archived hashes establish agreement with an attached receipt, not authenticity or independent trust.",
+    "Source quote matching and original experiments were not rerun.",
+    "XML checks cover named references and basic structure, not XSD validity, field typing, rendering, or performance.",
+    "A passing archive audit does not promote any evidence grade."
+  ],
+  "ok": true,
+  "pins": {
+    "x3d.docs": "ff0565e5a248ca391d68527716a58a821f25d152",
+    "x3d.loom": "ba301533d7b66eb8fe5e691524a551ef01c58de1"
+  },
+  "schema": "atlas.snapshot-audit/1",
+  "scope": "local-archive-consistency"
+}
