@@ -3,18 +3,22 @@ the world tests also need an x3d.accrete checkout (ACCRETE_DIR or a sibling) wit
 from __future__ import annotations
 
 import json
+import copy
+import contextlib
+import io
 from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from gobbler_flyte import accrete_bridge as accrete                 # noqa: E402
-from gobbler_flyte.budget import Budget, parse_allowance              # noqa: E402
+from gobbler_flyte.budget import Budget, Price, parse_allowance       # noqa: E402
 from gobbler_flyte.hitl import FileChannel, SimHumans, parse_answer   # noqa: E402
 from gobbler_flyte.relevance import classify                          # noqa: E402
-from gobbler_flyte.runner import load_config, tick                    # noqa: E402
+from gobbler_flyte.runner import Ctx, load_config, tick               # noqa: E402
 from gobbler_flyte.sim import DIAL, FIXED, NESTED, PLAIN, run_day     # noqa: E402
 
 CFG = load_config()
@@ -42,6 +46,58 @@ class Spend(unittest.TestCase):
         self.assertEqual(parse_allowance("ok 1.50 / month"), {"monthly_usd": 1.5})
         self.assertIsNone(parse_allowance("OK $5/day"))          # implausible daily figure is refused
         self.assertIsNone(parse_allowance("sounds ok"))
+
+    def test_allowance_line_must_be_exact_and_finite(self):
+        for text in ('OK $0.03/day but do not enable it', 'OK $0.03/daylight', 'OK '+ '9'*400 + '/month'):
+            self.assertIsNone(parse_allowance(text))
+        self.assertEqual(parse_allowance('OK 0/day'), {'daily_usd': 0})
+
+    def test_invalid_budget_inputs_fail_before_pricing(self):
+        for value in (-1, float('nan'), float('inf'), True):
+            with self.assertRaises(ValueError):
+                Price(value, 0.5)
+        with tempfile.TemporaryDirectory() as d:
+            for value in (-1, float('nan'), float('inf')):
+                with self.assertRaises(ValueError):
+                    Budget(CFG, {'daily_usd':value,'approved_by':'hagopjay'}, Path(d)/'s', ['hagopjay'])
+            b=Budget(CFG, {'daily_usd':1,'approved_by':'hagopjay'}, Path(d)/'s', ['hagopjay'])
+            for value in (-1, 1.5, True):
+                with self.assertRaises(ValueError):
+                    b.check(value, '2026-11-18T00:00:00Z', 1)
+            with self.assertRaises(ValueError):
+                b.record(now_utc='2026-11-18T00:00:00Z',cycle=1,organ='weaver',tokens_in=-1,tokens_out=0,
+                         estimate_usd=0,simulated=True)
+            with self.assertRaises(ValueError):
+                b.check(10,'2026-1-1T00:00:00Z',1)
+            nullable=Budget(CFG, {'daily_usd':None,'monthly_usd':None,'approved_by':'hagopjay'},Path(d)/'other',['hagopjay'])
+            self.assertFalse(nullable.approved())
+
+    def test_microdollar_usage_is_not_rounded_away(self):
+        cfg=copy.deepcopy(CFG);cfg['llm']['max_tokens']=1;cfg['llm']['price_usd_per_mtok']={'input':0.1,'output':0}
+        with tempfile.TemporaryDirectory() as d:
+            b=Budget(cfg, {'daily_usd':0.000001,'approved_by':'hagopjay'}, Path(d)/'s', ['hagopjay'])
+            for _ in range(10):
+                b.record(now_utc='2026-11-18T00:00:00Z',cycle=1,organ='weaver',tokens_in=1,tokens_out=0,
+                         estimate_usd=0.0000001,simulated=True)
+            self.assertAlmostEqual(b.spent(),0.000001,places=14)
+            self.assertFalse(b.check(1,'2026-11-18T00:00:00Z',1)['allowed'])
+
+    def test_prompt_count_does_not_allocate_a_fake_prompt(self):
+        with tempfile.TemporaryDirectory() as d:
+            b=Budget(CFG, {'daily_usd':1,'approved_by':'hagopjay'}, Path(d)/'s', ['hagopjay'])
+            check=b.check(10**12,'2026-11-18T00:00:00Z',1)
+            self.assertEqual(check['est_tokens_in'],285714285715)
+            self.assertFalse(check['allowed'])
+
+    def test_usage_request_id_is_idempotent_and_conflicts_fail(self):
+        with tempfile.TemporaryDirectory() as d:
+            b=Budget(CFG, {'daily_usd':1,'approved_by':'hagopjay'}, Path(d)/'s', ['hagopjay'])
+            args=dict(now_utc='2026-11-18T00:00:00Z',cycle=1,organ='weaver',tokens_in=100,tokens_out=10,
+                      estimate_usd=0,simulated=False,request_id='authored-request-id')
+            first=b.record(**args);self.assertTrue(first['estimate_exceeded'])
+            self.assertEqual(b.record(**args),first);self.assertEqual(len(b.rows()),1)
+            with self.assertRaises(ValueError):
+                b.record(**{**args,'tokens_in':101})
 
     def test_gate_closed_without_typed_ok(self):
         with tempfile.TemporaryDirectory() as d:
@@ -79,6 +135,15 @@ class Answers(unittest.TestCase):
         self.assertIsNone(parse_answer("A", self.QX))
         self.assertEqual(parse_answer("A send", self.QX), "A")
         self.assertEqual(parse_answer("B", self.QX), "B")
+        for text in ('A resend', 'A unsend', 'A do not send', 'A send?'):
+            self.assertIsNone(parse_answer(text,self.QX))
+
+    def test_cli_monthly_allowance_routes_to_allowance_file(self):
+        from gobbler_flyte.__main__ import main
+        with tempfile.TemporaryDirectory() as d, contextlib.redirect_stdout(io.StringIO()):
+            main(['answer','7','ok 1.50 / month','--by','hagopjay','--state',d])
+            self.assertTrue((Path(d)/'answers/allowance.json').exists())
+            self.assertFalse((Path(d)/'answers/00007.json').exists())
 
     def test_file_channel_ignores_unauthorized(self):
         with tempfile.TemporaryDirectory() as d:
@@ -88,6 +153,88 @@ class Answers(unittest.TestCase):
             (Path(d) / "answers" / "00007.json").write_text(json.dumps({"by": "HagopJay", "text": "A"}))
             self.assertEqual(ch.poll("x", {"cycle": 7, **self.Q}, "2026-11-18T00:00:00Z")["choice"], "A")
 
+
+class ExecutionBoundaries(unittest.TestCase):
+    def test_unknown_mode_cannot_touch_network_or_channel(self):
+        from gobbler_flyte import sources
+        source=next(x for x in CFG['sources'] if x['kind']=='rss')
+        with patch('gobbler_flyte.sources._get') as net, patch('gobbler_flyte.runner.default_channel') as channel:
+            with self.assertRaises(ValueError):sources.fetch(source,'offine')
+            with tempfile.TemporaryDirectory() as d:
+                with self.assertRaises(ValueError):tick(d,mode='offine',config=CFG)
+            net.assert_not_called();channel.assert_not_called()
+
+    def test_offline_real_graph_never_constructs_model_even_with_allowance(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);(root/'allowance.json').write_text(json.dumps({'daily_usd':1,'approved_by':'hagopjay'}))
+            with patch('gobbler_flyte.accrete_bridge.available',return_value=False), \
+                 patch('gobbler_flyte.runner.HaikuLLM') as model, patch('gobbler_flyte.sources._get') as net:
+                result=tick(root,mode='offline',now='2026-11-18T00:00:00Z',config=CFG)
+                self.assertEqual(result['started']['cycle'],1)
+                self.assertEqual(result['started']['ruling'],'hold')
+                self.assertIsNone(result['started']['entry'])
+                self.assertFalse((root/'spend.jsonl').exists())
+                model.assert_not_called();net.assert_not_called()
+
+    def test_sim_client_must_explicitly_declare_simulation(self):
+        from gobbler_flyte.llm import FakeLLM
+        with tempfile.TemporaryDirectory() as d, patch('gobbler_flyte.accrete_bridge.available',return_value=False):
+            def context(mode,factory=None):
+                return Ctx(state_dir=Path(d),mode=mode,now='2026-11-18T00:00:00Z',config=CFG,
+                           allowance={},llm_factory=factory)
+            with self.assertRaises(RuntimeError):context('offline').llm()
+            with self.assertRaises(RuntimeError):context('sim').llm()
+            with self.assertRaises(RuntimeError):context('sim',lambda:object()).llm()
+            self.assertTrue(context('sim',lambda:FakeLLM([{'text':'<Group/>'}])).llm().simulated)
+
+    def test_memory_replace_failure_keeps_previous_bytes(self):
+        with tempfile.TemporaryDirectory() as d, patch('gobbler_flyte.accrete_bridge.available',return_value=False):
+            root=Path(d);ctx=Ctx(state_dir=root,mode='offline',now='2026-11-18T00:00:00Z',config=CFG,allowance={})
+            ctx.save();before=ctx.memory_path.read_bytes();ctx.memory['cycles']=7
+            with patch('gobbler_flyte.runner.os.replace',side_effect=OSError('authored replacement failure')):
+                with self.assertRaises(OSError):ctx.save()
+            self.assertEqual(ctx.memory_path.read_bytes(),before)
+            self.assertEqual(list(root.glob('.memory-*')),[])
+
+    def test_checkpoint_connection_closes_when_graph_raises(self):
+        with tempfile.TemporaryDirectory() as d, patch('gobbler_flyte.accrete_bridge.available',return_value=False), \
+             patch('gobbler_flyte.runner.sqlite3.connect') as connect, \
+             patch('gobbler_flyte.runner.build',side_effect=RuntimeError('authored graph construction failure')):
+            with self.assertRaises(RuntimeError):tick(d,mode='offline',now='2026-11-18T00:00:00Z',config=CFG)
+            connect.return_value.close.assert_called_once()
+
+    def test_fixture_items_carry_byte_provenance(self):
+        from gobbler_flyte import sources
+        import hashlib
+        source=next(x for x in CFG['sources'] if x['id']=='web3d-news')
+        with patch('gobbler_flyte.sources._get') as net:
+            result=sources.fetch(source,'offline');net.assert_not_called()
+        self.assertTrue(result['items'])
+        digest=hashlib.sha256((sources.FIXTURES/'web3d_rss.xml').read_bytes()).hexdigest()
+        for item in result['items']:
+            self.assertEqual(item['provenance'],{'mode':'offline','transport':'fixture','body_sha256':digest,'fixture':'web3d_rss.xml'})
+
+    def test_synthetic_fixture_cannot_omit_its_synthetic_flag(self):
+        from gobbler_flyte import sources
+        source={'id':'x_ite-releases','repo':'create3000/x_ite','kind':'github-releases'}
+        with tempfile.TemporaryDirectory() as d:
+            fixture=Path(d)/'release.json';fixture.write_text(json.dumps({source['repo']:[{'id':1,'tag_name':'authored-control'}]}))
+            with patch('gobbler_flyte.sources.SYNTHETIC',fixture):
+                result=sources.fetch(source,'sim')
+            self.assertTrue(result['items'][0]['synthetic'])
+            self.assertEqual(result['items'][0]['provenance']['transport'],'fixture')
+
+    def test_feed_input_budget_and_kind_are_enforced(self):
+        from gobbler_flyte.sources import parse, MAX_FEED_BYTES
+        with self.assertRaises(ValueError):parse('rss',{'id':'control'},b' '*(MAX_FEED_BYTES+1))
+        with self.assertRaises(ValueError):parse('typo',{'id':'control'},b'{}')
+
+    def test_target_presence_does_not_confirm_external_claim(self):
+        from gobbler_flyte.organs.witness import grade
+        self.assertEqual(grade({},True,True),'Likely')
+        self.assertEqual(grade({},True,None),'Likely')
+        self.assertEqual(grade({'synthetic':True},True,True),'Suspected')
+        self.assertEqual(grade({},False,True),'Refused')
 
 @needs_world
 class Referee(unittest.TestCase):
@@ -155,6 +302,57 @@ class SimHumansOrder(unittest.TestCase):
         h.post(q)
         self.assertIsNone(h.poll("r", q, "2026-11-18T00:10:00Z"))
         self.assertEqual(h.poll("r", q, "2026-11-18T00:30:00Z")["choice"], "A")
+
+
+@needs_world
+class CrashRecovery(unittest.TestCase):
+    """W02 (local part): a tick that dies after the world append but before memory is saved must not admit twice."""
+
+    def test_crash_after_append_does_not_duplicate(self):
+        from gobbler_flyte import runner as R
+        with tempfile.TemporaryDirectory() as d:
+            real_save = R.Ctx.save
+            def crash(self):
+                raise RuntimeError("injected crash after keeper, before memory save")
+            R.Ctx.save = crash
+            try:
+                with self.assertRaises(RuntimeError):
+                    tick(d, mode="offline", now="2026-11-18T00:00:00Z", config=CFG)
+            finally:
+                R.Ctx.save = real_save
+            w = accrete.World(Path(d) / "world.sqlite")
+            self.assertEqual(w.head()["head"], 1)                       # the crashed attempt did admit once
+            s = tick(d, mode="offline", now="2026-11-18T00:00:00Z", config=CFG)
+            self.assertEqual(s["started"]["cycle"], 1)                  # memory was never saved: same cycle again
+            self.assertEqual(accrete.World(Path(d) / "world.sqlite").head()["head"], 1)   # ... and no second admission
+            turns = (Path(d) / "turns.jsonl").read_text().splitlines()
+            self.assertEqual(len(turns), 1)
+            tape = (Path(d) / "tape.jsonl").read_text()
+            self.assertIn("already holds operation", tape)
+            self.assertTrue(accrete.World(Path(d) / "world.sqlite").verify()["valid"])
+            nxt = tick(d, mode="offline", now="2026-11-18T00:30:00Z", config=CFG)
+            self.assertEqual(nxt["started"]["entry"], 2)                # the loop carries on normally
+
+    def test_overlapping_tick_fails_fast(self):
+        import fcntl
+        with tempfile.TemporaryDirectory() as d:
+            with open(Path(d) / ".tick.lock", "w") as held:
+                fcntl.flock(held, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                with self.assertRaisesRegex(RuntimeError, "another tick"):
+                    tick(d, mode="offline", now="2026-11-18T00:00:00Z", config=CFG)
+            self.assertFalse((Path(d) / "turns.jsonl").exists())
+
+
+@needs_world
+class Facets(unittest.TestCase):
+    def test_turn_carries_human_admission_and_render_facets(self):
+        with tempfile.TemporaryDirectory() as d:
+            tick(d, mode="offline", now="2026-11-18T00:00:00Z", config=CFG)
+            t = json.loads((Path(d) / "turns.jsonl").read_text().splitlines()[0])
+            f = t["evidence_facets"]
+            self.assertEqual((f["admission"], f["render"], f["reuse"]), ("committed", "not_run", "unverified"))
+            self.assertIn(f["human"], {"not_asked", "answered", "timeout_preferred_pick"})
+            self.assertNotEqual(t["grade"], "Confirmed")               # no broad grade from structure + path existence
 
 
 if __name__ == "__main__":

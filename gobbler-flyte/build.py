@@ -2,6 +2,8 @@
 """Gobbler.flyte Mission Control: an art piece. build.py -> scene.x3d + data.json (figures are synthetic, seeded)."""
 import json, math, pathlib, random
 from xml.sax.saxutils import quoteattr
+from urllib.parse import quote
+from build_observatory import look_at, mfstring
 HERE = pathlib.Path(__file__).resolve().parent
 rnd = random.Random(9)
 TAU = 2 * math.pi
@@ -31,15 +33,6 @@ def torus(R, r, nu=96, nv=18):
             c, d = ((i + 1) % nu) * nv + (j + 1) % nv, i * nv + (j + 1) % nv
             idx.append(f"{a} {b} {c} {d} -1")
     return (f"<IndexedFaceSet solid='false' creaseAngle='3' coordIndex='{' '.join(idx)}'><Coordinate point='{' '.join(v(p) for p in pts)}'/></IndexedFaceSet>")
-def look_at(eye, tgt):
-    fx, fy, fz = (tgt[i] - eye[i] for i in range(3)); n = math.sqrt(fx*fx + fy*fy + fz*fz); fx, fy, fz = fx/n, fy/n, fz/n
-    rx, rz = -fz, fx; n = math.hypot(rx, rz) or 1; rx, rz = rx/n, rz/n
-    ux, uy, uz = -rz*fy, rz*fx - rx*fz, rx*fy
-    m = [[rx, ux, -fx], [0, uy, -fy], [rz, uz, -fz]]
-    ang = math.acos(max(-1, min(1, (m[0][0] + m[1][1] + m[2][2] - 1) / 2)))
-    if ang < 1e-6: return (0, 1, 0, 0)
-    s = 2 * math.sin(ang)
-    return ((m[2][1] - m[1][2]) / s, (m[0][2] - m[2][0]) / s, (m[1][0] - m[0][1]) / s, ang)
 def spin(name, period, axis="0 0 1", sign=1):
     add(f"<TimeSensor DEF='T_{name}' cycleInterval='{f(period)}' loop='true'/>"
         f"<OrientationInterpolator DEF='O_{name}' key='0 0.25 0.5 0.75 1' keyValue='{axis} 0 {axis} {f(sign*TAU/4)} {axis} {f(sign*TAU/2)} {axis} {f(sign*3*TAU/4)} {axis} {f(sign*TAU)}'/>"
@@ -54,12 +47,12 @@ void main(){float r=length(vP.xz),t=etime;float a=atan(vP.z,vP.x);if(a<0.)a+=6.2
 float i=floor(a/s+.5);float d=abs(a-i*s);int k=int(mod(i,9.));
 vec3 col=vec3(.012,.016,.04);
 float ring=pow(.5+.5*sin(r*1.15+t*2.2),14.);col+=vec3(.25,.4,.9)*ring*.55*exp(-r*.03);
-float ray=exp(-d*d*r*r*.22)*smoothstep(3.,8.,r)*smoothstep(31.,24.,r);
+float ray=exp(-d*d*r*r*.22)*smoothstep(3.,8.,r)*(1.-smoothstep(24.,31.,r));
 float flow=pow(.5+.5*sin(r*.9+t*4.5+i*1.7),5.);col+=C[k]*ray*(.3+1.*flow);col+=vec3(.5,.7,1.)*smoothstep(.992,1.,cos(r*6.2831853))*.1*exp(-r*.025);
 float grid=smoothstep(.96,1.,cos(r*3.14159/3.))*.08+smoothstep(.985,1.,cos(a*36.))*.05;col+=vec3(.3,.5,1.)*grid*exp(-r*.02);
 col+=vec3(1.,.8,.5)*exp(-r*r*.02)*(.6+.3*sin(t*3.));
 col+=C[k]*.11*fbm(vec3(vP.xz*.12,t*.15))*exp(-r*.035);
-col*=smoothstep(72.,40.,r);x3d_FragColor=vec4(col,1.);}"""
+col*=1.-smoothstep(40.,72.,r);x3d_FragColor=vec4(col,1.);}"""
 SKY = HEAD + "uniform float etime;in vec3 vP;out vec4 x3d_FragColor;" + NOISE + """
 void main(){vec3 d=normalize(vP);float t=etime*.012;
 float n1=fbm(d*2.2+vec3(t,0.,-t)),n2=fbm(d*4.5-vec3(0.,t*1.7,t));
@@ -67,11 +60,11 @@ vec3 col=mix(vec3(.01,.012,.05),vec3(.14,.03,.24),smoothstep(.35,.8,n1));
 col=mix(col,vec3(.02,.2,.3),smoothstep(.5,.85,n2)*.7);
 col+=vec3(.9,.4,.15)*pow(smoothstep(.55,.95,n1*n2*2.2),2.)*.5;
 float band=exp(-pow(d.y*3.+.6*sin(d.x*3.+t*6.),2.));col+=vec3(.12,.1,.3)*band*n2;
-float cur=pow(.5+.5*sin(d.x*9.+n1*6.+t*20.),6.)*smoothstep(.05,.5,d.y)*smoothstep(.95,.4,d.y);col+=mix(vec3(.1,.9,.6),vec3(.7,.2,.9),n2)*cur*.35;vec3 g=normalize(vec3(-.5,.55,-.65));float gd=max(dot(d,g),0.);col+=vec3(1.,.75,.5)*pow(gd,60.)*1.2+vec3(.5,.3,.9)*pow(gd,8.)*.35*n1;col*=.35+.65*smoothstep(-.25,.35,d.y);x3d_FragColor=vec4(col,1.);}"""
+float cur=pow(.5+.5*sin(d.x*9.+n1*6.+t*20.),6.)*smoothstep(.05,.5,d.y)*(1.-smoothstep(.4,.95,d.y));col+=mix(vec3(.1,.9,.6),vec3(.7,.2,.9),n2)*cur*.35;vec3 g=normalize(vec3(-.5,.55,-.65));float gd=max(dot(d,g),0.);col+=vec3(1.,.75,.5)*pow(gd,60.)*1.2+vec3(.5,.3,.9)*pow(gd,8.)*.35*n1;col*=.35+.65*smoothstep(-.25,.35,d.y);x3d_FragColor=vec4(col,1.);}"""
 def shader(name, fs):
     return (f"<ComposedShader DEF='{name}' language='GLSL'><field name='etime' type='SFTime' accessType='inputOutput' value='0'/>"
-            f"<ShaderPart type='VERTEX'><![CDATA[data:x-shader/x-vertex,{VS}]]></ShaderPart>"
-            f"<ShaderPart type='FRAGMENT'><![CDATA[data:x-shader/x-fragment,{fs}]]></ShaderPart></ComposedShader>")
+            f"<ShaderPart type='VERTEX' url={mfstring('data:x-shader/x-vertex,'+quote(VS,safe=''))}/>"
+            f"<ShaderPart type='FRAGMENT' url={mfstring('data:x-shader/x-fragment,'+quote(fs,safe=''))}/></ComposedShader>")
 
 # ---- data (synthetic, seeded) ---------------------------------------------------------------------
 data = {"synthetic": True, "note": "Art piece. Every figure is invented by a seeded generator; none is a measurement.", "wheels": []}
@@ -156,7 +149,7 @@ for i, w in enumerate(data["wheels"]):
     add(f"<TouchSensor DEF='TS{i}' description={quoteattr(w['name'])}/>")
     add(f"<Transform DEF='{name}'><Shape>" + mat(c, tuple(0.85 * x for x in c)) + torus(4.2, 0.42) + "</Shape>"
         "<Shape>" + mat((1, 1, 1), (0.9, 0.95, 1)) + torus(2.5, 0.08, 72, 8) + "</Shape><Shape>" + mat((1, 1, 1), (0.95, 0.97, 1)) + torus(4.78, 0.045, 96, 6) + "</Shape>"
-        "<Shape>" + mat(c, c, 0.82) + "<Cylinder radius='4.1' height='0.05'/></Shape>".replace("<Cylinder", "<Cylinder DEF='_d'", 0))
+        "<Transform rotation='1 0 0 1.5708'><Shape>" + mat(c, c, 0.82) + "<Cylinder radius='4.1' height='0.05'/></Shape></Transform>")
     for k in range(9):
         b = TAU * k / 9
         add(f"<Transform rotation='0 0 1 {f(b)}'><Transform translation='0 2.1 0'><Shape>" + mat((0.9, 0.95, 1), tuple(0.5 + 0.5 * x for x in c)) + "<Box size='0.08 4.1 0.08'/></Shape></Transform>"
@@ -166,7 +159,7 @@ for i, w in enumerate(data["wheels"]):
     add(f"<Transform DEF='H{i}'><Shape><Appearance><PointProperties pointSizeScaleFactor='3' pointSizeMinValue='1' pointSizeMaxValue='5'/></Appearance>"
         f"<PointSet><Coordinate point='{' '.join(v(q) for q in pts)}'/><Color color='{' '.join(v(tuple(0.4 + 0.6 * x for x in c)) for _ in pts)}'/></PointSet></Shape></Transform>")
     add(f"<Transform translation='0 6.3 0'><Billboard axisOfRotation='0 0 0'><Shape><Appearance><Material diffuseColor='0 0 0' emissiveColor='{v(tuple(0.5 + 0.5 * x for x in c))}'/></Appearance>"
-        f"<Text string={quoteattr(chr(34) + w['name'].upper() + chr(34))}><FontStyle family='\"SANS\"' justify='\"MIDDLE\" \"MIDDLE\"' size='1.0' style='BOLD'/></Text></Shape></Billboard></Transform>")
+        f"<Text string={mfstring(w['name'].upper())}><FontStyle family='\"SANS\"' justify='\"MIDDLE\" \"MIDDLE\"' size='1.0' style='BOLD'/></Text></Shape></Billboard></Transform>")
     add("</Transform>")
     spin(name, w["period"]); spin(f"H{i}", w["period"] * 2.3, sign=-1)
     add(f"<Transform translation='{v((p[0], Y_WHEEL / 2 - 2.4, p[2]))}'><Shape>" + mat(c, c, 0.86) + f"<Cylinder radius='0.5' height='{f(Y_WHEEL - 4.6)}'/></Shape></Transform>")

@@ -1,0 +1,149 @@
+{
+  "authored_fixtures": true,
+  "fixtures": [
+    {
+      "expected_accepted": false,
+      "id": "gamedev-raw-cdata.x3d",
+      "observed": {
+        "diagnostics": [
+          {
+            "channel": "text",
+            "code": "SHADER_RAW_SOURCE",
+            "message": "Raw GLSL occupies a URL channel; use an explicit data URI or a shader-file URL.",
+            "node": "RawGameVertex"
+          }
+        ],
+        "ok": false,
+        "references": [
+          {
+            "channel": "text",
+            "kind": "raw-glsl",
+            "node": "RawGameVertex",
+            "sha256": "72386e10854137ae32b729ed42dbf470a8da0c63db02826fb35733e00c8af1b3"
+          }
+        ],
+        "shaderParts": 1
+      },
+      "role": "negative",
+      "sha256": "11ffe524e47be86a8437fa9d903312397f215c480aa46d4d7d727358a05174ea",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<X3D profile=\"Immersive\" version=\"4.0\"><head><component name=\"Shaders\" level=\"1\"/></head><Scene>\n<Shape><Appearance><ComposedShader language=\"GLSL\">\n<ShaderPart DEF=\"RawGameVertex\" type=\"VERTEX\"><![CDATA[#version 300 es\nin vec4 x3d_Vertex;\nvoid main() { gl_Position = x3d_Vertex; }\n]]></ShaderPart>\n</ComposedShader></Appearance><Box/></Shape>\n</Scene></X3D>\n"
+    },
+    {
+      "expected_accepted": false,
+      "id": "gamedev-raw-url.x3d",
+      "observed": {
+        "diagnostics": [
+          {
+            "channel": "url",
+            "code": "SHADER_RAW_SOURCE",
+            "message": "Raw GLSL occupies a URL channel; use an explicit data URI or a shader-file URL.",
+            "node": "RawGameURL"
+          }
+        ],
+        "ok": false,
+        "references": [
+          {
+            "channel": "url",
+            "kind": "raw-glsl",
+            "node": "RawGameURL",
+            "sha256": "2576c1563716561c698e5919f2a8c9c810edc41697cd8152a951f4152314d29b"
+          }
+        ],
+        "shaderParts": 1
+      },
+      "role": "negative",
+      "sha256": "222a6bf66634c508b6709f6f172c5043e74d1c5b0e7bc15922adf609269ff59b",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<X3D profile=\"Immersive\" version=\"4.0\"><head><component name=\"Shaders\" level=\"1\"/></head><Scene>\n<Shape><Appearance><ComposedShader language=\"GLSL\">\n<ShaderPart DEF=\"RawGameURL\" type=\"FRAGMENT\" url='\"void main() { outputColor = vec4(1.0); }\"'/>\n</ComposedShader></Appearance><Sphere/></Shape>\n</Scene></X3D>\n"
+    },
+    {
+      "expected_accepted": true,
+      "id": "gamedev-fixed-data-uri.x3d",
+      "observed": {
+        "diagnostics": [],
+        "ok": true,
+        "references": [
+          {
+            "channel": "text",
+            "kind": "data-uri",
+            "node": "BoundGameVertex",
+            "sha256": "07106fdbe1e820a55ff8ab224c431b20085b5a543a5d51414c9bc9143fa54f1e"
+          }
+        ],
+        "shaderParts": 1
+      },
+      "role": "positive",
+      "sha256": "e468a4631621a6e394ac572514581eac1637d986839154cdc11ac63453944b50",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<X3D profile=\"Immersive\" version=\"4.0\"><head><component name=\"Shaders\" level=\"1\"/></head><Scene>\n<Shape><Appearance><ComposedShader language=\"GLSL\">\n<ShaderPart DEF=\"BoundGameVertex\" type=\"VERTEX\"><![CDATA[data:x-shader/x-vertex,#version 300 es\nin vec4 x3d_Vertex;\nvoid main() { gl_Position = x3d_Vertex; }\n]]></ShaderPart>\n</ComposedShader></Appearance><Box/></Shape>\n</Scene></X3D>\n"
+    },
+    {
+      "expected_accepted": true,
+      "id": "positive-https-relative.x3d",
+      "observed": {
+        "diagnostics": [],
+        "ok": true,
+        "references": [
+          {
+            "channel": "url",
+            "kind": "external-url",
+            "node": "ExternalVertex",
+            "sha256": "1d8c71bfc9a170e71b8bcb82c0d5c4efb20dcbc3318a976797c6b4df4aa8aa97"
+          },
+          {
+            "channel": "url",
+            "kind": "relative-or-other-url",
+            "node": "ExternalVertex",
+            "sha256": "585187b3ed24405f36d07cc5c21b345cdb7aabf9d15b9073135401708c3ee38e"
+          },
+          {
+            "channel": "url",
+            "kind": "relative-or-other-url",
+            "node": "RelativeFragment",
+            "sha256": "151be5a20445a40839f8ec9b4fa9dff2ab86b760d2854915632716d70385d8ef"
+          }
+        ],
+        "shaderParts": 2
+      },
+      "role": "positive",
+      "sha256": "a60bcc3424574a07feedb0c69683aede41fc5b6896cabfd0156f906dbe155ccc",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<X3D profile=\"Immersive\" version=\"4.0\"><head><component name=\"Shaders\" level=\"1\"/></head><Scene>\n<Shape><Appearance><ComposedShader language=\"GLSL\">\n<ShaderPart DEF=\"ExternalVertex\" type=\"VERTEX\" url='\"https://example.org/shaders/vertex.glsl\" \"shaders/local-vertex.glsl\"'/>\n<ShaderPart DEF=\"RelativeFragment\" type=\"FRAGMENT\" url='\"../shared/fragment.glsl\"'/>\n</ComposedShader></Appearance><Box/></Shape>\n</Scene></X3D>\n"
+    },
+    {
+      "expected_accepted": true,
+      "id": "music-independent-data-uri.x3d",
+      "observed": {
+        "diagnostics": [],
+        "ok": true,
+        "references": [
+          {
+            "channel": "url",
+            "kind": "data-uri",
+            "node": "MusicSpectrum",
+            "sha256": "96ae73cc21e166ec0e62a2b6acd7971e8acc9f146716d114fbb8d1efc36ec28d"
+          }
+        ],
+        "shaderParts": 1
+      },
+      "role": "consumer",
+      "sha256": "e57aa466bcbe39686c4e14793114485eca5171f5fc219762e12767601c17ecef",
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<X3D profile=\"Immersive\" version=\"4.0\"><head><component name=\"Shaders\" level=\"1\"/></head><Scene>\n<Shape><Appearance><ComposedShader language=\"GLSL\">\n<ShaderPart DEF=\"MusicSpectrum\" type=\"FRAGMENT\" url='\"data:x-shader/x-fragment,precision highp float; out vec4 outputColor; void main() { outputColor = vec4(0.2,0.7,1.0,1.0); }\"'/>\n</ComposedShader></Appearance><Cylinder/></Shape>\n</Scene></X3D>\n"
+    }
+  ],
+  "guard": {
+    "path": "flywheel-review/atlas/shader_guard.py",
+    "scope": "Targeted structural GLSL-as-URL recognition. No shader fetch, compilation, linking or rendering.",
+    "sha256": "1b55293cbcc5ebc3b496e835acbdb68f9e65fcec11f3852a0c5b3f4ce7542b60"
+  },
+  "producer_sha256": "f733d05b3627ca581fa9c342670abf18da315da48c0b21a911bd89e229b6d771",
+  "schema": "gobbler.intervention-cases/1",
+  "scope": "Actual local Python guard observations on authored fixtures. Interactive transfer rows are synthetic protocol examples. Hash agreement is byte consistency, not authenticated authorship.",
+  "sources": [
+    {
+      "url": "https://www.w3.org/TR/prov-o/",
+      "use": "Separate artifacts, activities and agents; provenance vocabulary, not a certificate."
+    },
+    {
+      "url": "https://www.web3d.org/documents/specifications/19775-1/V4.0/Part01/components/shaders.html",
+      "use": "ShaderPart URL semantics."
+    }
+  ]
+}

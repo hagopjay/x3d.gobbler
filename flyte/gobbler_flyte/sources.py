@@ -19,6 +19,7 @@ FIXTURE_FOR = {"web3d-news": "web3d_rss.xml", "hn-x3d": "hn_x3d_title.json", "hn
                "arxiv-x3d": "arxiv.xml", "loom-commits": "loom_commits.atom"}
 SYNTHETIC = FIXTURES / "synthetic_releases.json"   # labelled synthetic: this container's proxy blocks those repos
 ATOM = "{http://www.w3.org/2005/Atom}"
+MAX_FEED_BYTES = 2 * 1024 * 1024
 
 
 def _id(*parts: str) -> str:
@@ -28,7 +29,10 @@ def _id(*parts: str) -> str:
 def _get(url: str, timeout: int = 20, headers: dict | None = None) -> bytes:
     req = urllib.request.Request(url, headers={"User-Agent": UA, **(headers or {})})
     with urllib.request.urlopen(req, timeout=timeout) as r:
-        return r.read()
+        body = r.read(MAX_FEED_BYTES + 1)
+        if len(body) > MAX_FEED_BYTES:
+            raise ValueError('feed exceeds the 2 MiB input budget')
+        return body
 
 
 _PRIVATE_LINK = re.compile(r"https?://claude\.ai/(?:code|project|artifact)/\S*")
@@ -40,7 +44,19 @@ def _clean(url: str) -> str:
 
 
 def parse(kind: str, source: dict, body: bytes) -> list[dict]:
+    if len(body) > MAX_FEED_BYTES:
+        raise ValueError('feed exceeds the 2 MiB input budget')
+    if kind not in ('hn', 'rss', 'atom', 'github-releases'):
+        raise ValueError('unsupported feed kind')
     return [{**i, "url": _clean(i["url"]), "summary": _clean(i.get("summary", ""))} for i in _parse(kind, source, body)]
+
+
+def _observed(items: list[dict], *, mode: str, transport: str, body: bytes, fixture: str | None = None,
+              synthetic: bool = False) -> list[dict]:
+    provenance = {'mode': mode, 'transport': transport, 'body_sha256': hashlib.sha256(body).hexdigest()}
+    if fixture:
+        provenance['fixture'] = fixture
+    return [{**item, 'provenance': dict(provenance), **({'synthetic': True} if synthetic else {})} for item in items]
 
 
 def _parse(kind: str, source: dict, body: bytes) -> list[dict]:
@@ -79,6 +95,8 @@ def _parse(kind: str, source: dict, body: bytes) -> list[dict]:
 
 def fetch(source: dict, mode: str) -> dict:
     """Return {'source', 'status', 'items', 'note'}; never raises (a dead feed is a tape row, not a crash)."""
+    if mode not in ('offline', 'sim', 'live'):
+        raise ValueError('mode must be live, offline or sim; unknown modes never fetch')
     kind = source["kind"]
     try:
         if mode in ("offline", "sim"):
@@ -86,12 +104,17 @@ def fetch(source: dict, mode: str) -> dict:
                 if not SYNTHETIC.exists():
                     return {"source": source["id"], "status": "skipped", "items": [], "note": "no fixture"}
                 rel = json.loads(SYNTHETIC.read_text()).get(source["repo"], [])
-                return {"source": source["id"], "status": "fixture-synthetic", "items": parse(kind, source, json.dumps(rel).encode()),
+                body = json.dumps(rel).encode()
+                items = _observed(parse(kind, source, body), mode=mode, transport='fixture', body=body,
+                                  fixture=SYNTHETIC.name, synthetic=True)
+                return {"source": source["id"], "status": "fixture-synthetic", "items": items,
                         "note": "synthetic release fixture (labelled)"}
             name = FIXTURE_FOR.get(source["id"])
             if not name:
                 return {"source": source["id"], "status": "skipped", "items": [], "note": "no fixture for this source"}
-            return {"source": source["id"], "status": "fixture", "items": parse(kind, source, (FIXTURES / name).read_bytes()),
+            body = (FIXTURES / name).read_bytes()
+            return {"source": source["id"], "status": "fixture", "items": _observed(parse(kind, source, body),
+                    mode=mode, transport='fixture', body=body, fixture=name),
                     "note": f"snapshot fixtures/feeds/{name}"}
         if kind == "github-releases":
             headers = {"Accept": "application/vnd.github+json"}
@@ -100,6 +123,7 @@ def fetch(source: dict, mode: str) -> dict:
             body = _get(f"https://api.github.com/repos/{source['repo']}/releases?per_page=5", headers=headers)
         else:
             body = _get(source["url"])
-        return {"source": source["id"], "status": "live", "items": parse(kind, source, body), "note": source.get("url") or source.get("repo")}
+        return {"source": source["id"], "status": "live", "items": _observed(parse(kind, source, body),
+                mode=mode, transport='live', body=body), "note": source.get("url") or source.get("repo")}
     except Exception as e:  # noqa: BLE001 - every failure is reported on the tape
         return {"source": source["id"], "status": "error", "items": [], "note": f"{type(e).__name__}: {str(e)[:160]}"}

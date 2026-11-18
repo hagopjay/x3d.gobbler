@@ -1,0 +1,201 @@
+{
+ "schema": "gobbler.lab-browser-check/1",
+ "status": "pass",
+ "started_utc": "2026-11-18T03:54:03.771Z",
+ "node": "v22.23.5",
+ "scope": "Native Chromium (software GL) run of the three lab experiments against their stated rules. Not GPU, shader-compilation, pixel-fidelity or adoption evidence.",
+ "inputs_sha256": {
+  "evidence-lab/app.mjs": "3363f3e98f23a52a97a10308b6d4a934bea1ff6ca74fc9034434e274ddf6bc98",
+  "evidence-lab/build_lab.py": "f733d05b3627ca581fa9c342670abf18da315da48c0b21a911bd89e229b6d771",
+  "evidence-lab/cases.json": "cd29920cf83f0d8c2942e6cf9795085744aa6c7fdf3e3417ee8c44cb000fbd42",
+  "evidence-lab/cases.manifest.json": "c54fd53f5685c4224ca56a3d51934cbc032538f9c9e4d3cd3fd4ea1f7f5012ad",
+  "evidence-lab/guide.html": "7cf5224ede4505218180fad64760824c8e1553e58ad353aa23701635989098a0",
+  "evidence-lab/index.html": "5024beb8d6a4092fe8d73a4e56c7e57fc0df557960756f0b818d56d9f484d3b1",
+  "evidence-lab/instruments.x3d": "0834763c526b0d6697eb55394e3998b7638874b9a72a2b1e8cad28c4d178e0f2",
+  "evidence-lab/lab.css": "5bab3764e3324fdee84141bc316335fe789baddb4c75c8adfc155a89fafade01",
+  "evidence-lab/model.mjs": "96998ca5c60a584115647e093b8176b0c317ac7643b2e1499659c50959bb741a",
+  "tools/lab_browser_check.cjs": "79814b97540c8515145a00e13b56e6f448c45a659737e6c8a6516d611ec90e7a",
+  "vendor/x_ite/x_ite.min.js": "b7df063e8cb14919887563506f6c5f386b3066b65768de1856320a54ec68725f"
+ },
+ "checks": [
+  {
+   "name": "lab reports ready with no errors",
+   "pass": true,
+   "observed": {
+    "ready": true,
+    "errors": []
+   }
+  },
+  {
+   "name": "identity: original",
+   "pass": true,
+   "expected": {
+    "n": "=",
+    "pass": "true"
+   },
+   "observed": {
+    "n": "=",
+    "title": "These bytes match the selected digest",
+    "pass": "true"
+   }
+  },
+  {
+   "name": "identity: one newline, no rebind",
+   "pass": true,
+   "expected": {
+    "n": "≠",
+    "pass": "false"
+   },
+   "observed": {
+    "n": "≠",
+    "title": "The selected digest identifies different bytes",
+    "pass": "false"
+   }
+  },
+  {
+   "name": "identity: Box to Sphere, no rebind",
+   "pass": true,
+   "expected": {
+    "n": "≠",
+    "pass": "false"
+   },
+   "observed": {
+    "n": "≠",
+    "title": "The selected digest identifies different bytes",
+    "pass": "false"
+   }
+  },
+  {
+   "name": "identity: Box to Sphere, self-rebound (consistent, no new witness)",
+   "pass": true,
+   "expected": {
+    "n": "=",
+    "pass": "true"
+   },
+   "observed": {
+    "n": "=",
+    "title": "These bytes match the selected digest",
+    "pass": "true"
+   }
+  },
+  {
+   "name": "controls: executed guard with failing fixtures kept",
+   "pass": true,
+   "expected": {
+    "n": "2/2",
+    "pass": "true"
+   },
+   "observed": {
+    "n": "2/2",
+    "title": "Both sides of the control survive",
+    "pass": "true"
+   }
+  },
+  {
+   "name": "controls: executed guard, failing fixtures dropped",
+   "pass": true,
+   "expected": {
+    "pass": "false"
+   },
+   "observed": {
+    "n": "—",
+    "title": "This control set does not qualify the guard",
+    "pass": "false"
+   }
+  },
+  {
+   "name": "controls: always-accept guard",
+   "pass": true,
+   "expected": {
+    "pass": "false"
+   },
+   "observed": {
+    "n": "—",
+    "title": "This control set does not qualify the guard",
+    "pass": "false"
+   }
+  },
+  {
+   "name": "reuse: one consumer",
+   "pass": true,
+   "expected": {
+    "n": "1",
+    "pass": "true"
+   },
+   "observed": {
+    "n": "1",
+    "title": "Distinct authored consumptions",
+    "pass": "true"
+   }
+  },
+  {
+   "name": "reuse: same consumption retried 3 times",
+   "pass": true,
+   "expected": {
+    "n": "1",
+    "pass": "true"
+   },
+   "observed": {
+    "n": "1",
+    "title": "Distinct authored consumptions",
+    "pass": "true"
+   }
+  },
+  {
+   "name": "reuse: a second input and target",
+   "pass": true,
+   "expected": {
+    "n": "2",
+    "pass": "true"
+   },
+   "observed": {
+    "n": "2",
+    "title": "Distinct authored consumptions",
+    "pass": "true"
+   }
+  },
+  {
+   "name": "reuse: counting the originating domain",
+   "pass": true,
+   "expected": {
+    "n": "0",
+    "pass": "false"
+   },
+   "observed": {
+    "n": "0",
+    "title": "Distinct authored consumptions",
+    "pass": "false"
+   }
+  },
+  {
+   "name": "reuse: input changed without rebinding",
+   "pass": true,
+   "expected": {
+    "n": "0",
+    "pass": "false"
+   },
+   "observed": {
+    "n": "0",
+    "title": "Distinct authored consumptions",
+    "pass": "false"
+   }
+  },
+  {
+   "name": "no horizontal overflow at 1440 and 400 px",
+   "pass": true,
+   "observed": {
+    "desktop": 0,
+    "mobile": 0
+   }
+  },
+  {
+   "name": "no page or console errors",
+   "pass": true
+  }
+ ],
+ "pageErrors": [],
+ "consoleErrors": [],
+ "chromium": "157.0.8103.78",
+ "inputs_unchanged": true,
+ "finished_utc": "2026-11-18T03:54:17.055Z"
+}

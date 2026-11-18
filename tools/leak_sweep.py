@@ -7,8 +7,12 @@ PATTERNS = {
     "key-shaped string": r"(AIza[0-9A-Za-z_-]{30,}|sk-[A-Za-z0-9]{20,}|gh[pousr]_[A-Za-z0-9]{30,}|-----BEGIN [A-Z ]*PRIVATE KEY)",
     "local home path in code": r"/Users/[a-z]+/",
 }
-CODE = {".py", ".js", ".cjs", ".html", ".yml", ".sh", ".css"}
-files = subprocess.run(["git", "ls-files"], cwd=ROOT, capture_output=True, text=True).stdout.split()
+CODE = {".py", ".js", ".mjs", ".cjs", ".html", ".yml", ".sh", ".css"}
+inventory = subprocess.run(["git", "ls-files", "--cached", "--others", "--exclude-standard", "-z"], cwd=ROOT, capture_output=True, text=True)
+if inventory.returncode:
+    print('leak sweep could not enumerate project files', file=sys.stderr)
+    sys.exit(1)
+files = sorted(set(filter(None, inventory.stdout.split('\0'))))
 bad = []
 for f in files:
     p = ROOT / f
@@ -20,5 +24,5 @@ for f in files:
             continue            # archived receipts keep their original strings; they are hash-bound and not code
         for m in re.finditer(pat, t):
             bad.append(f"{f}: {name}: {t[max(0, m.start()-20):m.end()+20]!r}")
-print("\n".join(bad) or "leak sweep clean: %d tracked files" % len(files))
+print("\n".join(bad) or "leak sweep clean: %d tracked/pending files" % len(files))
 sys.exit(1 if bad else 0)

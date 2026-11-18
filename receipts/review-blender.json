@@ -1,0 +1,150 @@
+{
+  "schema": "gobbler.intervention-blender-preview/1",
+  "status": "pass",
+  "created_utc": "2026-11-18T02:34:29.917833+00:00",
+  "source": "evidence-lab/instruments.x3d",
+  "source_sha256": "0834763c526b0d6697eb55394e3998b7638874b9a72a2b1e8cad28c4d178e0f2",
+  "tool_sha256": "eb43ca2da2966044effb13e95765640a306e158b76ab93cc6a09cede85e2203b",
+  "blender_version": "5.2.4 LTS",
+  "blender_build": "cd5dc428cce1",
+  "binary_sha256": "9c12ad1b09401dcd3a8a5336279bca91455f15023aa0e5e4cb5cdb7b116a09f1",
+  "importer_repository": "https://github.com/hagopjay/x3d-blender-io",
+  "importer_commit": "044bea3ae33a991f816de15a307826b6d7f576ec",
+  "import_source_sha256": {
+    "__init__.py": "57c160f7407315d254c3161f842b6e04d095aac1e73270adcce034126bf26bf4",
+    "import_x3d.py": "fc972f9c3c1177844372152b11c6992cd3fff6a730cd1ea0ba599afb04e48f7f"
+  },
+  "imported_objects": 105,
+  "occupancy": {
+    "status": "pass",
+    "mechanisms": 3,
+    "gates": 3,
+    "rings": 3,
+    "comparisons": [
+      {
+        "index": 0,
+        "source_x3d_center": [
+          -8.0,
+          0.4,
+          0.0
+        ],
+        "blender_center": [
+          -8.0,
+          -0.0,
+          0.4
+        ],
+        "ring_source_vertices": 576,
+        "gate_mesh_parts": 1,
+        "mechanism_mesh_parts": 13,
+        "ring_mesh_parts": 1,
+        "ring_imported_vertices": 576,
+        "gate_actual_bbox_center": [
+          -7.999999761581421,
+          0.0,
+          0.3999999836087227
+        ],
+        "ring_actual_bbox_center": [
+          -8.0,
+          0.0,
+          0.3999999761581421
+        ],
+        "max_absolute_error": 2.384185791015625e-07
+      },
+      {
+        "index": 1,
+        "source_x3d_center": [
+          0.0,
+          0.4,
+          0.0
+        ],
+        "blender_center": [
+          0.0,
+          -0.0,
+          0.4
+        ],
+        "ring_source_vertices": 576,
+        "gate_mesh_parts": 1,
+        "mechanism_mesh_parts": 13,
+        "ring_mesh_parts": 1,
+        "ring_imported_vertices": 576,
+        "gate_actual_bbox_center": [
+          0.0,
+          0.0,
+          0.3999999836087227
+        ],
+        "ring_actual_bbox_center": [
+          0.0,
+          0.0,
+          0.3999999761581421
+        ],
+        "max_absolute_error": 2.384185793236071e-08
+      },
+      {
+        "index": 2,
+        "source_x3d_center": [
+          8.0,
+          0.4,
+          0.0
+        ],
+        "blender_center": [
+          8.0,
+          -0.0,
+          0.4
+        ],
+        "ring_source_vertices": 576,
+        "gate_mesh_parts": 1,
+        "mechanism_mesh_parts": 13,
+        "ring_mesh_parts": 1,
+        "ring_imported_vertices": 576,
+        "gate_actual_bbox_center": [
+          7.999999761581421,
+          0.0,
+          0.3999999836087227
+        ],
+        "ring_actual_bbox_center": [
+          8.0,
+          0.0,
+          0.3999999761581421
+        ],
+        "max_absolute_error": 2.384185791015625e-07
+      }
+    ],
+    "tolerance": 2e-05,
+    "axis_projection": "X3D Y-up / -Z-forward -> Blender (x,-z,y).",
+    "scope": "Actual imported mesh bounding-box centers and ring vertex counts. Not topology/material/interaction equivalence."
+  },
+  "presentation_projection": {
+    "hidden_imported_text_objects": [
+      "Shape.019",
+      "Shape.038",
+      "Shape.057"
+    ],
+    "studio_labels": [
+      "01 / IDENTITY",
+      "02 / DISCRIMINATION",
+      "03 / REUSE"
+    ],
+    "imported_curves_given_bevel": 0
+  },
+  "render": {
+    "engine": "Cycles",
+    "device": "CPU",
+    "threads": 2,
+    "samples": 32,
+    "width": 1280,
+    "height": 720,
+    "seed": 1802,
+    "elapsed_seconds": 41.43393563399877,
+    "view_transform": "AgX",
+    "look": "AgX - Medium High Contrast"
+  },
+  "image_sha256": "6fc301f8ef06fea264e035516843abd5a11c4194ade1062e41fa461a424ef239",
+  "image_bytes": 1010134,
+  "appearance_changes": [
+    "Imported lights/camera disabled; studio camera and three area lights authored.",
+    "Imported Principled roughness/metallic adjusted for a studio still.",
+    "Imported Text hidden and the same three labels re-authored using Blender bundled font.",
+    "Separate studio floor; any imported zero-width curves receive a thin bevel."
+  ],
+  "scope": "Authored offline Blender studio still from actual portable X3D import. Not native X_ITE pixels, browser interaction, evidence-gate execution, color parity or GPU timing."
+}

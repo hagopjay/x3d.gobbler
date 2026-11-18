@@ -29,6 +29,10 @@ def main():
     before=sha(DEMO/'observatory.x3d')
     build=subprocess.run([sys.executable,str(DEMO/'build_observatory.py')])
     check('scene generator rebuilds to identical bytes',build.returncode==0 and sha(DEMO/'observatory.x3d')==before)
+    lab_paths=[ROOT/'evidence-lab'/name for name in ('cases.json','cases.manifest.json','instruments.x3d')]
+    lab_before={p.name:sha(p) for p in lab_paths}
+    lab_build=subprocess.run([sys.executable,str(ROOT/'evidence-lab/build_lab.py')],capture_output=True,text=True)
+    check('executed intervention cases and scene rebuild identically',lab_build.returncode==0 and lab_before=={p.name:sha(p) for p in lab_paths},details=lab_build.stdout.strip() if lab_build.returncode==0 else lab_build.stderr[-1000:])
     tree=ET.parse(DEMO/'observatory.x3d')
     definitions={}; errors=[]
     for el in tree.iter():
@@ -76,7 +80,8 @@ def main():
     leak=subprocess.run([sys.executable,str(ROOT/'tools'/'leak_sweep.py')],capture_output=True,text=True)
     check('leak sweep',leak.returncode==0,out=leak.stdout.strip()[:300])
     report={'schema':'flywheel.verification/1','scope':'local-code-and-artifact-consistency','ok':all(x['ok'] for x in checks),'checks':checks,
-            'notRun':['browser rendering and interaction (see receipts/browser-*.json, run by tools/browser_check.cjs)','X3D XSD/field typing','GPU timing or visual fidelity','audio listening','original experiments and full Atlas witness','current GitHub inventory or PR publication']}
+            'tool_sha256':sha(Path(__file__)),
+            'notRun':['native browser rendering and interaction (current review receipt: receipts/review-browser.json; older browser receipts are historical)','X3D XSD/field typing (separate tools/validate_scene.py)','GPU timing or visual fidelity','audio listening','original experiments and full Atlas witness','current GitHub inventory or PR publication']}
     (ROOT/'VALIDATION.json').write_text(json.dumps(report,indent=2)+'\n')
     return 0 if report['ok'] else 1
 if __name__=='__main__':

@@ -170,3 +170,26 @@ Instrument skew the sweep found, which matters before any number is compared: X_
 ## 13. Limits
 
 No live LLM call was made: every model reply in this folder is scripted. No GitHub issue was opened. The Actions workflow has never run on GitHub. The GitHub release and Reddit paths are unverified. The stills come from software GL (SwiftShader) on one machine, not a GPU. "Admitted" means bounded-vocabulary + XSD + semantic + chain. It does not mean beautiful, visible from every camera, or adopted by anyone.
+
+## 14. Review integration (18 Nov 2026, after PR #1)
+
+A second model reviewed main at 11a5616 (`../docs/FLYTE-REVIEW.md` and the other review files). Its patch went in unchanged. Then this pass ran what the reviewer's host could not, and closed part of what it deferred.
+
+| From the review (kept as is) | Effect on the loop |
+|---|---|
+| Grade capped at Likely (Suspected for synthetic). Path existence no longer gives Confirmed. | The simulated day re-run gives 31 Likely and 4 Suspected, where it used to give 31 Confirmed. Nothing else changed. |
+| `evidence_facets` on every turn: candidate structure, source (archived / synthetic / unverified_live), target presence, reuse | One grade no longer stands in for six questions |
+| Mode isolation: unknown mode fails; offline never builds a model client; sim needs a client that declares `simulated` | The cron can't drift into a priced call by mode |
+| Allowance and answer grammar are exact. `A send` must be the whole answer, so "resend" or "do not send" no longer pass. Finite budget values are checked, usage request IDs are deduplicated, and memory is written atomically. | Spend and the irreversible gate are harder to fool |
+
+| Added in this pass | Evidence |
+|---|---|
+| Per-cycle operation key in the world (`<world_id>:cycle-N`, stored in the entry's generator) plus one ledger row per cycle. A tick that crashes after the world append but before memory is saved re-runs the same cycle, finds its entry, and does not admit twice. | `CrashRecovery.test_crash_after_append_does_not_duplicate`: fault injected, world head stays 1, one turn row, the chain still verifies, and the next tick admits entry 2 |
+| Tick lock (`state/.tick.lock`, non-blocking flock): an overlapping tick fails fast | `CrashRecovery.test_overlapping_tick_fails_fast` |
+| Stale thread state for a re-run cycle is deleted before the graph starts | same test |
+| Three more facets: `admission`, `human` (answered / timeout_preferred_pick / not_asked) and `render` (not_run per turn) | `Facets` test; `runs/sim-2026-11-18-r2/summary.json` |
+| Render witness for the re-run world: the X_ITE 16.6.0 export of 35 entries loads and draws with no error | `runs/sim-2026-11-18-r2/render-witness.json` (scene and image SHA-256) |
+
+Tests: 32 pass, normally and under `-O`. The re-run day is in `runs/sim-2026-11-18-r2/` and the original run is untouched. Its counts match the first run exactly: 35 admitted, 61 attempts, 26 refusals, 8 questions, 5 timeouts, $0.028298. Only the grades and facets differ. The world hashes differ because each entry now carries its operation key.
+
+Still open, as the review states: cross-store exactly-once across the world, checkpoints, outbox and an external send (this pass covers the world and the ledger only); transactional spend reservations; GitHub answer lifecycle (edits and deletions); capability identity beyond a checkout path; and real adoption evidence.

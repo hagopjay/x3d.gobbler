@@ -13,16 +13,17 @@
 <div class="ambient" aria-hidden="true"></div>
 <header>
  <a class="brand" href="index.html"><span class="sigil">G</span><span>GOBBLER<span class="light"> / ATLAS</span><small>THE EVIDENCE LOOM · X3D EXPLORATORY SYSTEM</small></span></a>
- <div class="header-right"><span class="status-dot"></span><span id="load-status" role="status">Opening the loom…</span><a href="../flywheel-review/ATLAS-INSIGHTS.html">Read the Atlas ↗</a></div>
+ <div class="header-right"><span class="status-dot"></span><span id="load-status" role="status">Opening the loom…</span><a href="../evidence-lab/">Intervention lab ↗</a><a href="../flywheel-review/ATLAS-INSIGHTS.html">Read the Atlas ↗</a></div>
 </header>
 <main>
  <div class="intro"><p class="eyebrow">01 / A MACHINE FOR ACCUMULATING UNDERSTANDING</p><h1>Many feathers.<br>One learning organism.</h1><p>Let a failure in one world become<br>a capability in the next.</p></div>
  <x3d-canvas id="world" splashScreen="false" notifications="false" contentScale="auto" aria-label="Interactive X3D Gobbler with twelve flywheel feathers"></x3d-canvas>
  <div class="scene-caption" aria-hidden="true">THE GOBBLER AGENT<span>Feathers carry domains. The loom carries memory.</span></div>
  <aside class="left-panel" aria-label="Snapshot and learning controls">
-  <div class="tabs" role="tablist" aria-label="Inspection mode"><button role="tab" data-tab="snapshot" aria-selected="true">Evidence</button><button role="tab" data-tab="foldback" aria-selected="false">Foldback</button><button role="tab" data-tab="search" aria-selected="false">Find</button></div>
-  <section id="snapshot-tab" class="tab-content">
-   <p class="eyebrow">PINNED ARCHIVE / RECOUNTED HERE</p>
+  <p id="operation-status" class="operation-status" role="status" aria-live="polite" hidden></p>
+  <div class="tabs" role="tablist" aria-label="Inspection mode"><button id="tab-evidence" role="tab" data-tab="snapshot" aria-controls="snapshot-tab" aria-selected="true" tabindex="0">Evidence</button><button id="tab-foldback" role="tab" data-tab="foldback" aria-controls="foldback-tab" aria-selected="false" tabindex="-1">Foldback</button><button id="tab-search" role="tab" data-tab="search" aria-controls="search-tab" aria-selected="false" tabindex="-1">Find</button></div>
+  <section id="snapshot-tab" class="tab-content" role="tabpanel" aria-labelledby="tab-evidence">
+   <p class="eyebrow">COMPILED ARCHIVE / RECORDED COUNTS</p>
    <div class="big-stat"><strong id="node-count">—</strong><span>entities in the Atlas</span></div>
    <div class="stat-pair"><div><b id="edge-count">—</b><span>typed edges</span></div><div><b id="law-count">—</b><span>laws</span></div></div>
    <div class="hairline"></div><div class="metric-label"><span>Numbers with an archived verified quote</span><b id="quote-fraction">—</b></div><div class="meter"><i id="quote-bar"></i></div>
@@ -30,13 +31,13 @@
    <div class="snapshot-note"><span class="tiny-dot"></span><b id="hash-state">Checking archive…</b><p>Snapshot bytes, graph links, and recorded hashes. Domain transfers remain proposed.</p></div>
    <button class="text-button" id="show-limits">Inspect evidence & limits ↗</button>
   </section>
-  <section id="foldback-tab" class="tab-content" hidden>
+  <section id="foldback-tab" class="tab-content" role="tabpanel" aria-labelledby="tab-foldback" hidden>
    <p class="eyebrow amber">SYNTHETIC TEACHING REPLAY</p><h2>One failure.<br>Four useful returns.</h2><p class="muted">A shader-source incident becomes a guarded technique for a music world.</p>
    <ol id="replay-steps"></ol><button class="primary" id="advance">Begin the foldback →</button><button class="text-button" id="reset-replay">Reset sequence</button><button class="text-button" id="inspect-guard">Inspect the executed local shader guard ↗</button>
    <p id="replay-status" class="muted" aria-live="polite">Step through a protocol example. These are invented records, not an archived run.</p>
   </section>
-  <section id="search-tab" class="tab-content" hidden>
-   <p class="eyebrow">INSIDE THE PINNED KNOWLEDGE GRAPH</p><label for="query">An ID, a tool, a surprising idea</label><input id="query" type="search" placeholder="fm/1, ShaderPart, physics…" autocomplete="off"><p id="search-state" class="muted">Search loads the local Atlas. No external service.</p><div id="search-results"></div>
+  <section id="search-tab" class="tab-content" role="tabpanel" aria-labelledby="tab-search" hidden>
+   <p class="eyebrow">INSIDE THE PINNED KNOWLEDGE GRAPH</p><label for="query">An ID, a tool, a surprising idea</label><input id="query" type="search" placeholder="fm/1, ShaderPart, physics…" autocomplete="off" maxlength="240"><p id="search-state" class="muted" role="status" aria-live="polite">Search loads the local Atlas. No external service.</p><div id="search-results"></div>
   </section>
  </aside>
  <aside class="dossier" aria-label="Selected feather details">

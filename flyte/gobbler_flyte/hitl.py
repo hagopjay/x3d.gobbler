@@ -26,7 +26,7 @@ def parse_answer(text: str, question: dict) -> str | None:
         return None
     pick = m.group("pick").upper()
     pick = {"1": "A", "2": "B", "3": "C", "OK": question["preferred"]}.get(pick, pick)
-    if pick == "A" and not question.get("reversible", True) and "send" not in m.group("rest").lower():
+    if pick == "A" and not question.get("reversible", True) and not re.fullmatch(r"\s+send\s*[.!]?\s*", m.group("rest"), re.I):
         return None                      # an outside send needs the typed word
     return pick
 

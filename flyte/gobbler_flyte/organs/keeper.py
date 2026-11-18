@@ -36,8 +36,18 @@ def keeper(state: dict, ctx) -> dict:
     elif ctx.world is None:
         log.append(row("keeper", "world", "x3d.accrete missing: admission not_run, nothing committed"))
     else:
-        entry = ctx.world.append(state["candidate"])
-        if entry["status"] == "committed":
+        # One operation key per cycle. A tick that crashed after the world append but before its memory was
+        # saved re-runs the same cycle number; the key finds the entry it already admitted instead of a duplicate.
+        op = f"{ctx.world_id}:cycle-{state['cycle']}"
+        entry = ctx.world.find_op(op)
+        if entry:
+            log.append(row("keeper", "recovered", f"world entry #{entry['n']} {entry['hash'][:12]} already holds operation {op}; not appended again"))
+        else:
+            cand = {**state["candidate"], "generator": {**state["candidate"]["generator"], "op": op}}
+            entry = ctx.world.append(cand)
+        if entry.get("recovered"):
+            pass
+        elif entry["status"] == "committed":
             stages = " ".join(f"{s['id']}:{s['status']}" for s in entry["stages"])
             log.append(row("keeper", "commit", f"world entry #{entry['n']} {entry['hash'][:12]} committed ({stages})",
                            entry=entry))
@@ -54,6 +64,8 @@ def keeper(state: dict, ctx) -> dict:
             f"- target: `{repo}` `{path}`\n- action: {proposal['action']} ({'PR' if choice == 'A' else 'note only'})\n"
             f"- signal: [{signal['title']}]({signal['url']}) from `{signal['source']}`"
             f"{' (SYNTHETIC fixture)' if signal.get('synthetic') else ''}, score {signal['score']} ({'; '.join(signal['why'])})\n"
+            f"- observation: run mode `{ctx.mode}`, source transport `{signal.get('provenance', {}).get('transport', 'unrecorded')}`, "
+            f"body SHA-256 `{signal.get('provenance', {}).get('body_sha256', 'unrecorded')}`\n"
             f"- witness: grade {state['witness']['grade']}, gate {state['witness']['instrument'].get('gate_version')}, "
             f"x3d_mcp {state['witness']['instrument'].get('x3d_mcp_commit')}\n"
             f"- world: entry #{entry['n']} `{entry['hash'][:16]}`\n"
@@ -61,11 +73,23 @@ def keeper(state: dict, ctx) -> dict:
             f"Status: drafted, reuse pending. A flywheel turn is counted only when a second consumer takes this up.\n")
         log.append(row("keeper", "foldback", f"drafted {drafted.name} for {repo} ({'PR' if choice == 'A' else 'note'}); reuse pending"))
     turn = {"cycle": state["cycle"], "signal": signal["id"], "action": proposal["action"], "choice": choice,
+            "mode": ctx.mode, "source_provenance": signal.get('provenance'), "synthetic": bool(signal.get('synthetic')),
+            "evidence_facets": {**(state['witness'].get('evidence_facets') or {}),
+                                "admission": "committed" if entry and entry.get("status") == "committed" else "not_admitted",
+                                "human": {"hagopjay": "answered"}.get((state.get("decision") or {}).get("by"),
+                                          "timeout_preferred_pick" if (state.get("decision") or {}).get("by") == "timeout"
+                                          else "answered" if state.get("decision") else "not_asked"),
+                                "render": "not_run"},
             "admitted": bool(entry and entry.get("status") == "committed"), "drafted": bool(drafted), "reused": False,
             "entry_n": entry.get("n") if entry else None, "entry_hash": entry.get("hash") if entry else None,
             "grade": state["witness"].get("grade"), "attempts": state.get("attempts"),
             "decision": state.get("decision"), "spend_usd": round(sum(s["actual_usd"] for s in state.get("spend", [])), 6),
             "utc": ctx.now}
-    with (ctx.state_dir / "turns.jsonl").open("a") as f:
-        f.write(json.dumps(turn, sort_keys=True, default=str) + "\n")
+    turns = ctx.state_dir / "turns.jsonl"
+    done = {json.loads(x)["cycle"] for x in turns.read_text().splitlines() if x.strip()} if turns.exists() else set()
+    if state["cycle"] in done:                       # the same cycle re-run after a crash: one ledger row per cycle
+        log.append(row("keeper", "recovered", f"turn row for cycle {state['cycle']} already written; not duplicated"))
+    else:
+        with turns.open("a") as f:
+            f.write(json.dumps(turn, sort_keys=True, default=str) + "\n")
     return {"entry": entry or {}, "turn": turn, "log": log}
