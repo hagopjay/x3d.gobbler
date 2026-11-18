@@ -1,6 +1,7 @@
-# Everything is stdlib Python 3.12+ except where noted. PY can point at a venv that has x3d_mcp's dependencies.
+# Local verification uses Python3.12+ and Node. Full release also needs the
+# declared workflow/validation dependencies and a real x3d.accrete checkout.
 PY ?= python3
-.PHONY: test verify pins replay standalone browser sweep all
+.PHONY: test verify pins replay standalone browser sweep controls release lab all
 test:       ; $(PY) -m unittest discover -s flywheel-review/atlas/tests
 verify:     ; $(PY) verify.py
 pins:       ; $(PY) tools/fetch_pins.py                      # x3d.docs at flywheel-review/atlas/src/DOCS.sha
@@ -9,6 +10,10 @@ replay: pins                                                # full Atlas rebuild
 	cd flywheel-review/atlas && ATLAS_OUT=$$PWD/out-r1 $(PY) build_atlas.py >/dev/null && ATLAS_OUT=$$PWD/out-r1 $(PY) fly_atlas.py >/dev/null \
 	  && ATLAS_OUT=$$PWD/out-r1 $(PY) check_atlas.py --offline && ATLAS_OUT=$$PWD/out-r1 $(PY) report.py
 standalone: ; $(PY) gobbler-flyte/build_standalone.py --output Gobbler-Evidence-Loom.html
+lab:        ; $(PY) evidence-lab/build_lab.py
+controls:
+	node --test tools/observatory-controls.test.mjs tools/intervention-tests.mjs tools/intervention-ui.test.mjs
+release:    ; $(PY) tools/check_release.py
 browser:    ; node tools/browser_check.cjs --json receipts/browser-observatory.json   # NODE_PATH must reach playwright
 sweep:      ; $(PY) tools/leak_sweep.py
-all: test verify standalone sweep
+all: standalone verify controls sweep

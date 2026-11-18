@@ -32,6 +32,18 @@ class GraphIntegrityTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "duplicate edge"):
             kernel.validate_graph(self.graph)
 
+    def test_malformed_rows_raise_a_validation_error_instead_of_crashing(self):
+        for graph in ([], {"nodes": {}, "edges": []}, {"nodes": [None], "edges": []},
+                      {"nodes": self.graph["nodes"], "edges": [None]},
+                      {"nodes": self.graph["nodes"], "edges": [{"s": [], "p": "x", "o": "a"}]}):
+            with self.subTest(graph=graph), self.assertRaises(ValueError):
+                kernel.validate_graph(graph)
+
+    def test_empty_type_is_rejected(self):
+        for value in ("", "   ", None, []):
+            with self.subTest(value=value), self.assertRaisesRegex(ValueError, "type absent"):
+                kernel.validate_graph({"nodes": [{"id": "a", "type": value}], "edges": []})
+
 
 class FoldbackProtocolTests(unittest.TestCase):
     def setUp(self):
@@ -154,6 +166,33 @@ class FoldbackProtocolTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unresolved event domain"):
             self.replay()
 
+    def test_reference_collections_cannot_masquerade_as_arrays(self):
+        for bad in ("demo:candidate", {"demo:candidate": True}, ["demo:candidate", "demo:candidate"], [[]]):
+            with self.subTest(bad=bad):
+                self.events[0]["artifactRefs"] = bad
+                with self.assertRaisesRegex(ValueError, "array of unique string"):
+                    self.replay()
+
+    def test_candidate_cannot_start_from_an_unrelated_bound_artifact(self):
+        self.events[0]["artifactRefs"] = ["demo:guard"]
+        with self.assertRaisesRegex(ValueError, "candidate artifacts must be bound"):
+            self.replay()
+
+    def test_empty_history_is_not_a_successful_replay(self):
+        self.events = []
+        with self.assertRaisesRegex(ValueError, "events must be nonempty"):
+            self.replay()
+
+    def test_nonobject_events_are_validation_failures(self):
+        self.events[0] = None
+        with self.assertRaisesRegex(ValueError, "event must be an object"):
+            self.replay()
+
+    def test_unhashable_artifact_reference_is_a_validation_failure(self):
+        self.artifacts[-1]["inputRef"] = []
+        with self.assertRaisesRegex(ValueError, "unresolved artifact inputRef"):
+            self.replay()
+
 
 class ArchiveCompilationTests(unittest.TestCase):
     def test_snapshot_metrics_and_determinism(self):
@@ -198,6 +237,26 @@ class ArchiveCompilationTests(unittest.TestCase):
         self.assertEqual(kernel.canonical_bytes({"b": 2, "a": 1}), kernel.canonical_bytes({"a": 1, "b": 2}))
         with self.assertRaises(ValueError):
             kernel.canonical_bytes({"value": float("nan")})
+
+    def test_metadata_booleans_are_not_integer_counts(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            graph = {"nodes": [{"id": "law/1", "type": "Law"}], "edges": [],
+                     "meta": {"counts": {"Law": True}, "edges": {}}}
+            (root / "atlas.json").write_bytes(kernel.canonical_bytes(graph))
+            # No receipt is needed: shape validation must precede file assertions.
+            with self.assertRaisesRegex(ValueError, "nonnegative integer counts"):
+                kernel.compile_observatory(root)
+
+    def test_equal_but_empty_pins_are_not_a_bound_source(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            graph = {"nodes": [{"id": "law/1", "type": "Law"}], "edges": [],
+                     "meta": {"counts": {"Law": 1}, "edges": {}, "inputs": {}}}
+            (root / "atlas.json").write_bytes(kernel.canonical_bytes(graph))
+            (root / "receipt.json").write_bytes(kernel.canonical_bytes({"inputs": {}}))
+            with self.assertRaisesRegex(ValueError, "source pins disagree"):
+                kernel.compile_observatory(root)
 
 
 if __name__ == "__main__":

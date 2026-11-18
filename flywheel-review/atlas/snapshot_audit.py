@@ -114,14 +114,20 @@ def audit(output_directory: Path) -> dict[str, Any]:
     record("graph node IDs are unique and typed", not bad_nodes and not duplicates,
            nodes=len(nodes), duplicates=duplicates, invalidRows=bad_nodes)
     ids = set(id_counts)
-    malformed_edges, dangling = [], []
+    malformed_edges, dangling, duplicate_edges = [], [], []
+    seen_edges: set[tuple[str, str, str]] = set()
     for index, edge in enumerate(edges):
         if not isinstance(edge, dict) or not all(isinstance(edge.get(key), str) and edge[key] for key in ("s", "p", "o")):
             malformed_edges.append(index)
-        elif edge["s"] not in ids or edge["o"] not in ids:
-            dangling.append({"index": index, "s": edge["s"], "p": edge["p"], "o": edge["o"]})
-    record("graph edges resolve", not malformed_edges and not dangling, edges=len(edges),
-           malformedRows=malformed_edges, dangling=dangling)
+        else:
+            triple = (edge["s"], edge["p"], edge["o"])
+            if triple in seen_edges:
+                duplicate_edges.append({"index": index, "s": edge["s"], "p": edge["p"], "o": edge["o"]})
+            seen_edges.add(triple)
+            if edge["s"] not in ids or edge["o"] not in ids:
+                dangling.append({"index": index, "s": edge["s"], "p": edge["p"], "o": edge["o"]})
+    record("graph edges resolve", not malformed_edges and not dangling and not duplicate_edges, edges=len(edges),
+           malformedRows=malformed_edges, dangling=dangling, duplicateTriples=duplicate_edges)
     type_counts = dict(sorted(Counter(node["type"] for node in nodes
                                       if isinstance(node, dict) and isinstance(node.get("type"), str)).items()))
     predicate_counts = dict(sorted(Counter(edge["p"] for edge in edges
@@ -142,7 +148,10 @@ def audit(output_directory: Path) -> dict[str, Any]:
         expected_ids = {node["id"] for node in nodes if isinstance(node, dict)
                         and isinstance(node.get("id"), str) and isinstance(node.get("type"), str)
                         and node["type"] in COPIED_TYPES}
-        malformed = [i for i, row in enumerate(entries) if not all(key in row for key in ("id", "value", "quote", "source", "line"))]
+        malformed = [i for i, row in enumerate(entries)
+                     if not all(isinstance(row.get(key), str) and row[key].strip() for key in ("id", "value", "quote", "source"))
+                     or type(row.get("line")) is not int or row["line"] < 1
+                     or row["value"] not in row["quote"]]
         missing = sorted(expected_ids - set(claim_ids))
         unexpected = sorted(str(value) for value in set(claim_ids) - expected_ids)
         duplicate_claims = sorted(str(nid) for nid, count in claim_ids.items() if count > 1)
@@ -175,11 +184,12 @@ def audit(output_directory: Path) -> dict[str, Any]:
                       if not all(route.attrib.get(key) for key in ("fromNode", "fromField", "toNode", "toField"))
                       or route.attrib.get("fromNode") not in definitions or route.attrib.get("toNode") not in definitions]
         script_count = sum(node.tag.rsplit("}", 1)[-1] == "Script" for node in all_nodes)
+        scene_count = sum(node.tag.rsplit("}", 1)[-1] == "Scene" for node in tree.getroot())
         record("scene named references resolve", not duplicate_defs and not unresolved_uses and not mismatched_uses and not bad_routes,
                definitions=len(definitions), routes=len(routes), duplicateDefs=duplicate_defs,
                unresolvedUses=unresolved_uses, mismatchedUses=mismatched_uses, invalidRoutes=bad_routes)
-        record("scene has X3D root and no Script", tree.getroot().tag.rsplit("}", 1)[-1] == "X3D" and script_count == 0,
-               scripts=script_count)
+        record("scene has X3D root and no Script", tree.getroot().tag.rsplit("}", 1)[-1] == "X3D" and script_count == 0 and scene_count == 1,
+               scripts=script_count, scenes=scene_count)
     except (OSError, ET.ParseError) as exc:
         record("scene named references resolve", False, error=str(exc))
 

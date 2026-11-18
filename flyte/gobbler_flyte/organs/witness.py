@@ -19,7 +19,9 @@ def grade(signal: dict, gate_ok: bool, target_seen: bool | None) -> str:
         return "Refused"
     if signal.get("synthetic"):
         return "Suspected"
-    return "Confirmed" if target_seen else "Likely"
+    # A path's existence confirms only that the path exists. The candidate's
+    # structural checks do not establish source truth, target behavior or reuse.
+    return "Likely"
 
 
 def target_seen(ctx, proposal: dict) -> bool | None:
@@ -53,6 +55,9 @@ def witness(state: dict, ctx) -> dict:
             g = {**g, "errors": [{"code": "TRAP_" + h.rule.upper().replace("-", "_"), "message": h.detail} for h in trap_hits if h.severity == "error"]}
     seen = target_seen(ctx, proposal)
     verdict = {"status": "pass" if ok else "fail", "errors": g.get("errors", [])[:6], "grade": grade(signal, ok, seen),
+               "evidence_facets": {"candidate_structure": "pass" if ok else "fail",
+                   "source": "synthetic" if signal.get('synthetic') else "archived" if signal.get('provenance', {}).get('transport') == 'fixture' else "unverified_live",
+                   "target_presence": "not_run" if seen is None else "present" if seen else "missing", "reuse": "unverified"},
                "instrument": accrete.identity(), "metrics": g.get("metrics"), "target_seen": seen,
                "canonical_sha256": g.get("canonical_sha256"), "validator": {k: v.get(k) for k in ("status", "xsd", "semantic")},
                "traps": [{"rule": h.rule, "severity": h.severity, "where": h.where} for h in trap_hits]}

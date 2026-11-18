@@ -87,7 +87,7 @@ def weaver(state: dict, ctx) -> dict:
     story = f"Turn {state['cycle']}: {proposal['action']} - {signal['title'][:60]}"
     log, spend = [], []
     last = state.get("witness") or {}
-    use_llm = attempts < ctx.config["inner_loop"]["max_weave_attempts"]
+    use_llm = ctx.mode in ('live', 'sim') and attempts < ctx.config["inner_loop"]["max_weave_attempts"]
     gate_check = None
     if use_llm:
         feedback = ""
@@ -117,7 +117,8 @@ def weaver(state: dict, ctx) -> dict:
         c = accrete.procedural_candidate(plan, tier=3)
         candidate = {**c, "title": story[:120], "instruction": f"{proposal['target']}. {c['instruction']}"[:280],
                      "generator": {**c["generator"], "organ": "weaver", "attempt": attempts, "path": "accrete-procedural"}}
-        why = "inner loop exhausted, procedural fallback" if attempts >= ctx.config["inner_loop"]["max_weave_attempts"] and last else "no model allowance"
+        why = "offline mode, no model client" if ctx.mode == 'offline' else \
+            "inner loop exhausted, procedural fallback" if attempts >= ctx.config["inner_loop"]["max_weave_attempts"] and last else "no model allowance"
         log.append(row("weaver", "weave", f"attempt {attempts}: accrete {c['generator']['family']} sculpture, {len(c['x3d'])} bytes, 0 model calls ({why})"))
     if attempts == 1:
         log.insert(0, row("weaver", "proposal", f"{proposal['action']} -> {proposal['target']}; options A/B/C, prefers {proposal['preferred']}"

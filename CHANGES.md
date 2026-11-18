@@ -1,4 +1,19 @@
-# Independent assessment and changes (17 Nov 2026)
+# Intervention Lab and rigorous review pass (17 Nov 2026)
+
+This pass targets GitHub commit `11a561623b7539f1f9bf20f8ef7bc5b9706c10d2`.
+It adds three X3D evidence experiments, repairs the kernel/Flyte/frontend/scene
+boundaries, hardens standalone rebuilding, and supplies full pinned validation
+with source-bound release evidence. See [implementation review](docs/IMPLEMENTATION-REVIEW.md),
+[baseline assessment](docs/GOBBLER-REVIEW.md) and [release receipt](receipts/review-release.json).
+
+Fresh native browser execution is `not_run`: Chromium socket initialization is
+blocked by this host. The Blender preview is an actual import/placement check
+with explicit studio presentation changes, not browser pixels. The earlier
+browser figures below remain historical and do not certify the changed revision.
+
+---
+
+# Historical independent assessment and changes (17 Nov 2026)
 
 Rig: Python 3.13.18, rdflib 7.6.0, x3d_mcp `fa5dccf` (XSD + semantic validator), Node Playwright with Chromium 153.0.8010.12 on software GL (SwiftShader). Nothing here is a GPU measurement.
 

@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 from .runner import tick, utc_now
+from .budget import parse_allowance
 
 
 def main(argv=None):
@@ -28,7 +29,7 @@ def main(argv=None):
     elif args.cmd == "answer":
         d = Path(args.state) / "answers"
         d.mkdir(parents=True, exist_ok=True)
-        name = "allowance.json" if args.text.lower().startswith("ok $") else f"{args.cycle:05d}.json"
+        name = "allowance.json" if parse_allowance(args.text) is not None else f"{args.cycle:05d}.json"
         (d / name).write_text(json.dumps({"by": args.by, "text": args.text, "utc": utc_now()}))
         print("recorded; the next tick reads it")
     else:

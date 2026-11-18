@@ -27,20 +27,49 @@ def sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
+def _nonempty_string(value: Any) -> bool:
+    return isinstance(value, str) and bool(value.strip())
+
+
+def _references(value: Any, field: str) -> list[str]:
+    """Reference collections are JSON arrays, never strings or duplicate aliases."""
+    if (not isinstance(value, list) or not value
+            or not all(_nonempty_string(ref) for ref in value)
+            or len(value) != len(set(value))):
+        raise ValueError(f"{field} must be a nonempty array of unique string references")
+    return value
+
+
+def _string_map(value: Any) -> bool:
+    return isinstance(value, dict) and bool(value) and all(
+        _nonempty_string(key) and _nonempty_string(item) for key, item in value.items())
+
+
+def _count_map(value: Any) -> bool:
+    return isinstance(value, dict) and all(
+        _nonempty_string(key) and type(count) is int and count >= 0 for key, count in value.items())
+
+
 def validate_graph(graph: dict[str, Any]) -> dict[str, dict[str, Any]]:
     """Reject a graph whose local identity or endpoint integrity is ambiguous."""
+    if not isinstance(graph, dict) or not isinstance(graph.get("nodes"), list) or not isinstance(graph.get("edges"), list):
+        raise ValueError("graph nodes and edges must be arrays")
     nodes: dict[str, dict[str, Any]] = {}
     for node in graph["nodes"]:
+        if not isinstance(node, dict):
+            raise ValueError("graph node must be an object")
         nid = node.get("id")
-        if not isinstance(nid, str) or not nid or nid in nodes:
+        if not _nonempty_string(nid) or nid in nodes:
             raise ValueError(f"invalid or duplicate node id: {nid!r}")
-        if not isinstance(node.get("type"), str):
+        if not _nonempty_string(node.get("type")):
             raise ValueError(f"node type absent: {nid}")
         nodes[nid] = node
     triples: set[tuple[str, str, str]] = set()
     for edge in graph["edges"]:
+        if not isinstance(edge, dict):
+            raise ValueError("graph edge must be an object")
         s, p, o = edge.get("s"), edge.get("p"), edge.get("o")
-        if s not in nodes or o not in nodes or not isinstance(p, str) or not p:
+        if not all(_nonempty_string(value) for value in (s, p, o)) or s not in nodes or o not in nodes:
             raise ValueError(f"unresolved or invalid edge: {edge!r}")
         triple = (s, p, o)
         if triple in triples:
@@ -78,31 +107,37 @@ def replay_incident(incident: dict[str, Any], artifacts: list[dict[str, Any]],
     distinct (guard, target, input hash) tuples; retrying one run adds no momentum.
     Caller-supplied JSON is not authenticated and cannot establish empirical truth.
     """
-    if not incident.get("id") or not incident.get("sourceRefs"):
+    if not isinstance(incident, dict) or not _nonempty_string(incident.get("id")):
         raise ValueError("incident must name its identity and source references")
-    if any(ref not in known_source_ids for ref in incident["sourceRefs"]):
+    source_refs = _references(incident.get("sourceRefs"), "incident sourceRefs")
+    incident_refs = _references(incident.get("artifactRefs"), "incident artifactRefs")
+    if not isinstance(artifacts, list) or not artifacts or not isinstance(events, list) or not events:
+        raise ValueError("artifacts and events must be nonempty arrays")
+    if any(ref not in known_source_ids for ref in source_refs):
         raise ValueError("unresolved incident source reference")
     by_id: dict[str, dict[str, Any]] = {}
     for item in artifacts:
+        if not isinstance(item, dict):
+            raise ValueError("artifact must be an object")
         aid = item.get("id")
-        if not isinstance(aid, str) or not aid or aid in by_id:
+        if not _nonempty_string(aid) or aid in by_id:
             raise ValueError("invalid or duplicate artifact id")
+        if not _nonempty_string(item.get("kind")):
+            raise ValueError(f"artifact kind is required: {aid}")
         if not isinstance(item.get("content"), str) or item.get("sha256") != sha256(item["content"].encode("utf-8")):
             raise ValueError(f"artifact content hash mismatch: {aid}")
         by_id[aid] = item
-    for ref in incident.get("artifactRefs", []):
+    for ref in incident_refs:
         if ref not in by_id:
             raise ValueError("unresolved incident artifact reference")
-    if not incident.get("artifactRefs"):
-        raise ValueError("incident artifact references are required")
     for item in by_id.values():
         for field in ("guardRef", "subjectRef", "inputRef"):
-            if field in item and item[field] not in by_id:
+            if field in item and (not _nonempty_string(item[field]) or item[field] not in by_id):
                 raise ValueError(f"unresolved artifact {field}: {item['id']}")
     domains = {d["id"] for d in domain_manifest()}
     def refs(event: dict[str, Any], field: str, kind: str | None = None) -> list[dict[str, Any]]:
-        values = event.get(field, [])
-        if not values or any(ref not in by_id for ref in values):
+        values = _references(event.get(field), field)
+        if any(ref not in by_id for ref in values):
             raise ValueError(f"unresolved or missing {field}")
         resolved = [by_id[ref] for ref in values]
         if kind and any(a.get("kind") != kind for a in resolved):
@@ -114,11 +149,13 @@ def replay_incident(incident: dict[str, Any], artifacts: list[dict[str, Any]],
     state: str | None = None
     origin_domain: str | None = None
     for event in events:
+        if not isinstance(event, dict):
+            raise ValueError("event must be an object")
         eid = event.get("id")
-        if not isinstance(eid, str) or not eid or eid in event_ids:
+        if not _nonempty_string(eid) or eid in event_ids:
             raise ValueError("invalid or duplicate event id")
         event_ids.add(eid)
-        if event.get("domain") not in domains:
+        if not _nonempty_string(event.get("domain")) or event["domain"] not in domains:
             raise ValueError("unresolved event domain")
         nxt = event.get("state")
         if state is None:
@@ -127,14 +164,16 @@ def replay_incident(incident: dict[str, Any], artifacts: list[dict[str, Any]],
             allowed = {"reused"}
         else:
             allowed = {STATES[STATES.index(state) + 1]}
-        if nxt not in allowed:
+        if not isinstance(nxt, str) or nxt not in allowed:
             raise ValueError(f"bad transition: {state!r} -> {nxt!r}")
-        refs(event, "artifactRefs")
+        event_artifacts = refs(event, "artifactRefs")
         if nxt == "candidate":
+            if any(a["id"] not in incident_refs for a in event_artifacts):
+                raise ValueError("candidate artifacts must be bound to the incident")
             origin_domain = event["domain"]
         if nxt == "reproduced":
             evidence = refs(event, "runRefs", "reproduction")
-            if any(a.get("subjectRef") not in incident["artifactRefs"] for a in evidence):
+            if any(a.get("subjectRef") not in incident_refs for a in evidence):
                 raise ValueError("reproduction is not bound to the incident artifact")
             if not any(a.get("verdict") == "observed-failure" for a in evidence):
                 raise ValueError("reproduction requires an observed-failure run")
@@ -156,7 +195,7 @@ def replay_incident(incident: dict[str, Any], artifacts: list[dict[str, Any]],
             for run in evidence:
                 if run.get("guardRef") not in {g["id"] for g in guards}:
                     raise ValueError("reuse run is not bound to the promoted guard")
-                if run.get("verdict") != "accepted" or run.get("target") not in domains:
+                if run.get("verdict") != "accepted" or not _nonempty_string(run.get("target")) or run["target"] not in domains:
                     raise ValueError("reuse requires an accepted run with a target")
                 if run["target"] == origin_domain or run["target"] != event["domain"]:
                     raise ValueError("reuse target must differ from origin and match the event domain")
@@ -204,12 +243,18 @@ def compile_observatory(atlas_dir: Path) -> dict[str, Any]:
     graph_bytes = (atlas_dir / "atlas.json").read_bytes()
     graph = json.loads(graph_bytes)
     nodes = validate_graph(graph)
+    meta = graph.get("meta")
+    if not isinstance(meta, dict) or not _count_map(meta.get("counts")) or not _count_map(meta.get("edges")):
+        raise ValueError("graph metadata counts must map names to nonnegative integer counts")
     counts = dict(sorted(Counter(n["type"] for n in nodes.values()).items()))
     predicates = dict(sorted(Counter(e["p"] for e in graph["edges"]).items()))
     if counts != graph["meta"]["counts"] or predicates != graph["meta"]["edges"]:
         raise ValueError("graph metadata counts disagree with actual records")
     receipt = json.loads((atlas_dir / "receipt.json").read_text())
-    if receipt["inputs"] != graph["meta"]["inputs"]:
+    if not isinstance(receipt, dict):
+        raise ValueError("receipt must be an object")
+    if (not _string_map(receipt.get("inputs")) or not _string_map(meta.get("inputs"))
+            or receipt["inputs"] != meta["inputs"]):
         raise ValueError("receipt source pins disagree with graph")
     digests = receipt.get("sha256")
     if not isinstance(digests, dict) or set(digests) != REQUIRED_OUTPUTS:

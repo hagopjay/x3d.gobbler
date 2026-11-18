@@ -19,12 +19,55 @@ MESHES: dict[tuple, str] = {}
 f = lambda n: f"{n:.4f}".rstrip("0").rstrip(".") or "0"
 v = lambda q: " ".join(f(n) for n in q)
 
+def mfstring(value):
+    """One MFString item, escaped at both string-literal and XML layers."""
+    return quoteattr(json.dumps(str(value), ensure_ascii=False))
+
+def look_at(eye, target):
+    """Orient a Viewpoint's local -Z toward target, with a deterministic pole up.
+
+    The quaternion branches remain stable at half turns. A vertical sightline
+    uses +Z as its reference up instead of constructing a zero right vector.
+    """
+    if len(eye) != 3 or len(target) != 3 or not all(math.isfinite(x) for x in (*eye, *target)):
+        raise ValueError('look_at requires two finite three-vectors')
+    def cross(a, b):
+        return (a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0])
+    def unit(a):
+        n = math.hypot(*a)
+        if not math.isfinite(n) or n == 0:
+            raise ValueError('look_at eye and target must be distinct')
+        return tuple(x/n for x in a)
+    forward = unit(tuple(target[i]-eye[i] for i in range(3)))
+    reference = (0., 0., 1.) if abs(forward[1]) > 1-1e-10 else (0., 1., 0.)
+    right = unit(cross(forward, reference))
+    up = cross(right, forward)
+    m = [[right[i], up[i], -forward[i]] for i in range(3)]
+    trace = sum(m[i][i] for i in range(3))
+    if trace > 0:
+        s = math.sqrt(trace+1)*2
+        q = ((m[2][1]-m[1][2])/s, (m[0][2]-m[2][0])/s, (m[1][0]-m[0][1])/s, .25*s)
+    else:
+        i = max(range(3), key=lambda k: m[k][k]); j=(i+1)%3; k=(i+2)%3
+        s = math.sqrt(max(0., 1+m[i][i]-m[j][j]-m[k][k]))*2
+        xyz = [0., 0., 0.]; xyz[i]=.25*s
+        xyz[j]=(m[i][j]+m[j][i])/s; xyz[k]=(m[i][k]+m[k][i])/s
+        q = (*xyz, (m[k][j]-m[j][k])/s)
+    if q[3] < 0:
+        q = tuple(-x for x in q)
+    n = math.sqrt(sum(x*x for x in q[:3]))
+    return (0., 1., 0., 0.) if n < 1e-14 else (*tuple(x/n for x in q[:3]), 2*math.atan2(n, q[3]))
+
 def material(color, alpha=0, glow=0.65):
     return (f"<Appearance><Material diffuseColor='{v(tuple(.32*c for c in color))}' "
             f"emissiveColor='{v(tuple(glow*c for c in color))}' transparency='{f(alpha)}' "
             "specularColor='0.7 0.8 1' shininess='0.8'/></Appearance>")
 
 def torus(radius=1.0, tube=.025, segments=64, sides=6):
+    if not all(math.isfinite(x) for x in (radius, tube)) or not radius > tube > 0:
+        raise ValueError('torus requires finite radius > tube > 0')
+    if any(type(x) is not int or x < 3 for x in (segments, sides)):
+        raise ValueError('torus requires integer segment counts of at least three')
     key = (radius, tube, segments, sides)
     if key in MESHES:
         return f"<IndexedFaceSet USE='{MESHES[key]}'/>"
@@ -52,7 +95,7 @@ def line(points, color, alpha=0):
 
 def text(label, pos, size, color):
     return (f"<Transform translation='{v(pos)}'><Billboard axisOfRotation='0 0 0'>"
-            +shape(f"<Text string={quoteattr(chr(34)+label+chr(34))}><FontStyle family='&quot;SANS&quot;' "
+            +shape(f"<Text string={mfstring(label)}><FontStyle family='&quot;SANS&quot;' "
                    f"justify='&quot;MIDDLE&quot; &quot;MIDDLE&quot;' size='{f(size)}'/></Text>",color,glow=1)
             +'</Billboard></Transform>')
 
@@ -76,9 +119,12 @@ def build():
     add("<WorldInfo title='Gobbler / The Evidence Loom' info='&quot;Archive evidence and illustrative animation&quot;'/>")
     add("<NavigationInfo type='&quot;EXAMINE&quot; &quot;ANY&quot;' headlight='true' transitionTime='1.2' speed='6'/>")
     add("<Background skyColor='0.006 0.011 0.028'/>")
-    add("<Viewpoint DEF='ViewFront' description='The whole Gobbler' position='0 15 61' centerOfRotation='0 13 0' fieldOfView='.72'/>")
-    add("<Viewpoint DEF='ViewClose' description='The loom heart' position='0 10.5 29' centerOfRotation='0 11 0' fieldOfView='.8'/>")
-    add("<Viewpoint DEF='ViewOrbit' description='A different perspective' position='33 20 46' orientation='0 1 0 .62' centerOfRotation='0 12 0' fieldOfView='.8'/>")
+    for name, description, eye, target, field in (
+        ('ViewFront', 'The whole Gobbler', (0,15,61), (0,13,0), .72),
+        ('ViewClose', 'The loom heart', (0,10.5,29), (0,11,0), .8),
+        ('ViewOrbit', 'A different perspective', (33,20,46), (0,12,0), .8),
+    ):
+        add(f"<Viewpoint DEF='{name}' description={quoteattr(description)} position='{v(eye)}' orientation='{v(look_at(eye,target))}' centerOfRotation='{v(target)}' fieldOfView='{f(field)}'/>")
     add("<DirectionalLight direction='-.4 -.5 -1' color='.6 .8 1' intensity='.8'/>")
     add("<PointLight location='0 9 9' color='1 .7 .3' intensity='1' radius='60'/>")
     clock('Breath',6)
@@ -98,7 +144,7 @@ def build():
     for i,d in enumerate(domains):
         a=-1.22+2.44*i/(len(domains)-1)
         length=22+1.5*math.cos(a*2); color=tuple(d['color'])
-        add(f"<Transform rotation='0 0 1 {f(-a)}' translation='0 5 -3'><Transform DEF='Feather{i}'>")
+        add(f"<Transform DEF='FeatherFrame{i}' rotation='0 0 1 {f(-a)}' translation='0 5 -3'><Transform DEF='Feather{i}'>")
         add(f"<TouchSensor DEF='Pick{i}' description={quoteattr(d['label'])}/>")
         # Smooth tapered vane, central shaft and many barbs: geometry rather than a billboard.
         pts=[]; colors=[]; idx=[]
@@ -111,9 +157,12 @@ def build():
                 colors.append(tuple(c*weight for c in color))
             if j:
                 n=3*j
-                idx.extend((n-3,n,n+1,n-2,-1,n-2,n+1,n+2,n-1,-1))
+                # The raised central ridge makes changing-width quads
+                # non-planar. Explicit triangles give importers one surface.
+                idx.extend((n-3,n,n+1,-1,n-3,n+1,n-2,-1,
+                            n-2,n+1,n+2,-1,n-2,n+2,n-1,-1))
         add("<Shape><Appearance><Material emissiveColor='1 1 1' transparency='.18'/></Appearance>"
-            f"<IndexedFaceSet solid='false' colorPerVertex='true' coordIndex='{' '.join(map(str,idx))}'>"
+            f"<IndexedFaceSet DEF='VaneMesh{i}' solid='false' colorPerVertex='true' coordIndex='{' '.join(map(str,idx))}'>"
             f"<Coordinate point='{' '.join(v(p) for p in pts)}'/><Color color='{' '.join(v(c) for c in colors)}'/></IndexedFaceSet></Shape>")
         add(line([(0,0,.5),(0,length,.5)],tuple(.6+.4*c for c in color),.15))
         for j in range(4,39,2):
@@ -122,7 +171,7 @@ def build():
                 add(line([(0,length*(t-.055),.51),(sign*width,length*t,.4)],color,.24))
         # Flywheel ocellus: neutral shared mesh, 12 rotating spokes, distinct per-domain hue.
         y=length*.81
-        add(f"<Transform translation='0 {f(y)} .7'>")
+        add(f"<Transform DEF='Eye{i}' translation='0 {f(y)} .7'>")
         add(shape(torus(1.34,.035),tuple(.45+.55*c for c in color)))
         add(shape(torus(1.09,.06),color,glow=1))
         add(f"<Transform DEF='Wheel{i}'>")
@@ -139,7 +188,10 @@ def build():
         add("</Transform></Transform>")
         spin('Wheel'+str(i),20+i*.9,direction=1 if i%2 else -1)
         # A tether from each eye to the heart. It carries illustrative packets only.
-        tip=(math.sin(a)*y,5+math.cos(a)*y,-2.2)
+        # Use the exact serialized frame angle/eye height, so the tether begins
+        # at the actual wheel center rather than a nearby idealized transform.
+        frame_angle=float(f(-a)); eye_height=float(f(y))
+        tip=(-math.sin(frame_angle)*eye_height,5+math.cos(frame_angle)*eye_height,-2.3)
         end=(0,8,3); control=(tip[0]*.55,tip[1]*.65,5)
         path=[]
         for j in range(33):
@@ -152,7 +204,7 @@ def build():
         route('Pulse'+str(i),'fraction_changed','Flow'+str(i),'set_fraction')
         route('Flow'+str(i),'value_changed','Packet'+str(i),'translation')
         eye=(math.sin(a)*y*.67,5+math.cos(a)*y,29)
-        add(f"<Viewpoint DEF='DomainView{i}' description={quoteattr(d['label'])} position='{v(eye)}' centerOfRotation='{v(tip)}' fieldOfView='.82'/>")
+        add(f"<Viewpoint DEF='DomainView{i}' description={quoteattr(d['label'])} position='{v(eye)}' orientation='{v(look_at(eye,tip))}' centerOfRotation='{v(tip)}' fieldOfView='.82'/>")
     # Gobbler: a faceted body, curved neck and luminous, observant head.
     gold=(1,.65,.27); ice=(.5,.85,1)
     add("<Transform DEF='Heart' translation='0 7 2' scale='2.7 3.5 2'>"+shape("<Sphere radius='1'/>",(.14,.25,.4),glow=.5)+"</Transform>")

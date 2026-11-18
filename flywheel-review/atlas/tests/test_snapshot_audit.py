@@ -132,6 +132,37 @@ class SnapshotAuditTests(unittest.TestCase):
         result = audit(self.root)
         self.assertFalse(self.check(result, "graph node IDs are unique and typed")["ok"])
 
+    def test_duplicate_edge_fails_even_after_counts_and_hashes_are_updated(self):
+        self.graph["edges"].append(dict(self.graph["edges"][0]))
+        self.graph["meta"]["edges"]["grade"] = 2
+        self.write_graph()
+        self.update_receipt()
+        result = audit(self.root)
+        self.assertTrue(self.check(result, "archived output hashes match")["ok"])
+        self.assertTrue(self.check(result, "graph totals match embedded metadata")["ok"])
+        edges = self.check(result, "graph edges resolve")
+        self.assertFalse(edges["ok"])
+        self.assertEqual(edges["duplicateTriples"][0]["index"], 1)
+
+    def test_hash_consistent_ledger_must_contain_a_typed_quote_witness(self):
+        positive = {"id": "law/1", "value": "example", "quote": "example", "line": 1, "source": "fixture@pin:file"}
+        for field, value in (("value", "different"), ("quote", None), ("line", True), ("line", 0), ("source", [])):
+            with self.subTest(field=field, value=value):
+                row = dict(positive, **{field: value})
+                (self.root / "atlas-claims.jsonl").write_text(json.dumps(row) + "\n")
+                self.update_receipt()
+                result = audit(self.root)
+                self.assertTrue(self.check(result, "archived output hashes match")["ok"])
+                self.assertFalse(self.check(result, "copied rows each have one ledger entry")["ok"])
+
+    def test_x3d_root_alone_does_not_supply_a_scene(self):
+        for xml in ("<X3D/>", "<X3D><Scene/><Scene/></X3D>"):
+            with self.subTest(xml=xml):
+                (self.root / "atlas-world.x3d").write_text(xml)
+                self.update_receipt()
+                result = audit(self.root)
+                self.assertFalse(self.check(result, "scene has X3D root and no Script")["ok"])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -21,6 +21,7 @@ class Reply:
 
 
 class HaikuLLM:
+    simulated = False
     def __init__(self, model: str, max_tokens: int, effort: str = "low"):
         import anthropic                     # imported lazily: the default path needs no SDK at all
         self._anthropic = anthropic
@@ -47,6 +48,7 @@ class HaikuLLM:
 
 class FakeLLM:
     """Scripted replies, in order, cycling. Usage numbers are part of the script."""
+    simulated = True
 
     def __init__(self, script: list[dict]):
         self.script, self.i = script, 0

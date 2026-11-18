@@ -1,0 +1,156 @@
+{
+  "schema": "gobbler.accrete-integration/1",
+  "started_utc": "2026-11-18T02:30:33.551717+00:00",
+  "python": "3.12.14",
+  "backend": {
+    "path": "/workspace/scratch/aee90170662d/x3d.accrete",
+    "repository": "https://github.com/hagopjay/x3d.accrete",
+    "commit": "93063bf980b33cddd816588c51a03433c6158d81",
+    "working_tree_status": ""
+  },
+  "sources_before": {
+    "flyte/flyte_wf.py": "07673f0fce29a3c31d63f50dc43619d74096213942897676f70a7014af9d982f",
+    "flyte/gobbler_flyte/__init__.py": "4f18fcf56e6909c00e42d66984138da78a895b4a2c854f35f9b7b6ad56a2e7bc",
+    "flyte/gobbler_flyte/__main__.py": "5e1a14c80c154b1e1e452e3aa08710ac659f0af4f345422cf8709d35731bbb67",
+    "flyte/gobbler_flyte/accrete_bridge.py": "15f2b973a4512a4dba18f2fb730f77cbef54eef4ba18799503199a9c0385648a",
+    "flyte/gobbler_flyte/budget.py": "2a3a5f935321200beddf8a578430e6880f22a0f5c64b3a8107b5d72cee968361",
+    "flyte/gobbler_flyte/gobbler.py": "af41e11a627d1551af8aa82c7261a3279af0cc870218101f6d35a0044967b742",
+    "flyte/gobbler_flyte/hitl.py": "d8824ab9180af8861097a5bbc634ec2fb48e3ce80321222cf7a9b801f0993e75",
+    "flyte/gobbler_flyte/llm.py": "2804fd41cabc008dcd0d3f85122c9ba024e9d50b1082465d8bc3b23c401f2339",
+    "flyte/gobbler_flyte/loom/__init__.py": "04536e187d25ac2d02d4eda9fba178f61499995d935ee88a695bed2df897a6a4",
+    "flyte/gobbler_flyte/loom/traps.py": "880195a4974650b9b682e4526fb4852c86446d44d4083e64c5182fe5593601cc",
+    "flyte/gobbler_flyte/loom/untrusted.py": "046d8b79b3ab3b72ac24b39bc7237d3d4aada69d959cece6e166d932ba4666f1",
+    "flyte/gobbler_flyte/organs/__init__.py": "f406095723ef41a89d00941b8c9949296ca0590306aff5cb69f7a89379636db1",
+    "flyte/gobbler_flyte/organs/keeper.py": "8d68d51373413129c47abea91326d2c905d000dda3caba1263081a134263d956",
+    "flyte/gobbler_flyte/organs/scout.py": "45d1a88710c917a0c287ce603fe3c83836428b87c6cdc48e89c116f66fe39d34",
+    "flyte/gobbler_flyte/organs/weaver.py": "5d88b50a8e25926a89d30ef3b2f523c1363da40fd8e70d83d7846463c6379c53",
+    "flyte/gobbler_flyte/organs/witness.py": "85d1c30ee107f341581b1f6e8db5ba5a8c104750e0b93aa63cf1fa716d5674bd",
+    "flyte/gobbler_flyte/relevance.py": "07e44c2fe4bf56be18625e72b1dff1a8969f09ca7b4bebd4214f7749118a0ac8",
+    "flyte/gobbler_flyte/runner.py": "9343b1703fd31353c34eac9b394b9c61a58838aa7b051785b78f1397af20443e",
+    "flyte/gobbler_flyte/sim.py": "5e1166f4c6543acee2598387ff6a1bf016a0d61ab2e32cfd29991c838abeea16",
+    "flyte/gobbler_flyte/sources.py": "fe768c789b6760b9b598904d82b188327819f48050fb74e162b51b411aa82ce9",
+    "flyte/gobbler_flyte/state.py": "665e6e5a4f106414e14253292cb4248da202bc22afd8e4e9196a36e8061fe500",
+    "flyte/tests/test_flyte.py": "5ee7c67cf087e5e20a878053c49f4440dfc8991a91786bfb6795bb415923476c"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "flyte/tests",
+        "-v"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.227029572000902,
+      "log": "test_cli_monthly_allowance_routes_to_allowance_file (test_flyte.Answers.test_cli_monthly_allowance_routes_to_allowance_file) ... ok\ntest_file_channel_ignores_unauthorized (test_flyte.Answers.test_file_channel_ignores_unauthorized) ... ok\ntest_outside_send_needs_the_word (test_flyte.Answers.test_outside_send_needs_the_word) ... ok\ntest_picks (test_flyte.Answers.test_picks) ... ok\ntest_checkpoint_connection_closes_when_graph_raises (test_flyte.ExecutionBoundaries.test_checkpoint_connection_closes_when_graph_raises) ... ok\ntest_feed_input_budget_and_kind_are_enforced (test_flyte.ExecutionBoundaries.test_feed_input_budget_and_kind_are_enforced) ... ok\ntest_fixture_items_carry_byte_provenance (test_flyte.ExecutionBoundaries.test_fixture_items_carry_byte_provenance) ... ok\ntest_memory_replace_failure_keeps_previous_bytes (test_flyte.ExecutionBoundaries.test_memory_replace_failure_keeps_previous_bytes) ... ok\ntest_offline_real_graph_never_constructs_model_even_with_allowance (test_flyte.ExecutionBoundaries.test_offline_real_graph_never_constructs_model_even_with_allowance) ... ok\ntest_sim_client_must_explicitly_declare_simulation (test_flyte.ExecutionBoundaries.test_sim_client_must_explicitly_declare_simulation) ... ok\ntest_synthetic_fixture_cannot_omit_its_synthetic_flag (test_flyte.ExecutionBoundaries.test_synthetic_fixture_cannot_omit_its_synthetic_flag) ... ok\ntest_target_presence_does_not_confirm_external_claim (test_flyte.ExecutionBoundaries.test_target_presence_does_not_confirm_external_claim) ... ok\ntest_unknown_mode_cannot_touch_network_or_channel (test_flyte.ExecutionBoundaries.test_unknown_mode_cannot_touch_network_or_channel) ... ok\ntest_one_offline_tick_grows_the_world (test_flyte.Loop.test_one_offline_tick_grows_the_world) ... ok\ntest_simulated_day (test_flyte.Loop.test_simulated_day) ... ok\ntest_gate_and_validator (test_flyte.Referee.test_gate_and_validator) ... ok\ntest_format (test_flyte.Relevance.test_format) ... ok\ntest_namesakes (test_flyte.Relevance.test_namesakes) ... ok\ntest_silence_then_answer (test_flyte.SimHumansOrder.test_silence_then_answer) ... ok\ntest_allowance_line_must_be_exact_and_finite (test_flyte.Spend.test_allowance_line_must_be_exact_and_finite) ... ok\ntest_daily_and_cycle_caps (test_flyte.Spend.test_daily_and_cycle_caps) ... ok\ntest_gate_closed_without_typed_ok (test_flyte.Spend.test_gate_closed_without_typed_ok) ... ok\ntest_invalid_budget_inputs_fail_before_pricing (test_flyte.Spend.test_invalid_budget_inputs_fail_before_pricing) ... ok\ntest_microdollar_usage_is_not_rounded_away (test_flyte.Spend.test_microdollar_usage_is_not_rounded_away) ... ok\ntest_parse_allowance (test_flyte.Spend.test_parse_allowance) ... ok\ntest_prompt_count_does_not_allocate_a_fake_prompt (test_flyte.Spend.test_prompt_count_does_not_allocate_a_fake_prompt) ... ok\ntest_usage_request_id_is_idempotent_and_conflicts_fail (test_flyte.Spend.test_usage_request_id_is_idempotent_and_conflicts_fail) ... ok\ntest_hashes_match_origin (test_flyte.VendoredLoom.test_hashes_match_origin) ... ok\ntest_injection_lint (test_flyte.VendoredLoom.test_injection_lint) ... ok\n\n----------------------------------------------------------------------\nRan 29 tests in 4.309s\n\nOK\n",
+      "log_sha256": "85b2e2990862dc5a9d2a86895bc83873f063f347f292ec46353c5fb94ed1b248",
+      "status": "pass"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-O",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "flyte/tests",
+        "-v"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.564934481000819,
+      "log": "test_cli_monthly_allowance_routes_to_allowance_file (test_flyte.Answers.test_cli_monthly_allowance_routes_to_allowance_file) ... ok\ntest_file_channel_ignores_unauthorized (test_flyte.Answers.test_file_channel_ignores_unauthorized) ... ok\ntest_outside_send_needs_the_word (test_flyte.Answers.test_outside_send_needs_the_word) ... ok\ntest_picks (test_flyte.Answers.test_picks) ... ok\ntest_checkpoint_connection_closes_when_graph_raises (test_flyte.ExecutionBoundaries.test_checkpoint_connection_closes_when_graph_raises) ... ok\ntest_feed_input_budget_and_kind_are_enforced (test_flyte.ExecutionBoundaries.test_feed_input_budget_and_kind_are_enforced) ... ok\ntest_fixture_items_carry_byte_provenance (test_flyte.ExecutionBoundaries.test_fixture_items_carry_byte_provenance) ... ok\ntest_memory_replace_failure_keeps_previous_bytes (test_flyte.ExecutionBoundaries.test_memory_replace_failure_keeps_previous_bytes) ... ok\ntest_offline_real_graph_never_constructs_model_even_with_allowance (test_flyte.ExecutionBoundaries.test_offline_real_graph_never_constructs_model_even_with_allowance) ... ok\ntest_sim_client_must_explicitly_declare_simulation (test_flyte.ExecutionBoundaries.test_sim_client_must_explicitly_declare_simulation) ... ok\ntest_synthetic_fixture_cannot_omit_its_synthetic_flag (test_flyte.ExecutionBoundaries.test_synthetic_fixture_cannot_omit_its_synthetic_flag) ... ok\ntest_target_presence_does_not_confirm_external_claim (test_flyte.ExecutionBoundaries.test_target_presence_does_not_confirm_external_claim) ... ok\ntest_unknown_mode_cannot_touch_network_or_channel (test_flyte.ExecutionBoundaries.test_unknown_mode_cannot_touch_network_or_channel) ... ok\ntest_one_offline_tick_grows_the_world (test_flyte.Loop.test_one_offline_tick_grows_the_world) ... ok\ntest_simulated_day (test_flyte.Loop.test_simulated_day) ... ok\ntest_gate_and_validator (test_flyte.Referee.test_gate_and_validator) ... ok\ntest_format (test_flyte.Relevance.test_format) ... ok\ntest_namesakes (test_flyte.Relevance.test_namesakes) ... ok\ntest_silence_then_answer (test_flyte.SimHumansOrder.test_silence_then_answer) ... ok\ntest_allowance_line_must_be_exact_and_finite (test_flyte.Spend.test_allowance_line_must_be_exact_and_finite) ... ok\ntest_daily_and_cycle_caps (test_flyte.Spend.test_daily_and_cycle_caps) ... ok\ntest_gate_closed_without_typed_ok (test_flyte.Spend.test_gate_closed_without_typed_ok) ... ok\ntest_invalid_budget_inputs_fail_before_pricing (test_flyte.Spend.test_invalid_budget_inputs_fail_before_pricing) ... ok\ntest_microdollar_usage_is_not_rounded_away (test_flyte.Spend.test_microdollar_usage_is_not_rounded_away) ... ok\ntest_parse_allowance (test_flyte.Spend.test_parse_allowance) ... ok\ntest_prompt_count_does_not_allocate_a_fake_prompt (test_flyte.Spend.test_prompt_count_does_not_allocate_a_fake_prompt) ... ok\ntest_usage_request_id_is_idempotent_and_conflicts_fail (test_flyte.Spend.test_usage_request_id_is_idempotent_and_conflicts_fail) ... ok\ntest_hashes_match_origin (test_flyte.VendoredLoom.test_hashes_match_origin) ... ok\ntest_injection_lint (test_flyte.VendoredLoom.test_injection_lint) ... ok\n\n----------------------------------------------------------------------\nRan 29 tests in 4.288s\n\nOK\n",
+      "log_sha256": "65ef6579c8362c211599d0b62bdcb5c76f0e40111e079035bde602cf7032dcb1",
+      "status": "pass"
+    }
+  ],
+  "admission_instrument": {
+    "repository": "https://github.com/hagopjay/x3d_mcp",
+    "commit": "b5c9956917714747fe1d034c729612e99b0f09c9",
+    "files_sha256": {
+      "LICENSE": "d44b2af6013aee7eed3775190b1d15f9594cd70bafc2ce87e393747222271649",
+      "src/validation/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/validation/listvalues.py": "9b5ad661b0f12efedb0cde0c6b7c64cd1ffc5b70a667f7c2b48ebdd02d473cf4",
+      "src/validation/oversize.py": "8e80d694d7f63daf0ccf6fb149c7a71b7857f7642b8a1477eecf9760c946bd23",
+      "src/validation/profile.py": "fc716b832034d728892cabf9960a4de22e9a4d58bde1833af25f0eee71f8f5f6",
+      "src/validation/schemas/X3dUnifiedObjectModel-4.0.xml": "7e426a238656c21a4a444b989276494329da363625c36f0a719b15d89416bee3",
+      "src/validation/schemas/X3dUnifiedObjectModel-4.1.xml": "4fc10e8e15c0d6cf2a916e4f59b815b110104aa7ea734dc6afea9458095c792b",
+      "src/validation/schemas/x3d-4.0-Web3dExtensionsPrivate.xsd": "27657b812199aee0155be97d74cbd78181464f558013c18fb19fa4cf3a5d6b9e",
+      "src/validation/schemas/x3d-4.0-Web3dExtensionsPublic.xsd": "7a61432dcf1fef3bd568e555b9bb1d18c08fadc88ddb9a438bc001a9e048a169",
+      "src/validation/schemas/x3d-4.0.xsd": "0509fa5bd6016a0b9104ced3c91d6585c8073041f79b8c3f9758748d131b5192",
+      "src/validation/schemas/x3d-4.1-Web3dExtensionsPrivate.xsd": "784ee866095751eb9ca559837defdf3c1b9980ce66623aaa7635ced6a0d645d3",
+      "src/validation/schemas/x3d-4.1-Web3dExtensionsPublic.xsd": "8643f06321b8152e481f30c03c1c9f00efd61b6ea3806c5e752289092c3289a2",
+      "src/validation/schemas/x3d-4.1.xsd": "1a7935caa7e6a63de2b275968bdc48da2f34124a43acb7b293674c3d16646a85",
+      "src/validation/schemas/xmldsig-core-schema.xsd": "35cf8197da812c85e40d57891b35c94187569ed474a2dac813ce5090dafcd35c",
+      "src/validation/semantic.py": "8ede23abf7a6dfaf2a35c8ce8975c67f5c4d2ed3b1d715e9d0aaca363fc0d73f",
+      "src/validation/splat_arrays.py": "88692a03a68df7688e49cd73b5c2d4715c252d4fc6a350c9d11200d9c6c44160",
+      "src/validation/validate.py": "bbae82aa7ae930acf1e632bec18b785ab106cdf63757077304b4718377870959",
+      "src/x3d_utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/x3d_utils/x3duom.py": "51489acdbf6a6ee8f9f023aa21f5141d528e7afc235af8e4ab8467f8d3bc228c"
+    },
+    "adapter_sha256": "9c17d7d8d7408e44a0b1dd28c529e32c056458398525e41f72b0a5e7e849aac8",
+    "invocation": [
+      "validation.validate.validate_xml(version=\"4.0\")",
+      "validation.semantic.semantic_diagnostics"
+    ],
+    "schema_version": "4.0",
+    "semantic_vocabulary_version": "4.1",
+    "runtime": {
+      "python": "3.12.14",
+      "lxml": "6.1.1.0",
+      "libxml2": "2.14.6",
+      "jsonschema": "4.26.0"
+    },
+    "code_sha256": "24024becc2b3d20c03cba9f878ab20b011f9b50c0c07abec816ffd1c5cd6fc03"
+  },
+  "bridge_identity": {
+    "status": "ok",
+    "accrete_commit": "93063bf",
+    "gate_version": "2.0.0",
+    "x3d_mcp_commit": "b5c9956",
+    "x3d_mcp_repo": "https://github.com/hagopjay/x3d_mcp"
+  },
+  "dependencies": {
+    "langgraph": "1.2.22",
+    "langgraph-checkpoint": "4.3.2",
+    "langgraph-checkpoint-sqlite": "3.1.3",
+    "lxml": "6.1.1",
+    "jsonschema": "4.26.0",
+    "attrs": "26.1.0",
+    "referencing": "0.37.0",
+    "rpds-py": "2026.9.1",
+    "jsonschema-specifications": "2025.9.1"
+  },
+  "sources_after": {
+    "flyte/flyte_wf.py": "07673f0fce29a3c31d63f50dc43619d74096213942897676f70a7014af9d982f",
+    "flyte/gobbler_flyte/__init__.py": "4f18fcf56e6909c00e42d66984138da78a895b4a2c854f35f9b7b6ad56a2e7bc",
+    "flyte/gobbler_flyte/__main__.py": "5e1a14c80c154b1e1e452e3aa08710ac659f0af4f345422cf8709d35731bbb67",
+    "flyte/gobbler_flyte/accrete_bridge.py": "15f2b973a4512a4dba18f2fb730f77cbef54eef4ba18799503199a9c0385648a",
+    "flyte/gobbler_flyte/budget.py": "2a3a5f935321200beddf8a578430e6880f22a0f5c64b3a8107b5d72cee968361",
+    "flyte/gobbler_flyte/gobbler.py": "af41e11a627d1551af8aa82c7261a3279af0cc870218101f6d35a0044967b742",
+    "flyte/gobbler_flyte/hitl.py": "d8824ab9180af8861097a5bbc634ec2fb48e3ce80321222cf7a9b801f0993e75",
+    "flyte/gobbler_flyte/llm.py": "2804fd41cabc008dcd0d3f85122c9ba024e9d50b1082465d8bc3b23c401f2339",
+    "flyte/gobbler_flyte/loom/__init__.py": "04536e187d25ac2d02d4eda9fba178f61499995d935ee88a695bed2df897a6a4",
+    "flyte/gobbler_flyte/loom/traps.py": "880195a4974650b9b682e4526fb4852c86446d44d4083e64c5182fe5593601cc",
+    "flyte/gobbler_flyte/loom/untrusted.py": "046d8b79b3ab3b72ac24b39bc7237d3d4aada69d959cece6e166d932ba4666f1",
+    "flyte/gobbler_flyte/organs/__init__.py": "f406095723ef41a89d00941b8c9949296ca0590306aff5cb69f7a89379636db1",
+    "flyte/gobbler_flyte/organs/keeper.py": "8d68d51373413129c47abea91326d2c905d000dda3caba1263081a134263d956",
+    "flyte/gobbler_flyte/organs/scout.py": "45d1a88710c917a0c287ce603fe3c83836428b87c6cdc48e89c116f66fe39d34",
+    "flyte/gobbler_flyte/organs/weaver.py": "5d88b50a8e25926a89d30ef3b2f523c1363da40fd8e70d83d7846463c6379c53",
+    "flyte/gobbler_flyte/organs/witness.py": "85d1c30ee107f341581b1f6e8db5ba5a8c104750e0b93aa63cf1fa716d5674bd",
+    "flyte/gobbler_flyte/relevance.py": "07e44c2fe4bf56be18625e72b1dff1a8969f09ca7b4bebd4214f7749118a0ac8",
+    "flyte/gobbler_flyte/runner.py": "9343b1703fd31353c34eac9b394b9c61a58838aa7b051785b78f1397af20443e",
+    "flyte/gobbler_flyte/sim.py": "5e1166f4c6543acee2598387ff6a1bf016a0d61ab2e32cfd29991c838abeea16",
+    "flyte/gobbler_flyte/sources.py": "fe768c789b6760b9b598904d82b188327819f48050fb74e162b51b411aa82ce9",
+    "flyte/gobbler_flyte/state.py": "665e6e5a4f106414e14253292cb4248da202bc22afd8e4e9196a36e8061fe500",
+    "flyte/tests/test_flyte.py": "5ee7c67cf087e5e20a878053c49f4440dfc8991a91786bfb6795bb415923476c"
+  },
+  "source_stable": true,
+  "status": "pass",
+  "scope": "Actual local public x3d.accrete bridge tests through real gate, pinned XSD/semantic instrument and temporary SQLite admission, using offline/simulation paths. No hosted model, paid API, live sends or browser rendering.",
+  "finished_utc": "2026-11-18T02:30:44.456196+00:00",
+  "tool_sha256": "9f151600cc1ba7b14cd95bfa8c001cd01cb6bfda2454f613657d03ecc9e8db05"
+}

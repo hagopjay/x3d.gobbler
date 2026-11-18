@@ -54,6 +54,8 @@ def keeper(state: dict, ctx) -> dict:
             f"- target: `{repo}` `{path}`\n- action: {proposal['action']} ({'PR' if choice == 'A' else 'note only'})\n"
             f"- signal: [{signal['title']}]({signal['url']}) from `{signal['source']}`"
             f"{' (SYNTHETIC fixture)' if signal.get('synthetic') else ''}, score {signal['score']} ({'; '.join(signal['why'])})\n"
+            f"- observation: run mode `{ctx.mode}`, source transport `{signal.get('provenance', {}).get('transport', 'unrecorded')}`, "
+            f"body SHA-256 `{signal.get('provenance', {}).get('body_sha256', 'unrecorded')}`\n"
             f"- witness: grade {state['witness']['grade']}, gate {state['witness']['instrument'].get('gate_version')}, "
             f"x3d_mcp {state['witness']['instrument'].get('x3d_mcp_commit')}\n"
             f"- world: entry #{entry['n']} `{entry['hash'][:16]}`\n"
@@ -61,6 +63,8 @@ def keeper(state: dict, ctx) -> dict:
             f"Status: drafted, reuse pending. A flywheel turn is counted only when a second consumer takes this up.\n")
         log.append(row("keeper", "foldback", f"drafted {drafted.name} for {repo} ({'PR' if choice == 'A' else 'note'}); reuse pending"))
     turn = {"cycle": state["cycle"], "signal": signal["id"], "action": proposal["action"], "choice": choice,
+            "mode": ctx.mode, "source_provenance": signal.get('provenance'), "synthetic": bool(signal.get('synthetic')),
+            "evidence_facets": state['witness'].get('evidence_facets'),
             "admitted": bool(entry and entry.get("status") == "committed"), "drafted": bool(drafted), "reused": False,
             "entry_n": entry.get("n") if entry else None, "entry_hash": entry.get("hash") if entry else None,
             "grade": state["witness"].get("grade"), "attempts": state.get("attempts"),
