@@ -92,3 +92,15 @@ The current host blocks Chromium startup. `receipts/review-browser.json` says
 `not_run`; the aggregate explicitly excludes native acceptance. All new local
 receipts are unsigned, source-bound observations. Publication and authorship
 authentication are separate concerns.
+
+## Follow-up executed 18 Nov 2026 (after this patch landed)
+
+The patch was applied unchanged to main at 11a5616. Then a host that can launch Chromium ran:
+
+| Gate | Result | Receipt |
+|---|---|---|
+| Native observatory (`gobbler-flyte/index.html`) | 15 / 15 pass | `receipts/review-browser.json` |
+| Native standalone (`Gobbler-Evidence-Loom.html`) | failed 2 of 15 first: X_ITE asked the page origin for `/assets/images/logo.svg` (inlined and SRI-pinned `x_ite.css`) and `/assets/fonts/PT_Sans/PTSans-Regular.woff2` (`getFontsURL`). After the builder inlined both and re-pinned the stylesheet's SRI to the bytes it now serves: 15 / 15 pass | `receipts/review-browser-standalone.json` |
+| Native Intervention Lab (new tool `tools/lab_browser_check.cjs`) | 15 / 15 pass. All 12 experiment rules hold in Chromium, there is no overflow at 1440 and 400 px, and there are no errors. | `receipts/review-lab-browser.json`, `docs/assets/intervention-lab-native.png` |
+
+Chromium 157.0.8103.78 headless with SwiftShader. This is software GL, so it says nothing about the GPU, shader compilation or pixel fidelity. Flyte follow-ups (operation keys, tick lock, and the admission, human and render facets) are in `flyte/DESIGN.md` section 14.

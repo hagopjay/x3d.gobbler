@@ -1,0 +1,19 @@
+{
+ "schema": "gobbler.flyte-render-witness/1",
+ "status": "rendered",
+ "scene": "world-35.x3d",
+ "scene_sha256": "ab2d4b73ffd4d445e1828e7f0de811e6ec2cc05695cc9570bee6a9c39dd3ceb9",
+ "image": "stills/world-35.png",
+ "image_sha256": "952c607bb663f50dc3e4ff4557a9dadfd6786732af3617e14f8e47ca51f39df5",
+ "x_ite_error": null,
+ "canvas": [
+  1280,
+  720
+ ],
+ "renderer": "X_ITE 16.6.0 (x3d.accrete vendor) in Chromium 157.0.8103.78 headless, SwiftShader",
+ "archive_verify": {
+  "valid": true,
+  "checked": 35
+ },
+ "scope": "The exported world loads and draws in X_ITE without an error. Not GPU, material-fidelity or per-turn render evidence; the per-turn render facet stays not_run."
+}

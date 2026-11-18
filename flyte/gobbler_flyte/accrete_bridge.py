@@ -103,6 +103,15 @@ class World:
                 "plan": {k: e.get(k) for k in ("cell", "level", "mode", "biome", "era", "translation", "color")},
                 "generator": e.get("generator")}
 
+    def find_op(self, op: str) -> dict | None:
+        """The committed entry whose generator carries this operation key, if any (crash/retry recovery)."""
+        for e in reversed(self.store.archive()["entries"]):
+            if (e.get("payload", {}).get("generation") or {}).get("op") == op:
+                return {"status": "committed", "n": e["n"], "hash": e["hash"], "recovered": True,
+                        "title": e["payload"].get("title"), "stages": [], "plan": e["payload"].get("plan"),
+                        "generator": e["payload"].get("generation")}
+        return None
+
     def export_x3d(self) -> str:
         return self.store.export_x3d()
 

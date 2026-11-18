@@ -304,5 +304,56 @@ class SimHumansOrder(unittest.TestCase):
         self.assertEqual(h.poll("r", q, "2026-11-18T00:30:00Z")["choice"], "A")
 
 
+@needs_world
+class CrashRecovery(unittest.TestCase):
+    """W02 (local part): a tick that dies after the world append but before memory is saved must not admit twice."""
+
+    def test_crash_after_append_does_not_duplicate(self):
+        from gobbler_flyte import runner as R
+        with tempfile.TemporaryDirectory() as d:
+            real_save = R.Ctx.save
+            def crash(self):
+                raise RuntimeError("injected crash after keeper, before memory save")
+            R.Ctx.save = crash
+            try:
+                with self.assertRaises(RuntimeError):
+                    tick(d, mode="offline", now="2026-11-18T00:00:00Z", config=CFG)
+            finally:
+                R.Ctx.save = real_save
+            w = accrete.World(Path(d) / "world.sqlite")
+            self.assertEqual(w.head()["head"], 1)                       # the crashed attempt did admit once
+            s = tick(d, mode="offline", now="2026-11-18T00:00:00Z", config=CFG)
+            self.assertEqual(s["started"]["cycle"], 1)                  # memory was never saved: same cycle again
+            self.assertEqual(accrete.World(Path(d) / "world.sqlite").head()["head"], 1)   # ... and no second admission
+            turns = (Path(d) / "turns.jsonl").read_text().splitlines()
+            self.assertEqual(len(turns), 1)
+            tape = (Path(d) / "tape.jsonl").read_text()
+            self.assertIn("already holds operation", tape)
+            self.assertTrue(accrete.World(Path(d) / "world.sqlite").verify()["valid"])
+            nxt = tick(d, mode="offline", now="2026-11-18T00:30:00Z", config=CFG)
+            self.assertEqual(nxt["started"]["entry"], 2)                # the loop carries on normally
+
+    def test_overlapping_tick_fails_fast(self):
+        import fcntl
+        with tempfile.TemporaryDirectory() as d:
+            with open(Path(d) / ".tick.lock", "w") as held:
+                fcntl.flock(held, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                with self.assertRaisesRegex(RuntimeError, "another tick"):
+                    tick(d, mode="offline", now="2026-11-18T00:00:00Z", config=CFG)
+            self.assertFalse((Path(d) / "turns.jsonl").exists())
+
+
+@needs_world
+class Facets(unittest.TestCase):
+    def test_turn_carries_human_admission_and_render_facets(self):
+        with tempfile.TemporaryDirectory() as d:
+            tick(d, mode="offline", now="2026-11-18T00:00:00Z", config=CFG)
+            t = json.loads((Path(d) / "turns.jsonl").read_text().splitlines()[0])
+            f = t["evidence_facets"]
+            self.assertEqual((f["admission"], f["render"], f["reuse"]), ("committed", "not_run", "unverified"))
+            self.assertIn(f["human"], {"not_asked", "answered", "timeout_preferred_pick"})
+            self.assertNotEqual(t["grade"], "Confirmed")               # no broad grade from structure + path existence
+
+
 if __name__ == "__main__":
     unittest.main()

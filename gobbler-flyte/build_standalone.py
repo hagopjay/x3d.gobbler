@@ -29,6 +29,17 @@ def replace_required(text, old, new, *, label=None):
 def build(output):
     html=(HERE/'index.html').read_text()
     css=(HERE/'observatory.css').read_text()+'\n'+(ROOT/'vendor/x_ite/x_ite.css').read_text()
+    # The inline copy of x_ite.css resolves url(assets/...) against the page, so a single file asked its own
+    # origin for /assets/images/logo.svg and the PT Sans font (two 404s on a native run, 18 Nov). Inline them.
+    # The SRI-pinned blob copy below stays byte-exact.
+    import base64 as _b64, mimetypes as _mt
+    def _inline_asset(m):
+        f=ROOT/'vendor/x_ite'/m.group(2)
+        if not f.is_file():
+            raise ValueError(f'x_ite.css references a missing asset: {m.group(2)}')
+        mime={'.svg':'image/svg+xml','.woff2':'font/woff2'}.get(f.suffix) or _mt.guess_type(f.name)[0] or 'application/octet-stream'
+        return 'url('+m.group(1)+'data:'+mime+';base64,'+_b64.b64encode(f.read_bytes()).decode()+m.group(1)+')'
+    css=re.sub(r'url\((["\']?)(assets/[^)"\']+)\1\)',_inline_asset,css)
     js=(HERE/'observatory.js').read_text()
     engine=(ROOT/'vendor/x_ite/x_ite.min.js').read_text()
     # The supplied runtime uses nullish fallback for currentScript.src. Inline
@@ -53,14 +64,34 @@ def build(output):
     if engine.count(lib_marker)!=1 or len(_re.findall(css_pat,engine))!=1:
         raise ValueError('Bundled runtime changed: recheck the getLibraryURL()/x_ite.css shims')
     engine=engine.replace(lib_marker,'getLibraryURL(e){if(globalThis.__x3dLibs?.[e])return globalThis.__x3dLibs[e];return new URL(')
+    # X_ITE registers its PT Sans faces through getFontsURL(), again relative to its script URL (a 404 per face).
+    fonts_marker='getFontsURL(e){return new URL('
+    if engine.count(fonts_marker)!=1:
+        raise ValueError('Bundled runtime changed: recheck the getFontsURL() shim')
+    engine=engine.replace(fonts_marker,'getFontsURL(e){if(globalThis.__x3dFonts?.[e])return globalThis.__x3dFonts[e];return new URL(')
+    FONTS=['PT_Sans/PTSans-Regular.woff2','PT_Sans/PTSans-Bold.woff2','PT_Sans/PTSans-Italic.woff2']
+    for f in FONTS:
+        if engine.count('fp("'+f+'"')!=1:
+            raise ValueError(f'Bundled runtime changed: font {f} is no longer registered')
     # the browser keeps itself hidden until its stylesheet <link> loads, so a failed x_ite.css request means a blank canvas
     engine=_re.sub(css_pat,r'i.href=globalThis.__x3dCssURL||new URL("x_ite.css",\1)',engine)
     wasm=_b64.b64encode((ROOT/'vendor/x_ite/assets/lib/mikktspace_bg.wasm').read_bytes()).decode()
-    css_exact=(ROOT/'vendor/x_ite/x_ite.css').read_bytes().decode('utf-8')    # byte-exact: the engine pins it with an SRI hash
+    # The engine pins x_ite.css with an SRI hash. Its url(assets/...) references resolve against the page in a
+    # single file, so the served copy inlines them as data: URIs and the pinned hash is replaced by the sha384 of
+    # exactly those served bytes (the original hash must still be present once, or the build fails).
+    import hashlib as _hl
+    css_raw=(ROOT/'vendor/x_ite/x_ite.css').read_bytes()
+    sri_old='sha384-'+_b64.b64encode(_hl.sha384(css_raw).digest()).decode()
+    if engine.count('i.integrity="'+sri_old+'"')!=1:
+        raise ValueError('Bundled runtime changed: the x_ite.css SRI pin no longer matches the vendored stylesheet')
+    css_exact=re.sub(r'url\((["\']?)(assets/[^)"\']+)\1\)',_inline_asset,css_raw.decode('utf-8'))
+    sri_new='sha384-'+_b64.b64encode(_hl.sha384(css_exact.encode('utf-8')).digest()).decode()
+    engine=engine.replace('i.integrity="'+sri_old+'"','i.integrity="'+sri_new+'"',1)
     comp_src={c:(ROOT/f'vendor/x_ite/assets/components/{c}Component.min.js').read_text() for c in COMPONENTS}
     text_component=('globalThis.__x3dComponents=Object.fromEntries(Object.entries('+json.dumps(comp_src).replace('</','<\\/')+
                     ').map(([k,v])=>[k,URL.createObjectURL(new Blob([v],{type:"text/javascript"}))]));'
                     +'globalThis.__x3dLibs={"mikktspace_bg.wasm":"data:application/wasm;base64,'+wasm+'"};'
+                    +'globalThis.__x3dFonts='+json.dumps({f:'data:font/woff2;base64,'+_b64.b64encode((ROOT/'vendor/x_ite/assets/fonts'/f).read_bytes()).decode() for f in FONTS})+';'
                     +'globalThis.__x3dCssURL=URL.createObjectURL(new Blob(['+json.dumps(css_exact).replace('</','<\\/')+'],{type:"text/css"}));')
     # Font-independent export: all domain names remain available in accessible HTML.
     tree=ET.fromstring((HERE/'observatory.x3d').read_text())
@@ -90,7 +121,7 @@ def build(output):
     html=replace_required(html,'<a href="cinematic.html">Original cinematic ↗</a>','<span>Single file · full score and 3D labels in source ZIP</span>')
     html=replace_required(html,'<audio id="score" src="loop.wav" loop preload="none"></audio>','<audio id="score"></audio>')
     html=replace_required(html,'id="labels" aria-pressed="true">Labels','id="labels" title="Labels are in the domain dock in this edition" aria-pressed="true">Dock labels')
-    html=replace_required(html,'</footer>', '</footer><details style="padding:16px 34px;color:#8292ab;font-size:10px"><summary>Third party notices</summary><pre style="white-space:pre-wrap">'+__import__('html').escape((ROOT/'vendor/x_ite/LICENSE.md').read_text())+'</pre></details>')
+    html=replace_required(html,'</footer>', '</footer><details style="padding:16px 34px;color:#8292ab;font-size:10px"><summary>Third party notices</summary><pre style="white-space:pre-wrap">'+__import__('html').escape((ROOT/'vendor/x_ite/LICENSE.md').read_text()+'\n\nPT Sans (embedded for X_ITE labels):\n'+(ROOT/'vendor/x_ite/assets/fonts/PT_Sans/OFL.txt').read_text())+'</pre></details>')
     payload='\n'.join('<script type="application/octet-stream" id="'+k+'">'+encoded(v)+'</script>' for k,v in blobs.items())
     html=replace_required(html,'</body>',payload+'\n<script type="module">'+safe_script(js)+'</script></body>')
     output.write_text(html,encoding='utf-8')

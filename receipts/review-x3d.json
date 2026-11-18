@@ -1,6 +1,6 @@
 {
   "schema": "gobbler.pinned-x3d-validation/1",
-  "created_utc": "2026-11-18T02:38:42.767269+00:00",
+  "created_utc": "2026-11-18T03:57:00.777884+00:00",
   "status": "pass",
   "input_cap_bytes": 8388608,
   "instrument": {
@@ -36,12 +36,12 @@
     "xsd_version": "4.0",
     "semantic_vocabulary_version": "4.1",
     "runtime": {
-      "python": "3.12.14",
+      "python": "3.13.18",
       "lxml": "6.1.1.0",
       "libxml2": "2.14.6",
       "jsonschema": "4.26.0"
     },
-    "identity_sha256": "b8d7bd9b4d12842c227dc70203f5038d08919c748917c29b6662213a0a53a5c9"
+    "identity_sha256": "0786751a553f3b672d2ac828ba7b77965893dc007d8e7bf1eb0116763caaebaa"
   },
   "instrument_problem": null,
   "files": [
@@ -880,7 +880,7 @@
           }
         ]
       },
-      "instrument_sha256": "b8d7bd9b4d12842c227dc70203f5038d08919c748917c29b6662213a0a53a5c9"
+      "instrument_sha256": "0786751a553f3b672d2ac828ba7b77965893dc007d8e7bf1eb0116763caaebaa"
     },
     {
       "path": "gobbler-flyte/scene.x3d",
@@ -1045,7 +1045,7 @@
           }
         ]
       },
-      "instrument_sha256": "b8d7bd9b4d12842c227dc70203f5038d08919c748917c29b6662213a0a53a5c9"
+      "instrument_sha256": "0786751a553f3b672d2ac828ba7b77965893dc007d8e7bf1eb0116763caaebaa"
     },
     {
       "path": "flywheel-review/atlas/out-r1/atlas-world.x3d",
@@ -11353,7 +11353,7 @@
           }
         ]
       },
-      "instrument_sha256": "b8d7bd9b4d12842c227dc70203f5038d08919c748917c29b6662213a0a53a5c9"
+      "instrument_sha256": "0786751a553f3b672d2ac828ba7b77965893dc007d8e7bf1eb0116763caaebaa"
     },
     {
       "path": "evidence-lab/instruments.x3d",
@@ -11483,7 +11483,7 @@
           }
         ]
       },
-      "instrument_sha256": "b8d7bd9b4d12842c227dc70203f5038d08919c748917c29b6662213a0a53a5c9"
+      "instrument_sha256": "0786751a553f3b672d2ac828ba7b77965893dc007d8e7bf1eb0116763caaebaa"
     }
   ],
   "controls": [
@@ -11512,7 +11512,7 @@
             }
           ]
         },
-        "instrument_sha256": "b8d7bd9b4d12842c227dc70203f5038d08919c748917c29b6662213a0a53a5c9"
+        "instrument_sha256": "0786751a553f3b672d2ac828ba7b77965893dc007d8e7bf1eb0116763caaebaa"
       },
       "negative": {
         "bytes": 426,
@@ -11538,7 +11538,7 @@
             }
           ]
         },
-        "instrument_sha256": "b8d7bd9b4d12842c227dc70203f5038d08919c748917c29b6662213a0a53a5c9"
+        "instrument_sha256": "0786751a553f3b672d2ac828ba7b77965893dc007d8e7bf1eb0116763caaebaa"
       },
       "caught": true
     },
@@ -11567,7 +11567,7 @@
             }
           ]
         },
-        "instrument_sha256": "b8d7bd9b4d12842c227dc70203f5038d08919c748917c29b6662213a0a53a5c9"
+        "instrument_sha256": "0786751a553f3b672d2ac828ba7b77965893dc007d8e7bf1eb0116763caaebaa"
       },
       "negative": {
         "bytes": 428,
@@ -11605,7 +11605,7 @@
             }
           ]
         },
-        "instrument_sha256": "b8d7bd9b4d12842c227dc70203f5038d08919c748917c29b6662213a0a53a5c9"
+        "instrument_sha256": "0786751a553f3b672d2ac828ba7b77965893dc007d8e7bf1eb0116763caaebaa"
       },
       "caught": true
     },
@@ -11634,7 +11634,7 @@
             }
           ]
         },
-        "instrument_sha256": "b8d7bd9b4d12842c227dc70203f5038d08919c748917c29b6662213a0a53a5c9"
+        "instrument_sha256": "0786751a553f3b672d2ac828ba7b77965893dc007d8e7bf1eb0116763caaebaa"
       },
       "negative": {
         "bytes": 456,
@@ -11665,7 +11665,7 @@
             }
           ]
         },
-        "instrument_sha256": "b8d7bd9b4d12842c227dc70203f5038d08919c748917c29b6662213a0a53a5c9"
+        "instrument_sha256": "0786751a553f3b672d2ac828ba7b77965893dc007d8e7bf1eb0116763caaebaa"
       },
       "caught": true
     }
@@ -11678,5 +11678,5 @@
     "Parameterized model fidelity and exported visual semantics require separate application controls.",
     "This unsigned local report is not a formal Loom acceptance receipt or publisher authentication."
   ],
-  "report_sha256": "f56bc37de6c7fd7e19c2ac492d2c160487f1708e01e7dc6ffd9aa1c2c81f195d"
+  "report_sha256": "1a9beb61d04c6b9d9d509e3ab72a00251e7113e6b5a2ee353198903b08c0bf65"
 }

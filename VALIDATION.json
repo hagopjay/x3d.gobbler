@@ -64,7 +64,7 @@
     {
       "name": "leak sweep",
       "ok": true,
-      "out": "leak sweep clean: 384 tracked/pending files"
+      "out": "leak sweep clean: 435 tracked/pending files"
     }
   ],
   "tool_sha256": "5219509d2bcc11fbda7429564a2206240b08df0ae09c5e8ad1e7d3bc0008c9e3",

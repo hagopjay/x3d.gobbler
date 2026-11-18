@@ -1,0 +1,49 @@
+{
+ "ticks": 48,
+ "tape_rows": 525,
+ "turns": 35,
+ "admitted": 35,
+ "drafted": 35,
+ "reused": 0,
+ "weave_attempts": 61,
+ "witness_refusals": 26,
+ "model_calls_simulated": 52,
+ "spend_usd_at_list_price": 0.028298,
+ "questions": 8,
+ "timeouts": 5,
+ "grades": {
+  "Likely": 31,
+  "Suspected": 4
+ },
+ "evidence_facets": {
+  "admission=committed": 35,
+  "candidate_structure=pass": 35,
+  "human=answered": 3,
+  "human=not_asked": 27,
+  "human=timeout_preferred_pick": 5,
+  "render=not_run": 35,
+  "reuse=unverified": 35,
+  "source=archived": 31,
+  "source=synthetic": 4,
+  "target_presence=present": 35
+ },
+ "recovered_rows": 0,
+ "same_as_r1": {
+  "admitted": 35,
+  "weave_attempts": 61,
+  "witness_refusals": 26,
+  "questions": 8,
+  "timeouts": 5,
+  "spend_usd_at_list_price": 0.028298
+ },
+ "instruments": {
+  "gate": "x3d.accrete accretion.fragment-gate 2.0.0 @ 93063bf",
+  "validator": "hagopjay/x3d_mcp b5c9956 (vendored in x3d.accrete)",
+  "traps": "x3d.loom kit/loomkit/traps.py @ 4cf5c7a",
+  "renderer": "X_ITE 16.6.0 (x3d.accrete vendor) in Chromium 157.0.8103.78 headless, SwiftShader",
+  "python": "3.13.18",
+  "langgraph": "1.2.22"
+ },
+ "code": "x3d.gobbler flyte after the 18 Nov review integration (faceted grades, mode isolation, op keys, tick lock)",
+ "world_head": 35
+}

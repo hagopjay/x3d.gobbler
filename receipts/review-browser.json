@@ -1,26 +1,149 @@
 {
   "schema": "gobbler.browser-check/2",
-  "status": "not_run",
-  "ok": false,
+  "status": "pass",
+  "ok": true,
   "page": "gobbler-flyte/index.html",
-  "node": "v24.22.1",
-  "started_utc": "2026-11-18T02:26:44.745Z",
-  "tool_sha256": "2f142a9ffbe81e0c87274e92dbff3086955f8edfea389a90dde496baef4b2a38",
+  "node": "v22.23.5",
+  "started_utc": "2026-11-18T03:46:44.776Z",
+  "tool_sha256": "7edad2dbed7ad4e393f311a96a6fdce81af46ec1439d6a4d97c8ebda22849977",
   "scope": "Actual native X_ITE browser/interaction checks when launched. Software GL cadence is not a GPU benchmark.",
-  "checks": [],
+  "checks": [
+    {
+      "name": "explicit successful application readiness",
+      "ok": true,
+      "detail": {
+        "ready": true,
+        "status": "ready",
+        "errors": []
+      }
+    },
+    {
+      "name": "expected Gobbler world and named controls loaded",
+      "ok": true,
+      "detail": {
+        "roots": 180,
+        "version": "16.7.0",
+        "expectedNames": [
+          {
+            "name": "ViewFront",
+            "found": true
+          },
+          {
+            "name": "LearningRing",
+            "found": true
+          },
+          {
+            "name": "Pick0",
+            "found": true
+          },
+          {
+            "name": "Pick11",
+            "found": true
+          },
+          {
+            "name": "Clock_Wheel0",
+            "found": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "native WebGL canvas has size",
+      "ok": true,
+      "detail": {
+        "w": 922,
+        "h": 668
+      }
+    },
+    {
+      "name": "rendered archive counters equal current manifest",
+      "ok": true,
+      "detail": {
+        "nodes": "2,181",
+        "edges": "7,222"
+      }
+    },
+    {
+      "name": "twelve feather buttons",
+      "ok": true,
+      "detail": 12
+    },
+    {
+      "name": "feather selection changes dossier",
+      "ok": true,
+      "detail": [
+        "Ontology",
+        "Game development",
+        "Architecture"
+      ]
+    },
+    {
+      "name": "synthetic foldback advances explicitly",
+      "ok": true,
+      "detail": "CANDIDATE · A game effect proposes raw GLSL as a ShaderPart URL. This teaching artifact has not passed a witness."
+    },
+    {
+      "name": "hash-verified Atlas search returns records",
+      "ok": true,
+      "detail": {
+        "hits": 18
+      }
+    },
+    {
+      "name": "pause toggles from actual prior state",
+      "ok": true
+    },
+    {
+      "name": "UI cadence remains live under software rendering",
+      "ok": true,
+      "detail": {
+        "raf_per_second": 60.4,
+        "not_gpu_fps": true
+      }
+    },
+    {
+      "name": "mobile width has no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "pixels": 0
+      }
+    },
+    {
+      "name": "no uncaught page errors",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "no console errors",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "no failed required requests",
+      "ok": true,
+      "detail": {
+        "failed": [],
+        "http": []
+      }
+    },
+    {
+      "name": "checked source bytes remain unchanged",
+      "ok": true
+    }
+  ],
   "consoleErrors": [],
   "pageErrors": [],
   "failedRequests": [],
   "httpErrors": [],
   "optionalAssetFailures": [],
   "inputs_sha256": {
-    "Gobbler-Evidence-Loom.html": "aab0b300ad880858cb56bdfe06c6e1211cb26100020c9d62bf35a8683776b371",
+    "Gobbler-Evidence-Loom.html": "9a83ee3db9a6c6b23bd82b5b6d9de2a46f788847541d3b4a6fb2462217d5bf02",
     "flywheel-review/atlas/out/atlas.json": "552d8497f3abff4a3dfabd3ee35ac6c784105a901920417bf6468da7dfe6a6a7",
-    "gobbler-flyte/index.html": "9ab762c16c0b510db42e413cc8ac1f308e447e74263996ee84e14104fcf87a47",
-    "gobbler-flyte/observatory.css": "217940acac6ea1b765160a2953046f9710ad87df23939daea6b3baa252ebcec3",
-    "gobbler-flyte/observatory.js": "4cd40034f7f3a52ec120dcf74ab1ae89d96dca4bcd32c32b697fa1b2d0d48028",
+    "gobbler-flyte/index.html": "c64647c25c5bc6178890373126482d7341e1b6deaa8b8c870b85dd1714864937",
+    "gobbler-flyte/observatory.css": "11fd5f2c516470afd0d41105b8417cbcfca05841e7b5ae48458fcd3110a8381d",
+    "gobbler-flyte/observatory.js": "889926766a567868fe7a87406fad588935c071f54048634f3b104e630cbfa2f2",
     "gobbler-flyte/observatory.json": "1b4fe6083d53839229df277d480d05f44cce1c2143927985bd301b8f2ea70c1f",
-    "gobbler-flyte/observatory.x3d": "68c08fd1480d86dc7da37fd69c69ebe86c6573a33cee8e786b187a8ac1225f76",
+    "gobbler-flyte/observatory.x3d": "c2f8ca8e4a8352221fe27c79d6df74aa086769c2991876f5a3ce5f0e61d0f9af",
     "vendor/x_ite/LICENSE.md": "4b4a56dafaa360d8541ed5425e9e891cb678e6cd5eaf71bfe7ef25514db01695",
     "vendor/x_ite/assets/components/AnnotationComponent.js": "ee62fd12eb3e11df20ef89b19579e6af687254ac8939ea4d07a94aa3f35b10f1",
     "vendor/x_ite/assets/components/AnnotationComponent.min.js": "3a084458eb8edcbd123ab62825638157e8667de9686bd6147d21244f3da4c2fb",
@@ -151,10 +274,17 @@
     "vendor/x_ite/x_ite.css": "e8af335cd9e46cbc1d88605a841c89a3ef18a40f161a836bc8dcbbcc107dcb8e",
     "vendor/x_ite/x_ite.min.js": "b7df063e8cb14919887563506f6c5f386b3066b65768de1856320a54ec68725f"
   },
-  "playwright": "1.62.1",
-  "executable": "/usr/bin/chromium",
-  "blocker": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /usr/bin/chromium --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-sandbox --use-gl=angle --use-angle=swiftshader --enable-unsafe-swiftshader --ignore-gpu-blocklist --user-data-dir=/tmp/playwright_chromiumdev_profile-3DVaMH --remote-debugging-pipe --no-startup-window\n<launched> pid=16\n[pid=16][err] /usr/bin/chromium: 9: [: 5225713664: unexpected operator\n[pid=16][err] [16:16:1117/212645.355656:FATAL:chrome/browser/process_singleton_posix.cc:297] Check failed: . socket() failed: Operation not permitted (1)\n[pid=16][err] [1117/212645.355872:ERROR:third_party/crashpad/crashpad/util/linux/scoped_ptrace_attach.cc:27] ptrace: Operation not permitted (1)\nCall log:\n\u001b[2m  - <launching> /usr/bin/chromium --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-sandbox --use-gl=angle --use-angle=swiftshader --enable-unsafe-swiftshader --ignore-gpu-blocklist --user-data-dir=/tmp/playwright_chromiumdev_profile-3DVaMH --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=16\u001b[22m\n\u001b[2m  - [pid=16][err] /usr/bin/chromium: 9: [: 5225713664: unexpected operator\u001b[22m\n\u001b[2m  - [pid=16][err] [16:16:1117/212645.355656:FATAL:chrome/browser/process_singleton_posix.cc:297] Check failed: . socket() failed: Operation not permitted (1)\u001b[22m\n\u001b[2m  - [pid=16][err] [1117/212645.355872:ERROR:third_party/crashpad/crashpad/util/linux/scoped_ptrace_attach.cc:27] ptrace: Operation not permitted (1)\u001b[22m\n\u001b[2m  - [pid=16] <gracefully close start>\u001b[22m\n\u001b[2m  - [pid=16] <kill>\u001b[22m\n\u001b[2m  - [pid=16] <will force kill>\u001b[22m\n\u001b[2m  - [pid=16] <process did exit: exitCode=null, signal=SIGABRT>\u001b[22m\n\u001b[2m  - [pid=16] starting temporary directories cleanup\u001b[22m\n\u001b[2m  - [pid=16] finished temporary directories cleanup\u001b[22m\n\u001b[2m  - [pid=16] <gracefully close end>\u001b[22m\n",
-  "error": "browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /usr/bin/chromium --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-sandbox --use-gl=angle --use-angle=swiftshader --enable-unsafe-swiftshader --ignore-gpu-blocklist --user-data-dir=/tmp/playwright_chromiumdev_profile-3DVaMH --remote-debugging-pipe --no-startup-window\n<launched> pid=16\n[pid=16][err] /usr/bin/chromium: 9: [: 5225713664: unexpected operator\n[pid=16][err] [16:16:1117/212645.355656:FATAL:chrome/browser/process_singleton_posix.cc:297] Check failed: . socket() failed: Operation not permitted (1)\n[pid=16][err] [1117/212645.355872:ERROR:third_party/crashpad/crashpad/util/linux/scoped_ptrace_attach.cc:27] ptrace: Operation not permitted (1)\nCall log:\n\u001b[2m  - <launching> /usr/bin/chromium --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-sandbox --use-gl=angle --use-angle=swiftshader --enable-unsafe-swiftshader --ignore-gpu-blocklist --user-data-dir=/tmp/playwright_chromiumdev_profile-3DVaMH --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=16\u001b[22m\n\u001b[2m  - [pid=16][err] /usr/bin/chromium: 9: [: 5225713664: unexpected operator\u001b[22m\n\u001b[2m  - [pid=16][err] [16:16:1117/212645.355656:FATAL:chrome/browser/process_singleton_posix.cc:297] Check failed: . socket() failed: Operation not permitted (1)\u001b[22m\n\u001b[2m  - [pid=16][err] [1117/212645.355872:ERROR:third_party/crashpad/crashpad/util/linux/scoped_ptrace_attach.cc:27] ptrace: Operation not permitted (1)\u001b[22m\n\u001b[2m  - [pid=16] <gracefully close start>\u001b[22m\n\u001b[2m  - [pid=16] <kill>\u001b[22m\n\u001b[2m  - [pid=16] <will force kill>\u001b[22m\n\u001b[2m  - [pid=16] <process did exit: exitCode=null, signal=SIGABRT>\u001b[22m\n\u001b[2m  - [pid=16] starting temporary directories cleanup\u001b[22m\n\u001b[2m  - [pid=16] finished temporary directories cleanup\u001b[22m\n\u001b[2m  - [pid=16] <gracefully close end>\u001b[22m\n\n    at main (/workspace/scratch/aee90170662d/x3d.gobbler/tools/browser_check.cjs:88:30)\n    at Object.<anonymous> (/workspace/scratch/aee90170662d/x3d.gobbler/tools/browser_check.cjs:149:75)",
-  "finished_utc": "2026-11-18T02:26:45.364Z",
-  "report_sha256": "82c9ca2993b94e092cf90955569a55cfd5067d3a97de976626abcea678b9422f"
+  "playwright": "1.63.0",
+  "executable": "Playwright managed Chromium",
+  "browser": "Chromium 157.0.8103.78",
+  "gl": "requested software SwiftShader; hardware/GPU performance not inferred",
+  "bootMs": 6781,
+  "readiness": {
+    "ready": true,
+    "status": "ready",
+    "errors": []
+  },
+  "uiCadenceRafPerSec": 60.4,
+  "finished_utc": "2026-11-18T03:47:36.160Z",
+  "report_sha256": "44351e644faceff90d50412514b5552187190ee39e5135d4ad0b7db05a907034"
 }

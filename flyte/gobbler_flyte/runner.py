@@ -44,6 +44,7 @@ class Ctx:
         self.sources = config["sources"]
         self.budget = Budget(config, allowance, self.state_dir / "spend.jsonl", config["authorized_humans"])
         self.world = accrete.World(self.state_dir / "world.sqlite") if accrete.available() else None
+        self.world_id = (self.world.archive().get("world_id") or "world")[:16] if self.world else "no-world"
         self.outbox = self.state_dir / "outbox"
         self.loom_dir = loom_dir
         self.channel = channel
@@ -123,6 +124,15 @@ def tick(state_dir: str | Path, *, mode: str = "offline", now: str | None = None
         (state_dir / "allowance.json").write_text(json.dumps(a, indent=1))
     ctx = Ctx(state_dir=state_dir, mode=mode, now=now, config=config, allowance=load_allowance(state_dir), channel=channel,
               llm_factory=llm_factory, visible=visible, loom_dir=loom_dir)
+    # One tick at a time per state directory: a second overlapping tick fails fast instead of reading the same
+    # cycle number. (Actions already serialises with a concurrency group; this covers Flyte and local runs.)
+    import fcntl
+    lock = open(state_dir / ".tick.lock", "w")
+    try:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        lock.close()
+        raise RuntimeError(f"another tick holds {state_dir / '.tick.lock'}")
     conn = sqlite3.connect(state_dir / "checkpoints.sqlite", check_same_thread=False)
     try:
         saver = SqliteSaver(conn)
@@ -154,6 +164,7 @@ def tick(state_dir: str | Path, *, mode: str = "offline", now: str | None = None
         cycle = ctx.memory["cycles"] + 1
         ctx.memory["cycles"] = cycle
         cfg = {"configurable": {"thread_id": f"cycle-{cycle}"}}
+        saver.delete_thread(f"cycle-{cycle}")       # a crashed earlier attempt at this cycle leaves no half-run graph state
         out = graph.invoke({"cycle": cycle, "started_utc": now, "mode": mode}, cfg)
         taped = _tape(ctx, cycle, out["log"], 0)
         if "__interrupt__" in out:
@@ -172,3 +183,5 @@ def tick(state_dir: str | Path, *, mode: str = "offline", now: str | None = None
         return summary
     finally:
         conn.close()
+        fcntl.flock(lock, fcntl.LOCK_UN)
+        lock.close()
