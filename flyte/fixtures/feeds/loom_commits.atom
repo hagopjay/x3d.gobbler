@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xml:lang="en-US">
+  <id>tag:github.com,2008:/hagopjay/x3d.loom/commits/main</id>
+  <link type="text/html" rel="alternate" href="https://github.com/hagopjay/x3d.loom/commits/main"/>
+  <link type="application/atom+xml" rel="self" href="https://github.com/hagopjay/x3d.loom/commits/main.atom"/>
+  <title>Recent Commits to x3d.loom:main</title>
+  <updated>2026-11-18T00:22:49Z</updated>
+  <entry>
+    <id>tag:github.com,2008:Grit::Commit/4cf5c7a0133ea6ab8183bf0826d96f57556716c3</id>
+    <link type="text/html" rel="alternate" href="https://github.com/hagopjay/x3d.loom/commit/4cf5c7a0133ea6ab8183bf0826d96f57556716c3"/>
+    <title>
+        Merge pull request #95 from hagopjay/claude/project-thread-vk3u55
+    </title>
+    <updated>2026-11-18T00:22:49Z</updated>
+    <media:thumbnail height="30" width="30" url="https://avatars.githubusercontent.com/u/7343285?s=30&amp;v=4"/>
+    <author>
+      <name>hagopjay</name>
+      <uri>https://github.com/hagopjay</uri>
+    </author>
+    <content type="html">
+      &lt;pre style=&#39;white-space:pre-wrap;width:81ex&#39;&gt;Merge pull request #95 from hagopjay/claude/project-thread-vk3u55
+
+x3d.mandala: Sri Yantra Resonance Loom 1.0 (as delivered) + 2.0 Chamber Harp&lt;/pre&gt;
+    </content>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Grit::Commit/12a1c6272d6f69742794325bcea5a32afbecbec8</id>
+    <link type="text/html" rel="alternate" href="https://github.com/hagopjay/x3d.loom/commit/12a1c6272d6f69742794325bcea5a32afbecbec8"/>
+    <title>
+        x3d.mandala 2.0: the Chamber Harp
+    </title>
+    <updated>2026-11-18T00:21:10Z</updated>
+    <media:thumbnail height="30" width="30" url="https://avatars.githubusercontent.com/u/7343285?s=30&amp;v=4"/>
+    <author>
+      <name>hagopjay</name>
+      <uri>https://github.com/hagopjay</uri>
+    </author>
+    <content type="html">
+      &lt;pre style=&#39;white-space:pre-wrap;width:81ex&#39;&gt;x3d.mandala 2.0: the Chamber Harp
+
+Make the 43 canonical chambers playable without moving a vertex:
+- one TouchSensor plus a pure point-in-chamber locator (43/43 independent
+  interior samples land in their own chamber); an invisible R=1 plate makes
+  voids pickable so a touch between chambers explains its even coverage
+- bell strikes (1, 2.756, 5.404 partials) through the 1.0 filter, delays,
+  reverb and gain ceiling; 26 bilateral classes share pitches and rise
+  pentatonically toward the bindu; keys 1-5 strike whole rings
+- 43 chamber lights and 9 covering-triangle lights; an inward spiral lit by
+  the transport that ends in bindu sparks; a Resonance wave outward
+- 60-gem spark pool animated by Transforms only (no ParticleSystem: that
+  component is not in the vendored X_ITE bundle)
+- halo bloom overlay with a software-GL default-off and a 30 ms governor
+- immersive view recentres; optional chamber-spiral melody voice
+
+Canonical YantraCoordinates unchanged; checked in tests and after every
+browser interaction. 25/25 node tests, 5/5 python tests, pinned x3d_mcp gate
+pass (0 errors), upstream UI and audio witnesses pass, new harp gate 22/22.
+Docs: docs/CHAMBER-HARP.md, docs/HARP-GAPS.md, loom learnings extended.
+
+Co-Authored-By: Claude Opus 5.5 &amp;lt;noreply@anthropic.com&amp;gt;&lt;/pre&gt;
+    </content>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Grit::Commit/2a4193a608856da0f20add222233eac584463e8e</id>
+    <link type="text/html" rel="alternate" href="https://github.com/hagopjay/x3d.loom/commit/2a4193a608856da0f20add222233eac584463e8e"/>
+    <title>
+        x3d.mandala: Sri Yantra Resonance Loom 1.0 as delivered
+    </title>
+    <updated>2026-11-17T23:56:16Z</updated>
+    <media:thumbnail height="30" width="30" url="https://avatars.githubusercontent.com/u/7343285?s=30&amp;v=4"/>
+    <author>
+      <name>hagopjay</name>
+      <uri>https://github.com/hagopjay</uri>
+    </author>
+    <content type="html">
+      &lt;pre style=&#39;white-space:pre-wrap;width:81ex&#39;&gt;x3d.mandala: Sri Yantra Resonance Loom 1.0 as delivered
+
+Native X3D Sri Yantra (canonical 9 triangles, 43 chambers) on vendored
+X_ITE 16.8.0 with a Web Audio resonance transport. Applied unchanged from
+the uploaded patch; build reproduces the delivered standalone byte for byte.
+
+Co-Authored-By: Claude Opus 5.5 &amp;lt;noreply@anthropic.com&amp;gt;&lt;/pre&gt;
+    </content>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Grit::Commit/81c29f6089b51eed20d9762152138b635c357d72</id>
+    <link type="text/html" rel="alternate" href="https://github.com/hagopjay/x3d.loom/commit/81c29f6089b51eed20d9762152138b635c357d72"/>
+    <title>
+        Merge pull request #94 from hagopjay/claude/project-thread-vk3u55
+    </title>
+    <updated>2026-11-17T23:12:07Z</updated>
+    <media:thumbnail height="30" width="30" url="https://avatars.githubusercontent.com/u/7343285?s=30&amp;v=4"/>
+    <author>
+      <name>hagopjay</name>
+      <uri>https://github.com/hagopjay</uri>
+    </author>
+    <content type="html">
+      &lt;pre style=&#39;white-space:pre-wrap;width:81ex&#39;&gt;Merge pull request #94 from hagopjay/claude/project-thread-vk3u55
+
+Add LEARNINGS-chasm: nine findings from the CHASM 2.0 arcade + FX pass&lt;/pre&gt;
+    </content>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Grit::Commit/888e64b4aba838e7e99b7a5808d50acd00e6e71a</id>
+    <link type="text/html" rel="alternate" href="https://github.com/hagopjay/x3d.loom/commit/888e64b4aba838e7e99b7a5808d50acd00e6e71a"/>
+    <title>
+        Merge pull request #93 from hagopjay/claude/project-thread-e0v9rt
+    </title>
+    <updated>2026-11-17T23:12:04Z</updated>
+    <media:thumbnail height="30" width="30" url="https://avatars.githubusercontent.com/u/7343285?s=30&amp;v=4"/>
+    <author>
+      <name>hagopjay</name>
+      <uri>https://github.com/hagopjay</uri>
+    </author>
+    <content type="html">
+      &lt;pre style=&#39;white-space:pre-wrap;width:81ex&#39;&gt;Merge pull request #93 from hagopjay/claude/project-thread-e0v9rt
+
+learn: Blender sci-vis integration review fold-back&lt;/pre&gt;
+    </content>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Grit::Commit/beb278463343a8b926f6c687e0890f4e3e464449</id>
+    <link type="text/html" rel="alternate" href="https://github.com/hagopjay/x3d.loom/commit/beb278463343a8b926f6c687e0890f4e3e464449"/>
+    <title>
+        Merge pull request #92 from hagopjay/claude/project-thread-ek8dru
+    </title>
+    <updated>2026-11-17T23:11:48Z</updated>
+    <media:thumbnail height="30" width="30" url="https://avatars.githubusercontent.com/u/7343285?s=30&amp;v=4"/>
+    <author>
+      <name>hagopjay</name>
+      <uri>https://github.com/hagopjay</uri>
+    </author>
+    <content type="html">
+      &lt;pre style=&#39;white-space:pre-wrap;width:81ex&#39;&gt;Merge pull request #92 from hagopjay/claude/project-thread-ek8dru
+
+LEARNINGS-mathlab: second pass with 18 lessons verified&lt;/pre&gt;
+    </content>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Grit::Commit/ae2537dba88fa6319702e777de9ab90a19a7b8e2</id>
+    <link type="text/html" rel="alternate" href="https://github.com/hagopjay/x3d.loom/commit/ae2537dba88fa6319702e777de9ab90a19a7b8e2"/>
+    <title>
+        Add LEARNINGS-chasm: nine findings from the CHASM 2.0 arcade + FX pass
+    </title>
+    <updated>2026-11-17T22:54:39Z</updated>
+    <media:thumbnail height="30" width="30" url="https://avatars.githubusercontent.com/u/7343285?s=30&amp;v=4"/>
+    <author>
+      <name>hagopjay</name>
+      <uri>https://github.com/hagopjay</uri>
+    </author>
+    <content type="html">
+      &lt;pre style=&#39;white-space:pre-wrap;width:81ex&#39;&gt;Add LEARNINGS-chasm: nine findings from the CHASM 2.0 arcade + FX pass
+
+Co-Authored-By: Claude Opus 5.5 &amp;lt;noreply@anthropic.com&amp;gt;&lt;/pre&gt;
+    </content>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Grit::Commit/279dead8399fdca15d6bc9244bb5f3d07ffc0b4b</id>
+    <link type="text/html" rel="alternate" href="https://github.com/hagopjay/x3d.loom/commit/279dead8399fdca15d6bc9244bb5f3d07ffc0b4b"/>
+    <title>
+        Add LEARNINGS-blender-scivis (Blender sci-vis integration review fold…
+    </title>
+    <updated>2026-11-17T22:19:10Z</updated>
+    <media:thumbnail height="30" width="30" url="https://avatars.githubusercontent.com/u/7343285?s=30&amp;v=4"/>
+    <author>
+      <name>hagopjay</name>
+      <uri>https://github.com/hagopjay</uri>
+    </author>
+    <content type="html">
+      &lt;pre style=&#39;white-space:pre-wrap;width:81ex&#39;&gt;Add LEARNINGS-blender-scivis (Blender sci-vis integration review fold-back)
+
+Co-Authored-By: Claude Sonnet 5.5 &amp;lt;noreply@anthropic.com&amp;gt;&lt;/pre&gt;
+    </content>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Grit::Commit/428cacc03b5f399d4b3533fc74a82d677241afa9</id>
+    <link type="text/html" rel="alternate" href="https://github.com/hagopjay/x3d.loom/commit/428cacc03b5f399d4b3533fc74a82d677241afa9"/>
+    <title>
+        LEARNINGS-mathlab: second pass with 18 lessons verified
+    </title>
+    <updated>2026-11-17T19:31:03Z</updated>
+    <media:thumbnail height="30" width="30" url="https://avatars.githubusercontent.com/u/81847?s=30&amp;v=4"/>
+    <author>
+      <name>claude</name>
+      <uri>https://github.com/claude</uri>
+    </author>
+    <content type="html">
+      &lt;pre style=&#39;white-space:pre-wrap;width:81ex&#39;&gt;LEARNINGS-mathlab: second pass with 18 lessons verified
+
+Co-Authored-By: Claude Sonnet 5.5 &amp;lt;noreply@anthropic.com&amp;gt;&lt;/pre&gt;
+    </content>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Grit::Commit/a02a1a289b222900382e5106132d79f80a35dc28</id>
+    <link type="text/html" rel="alternate" href="https://github.com/hagopjay/x3d.loom/commit/a02a1a289b222900382e5106132d79f80a35dc28"/>
+    <title>
+        Merge pull request #91 from hagopjay/claude/gobbler-foldback
+    </title>
+    <updated>2026-11-17T05:55:36Z</updated>
+    <media:thumbnail height="30" width="30" url="https://avatars.githubusercontent.com/u/7343285?s=30&amp;v=4"/>
+    <author>
+      <name>hagopjay</name>
+      <uri>https://github.com/hagopjay</uri>
+    </author>
+    <content type="html">
+      &lt;pre style=&#39;white-space:pre-wrap;width:81ex&#39;&gt;Merge pull request #91 from hagopjay/claude/gobbler-foldback
+
+Fold Gobbler Evidence Loom back: LEARNINGS-gobbler + three text-defect fixes&lt;/pre&gt;
+    </content>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Grit::Commit/048461912c2e227f4cb7d55c811a5469cce16679</id>
+    <link type="text/html" rel="alternate" href="https://github.com/hagopjay/x3d.loom/commit/048461912c2e227f4cb7d55c811a5469cce16679"/>
+    <title>
+        Merge pull request #90 from hagopjay/claude/project-thread-dwc7ss
+    </title>
+    <updated>2026-11-17T05:55:18Z</updated>
+    <media:thumbnail height="30" width="30" url="https://avatars.githubusercontent.com/u/7343285?s=30&amp;v=4"/>
+    <author>
+      <name>hagopjay</name>
+      <uri>https://github.com/hagopjay</uri>
+    </author>
+    <content type="html">
+      &lt;pre style=&#39;white-space:pre-wrap;width:81ex&#39;&gt;Merge pull request #90 from hagopjay/claude/project-thread-dwc7ss
+
+LEARNINGS-accretion: what a gated, hash-chained world teaches&lt;/pre&gt;
+    </content>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Grit::Commit/2bbbb0f97c5beaec76c13fdfa9d0a10f4e84f3ef</id>
+    <link type="text/html" rel="alternate" href="https://github.com/hagopjay/x3d.loom/commit/2bbbb0f97c5beaec76c13fdfa9d0a10f4e84f3ef"/>
+    <title>
+        Add LEARNINGS-gobbler: six findings from the Gobbler Evidence Loom re…
+    </title>
+    <updated>2026-11-17T05:47:31Z</updated>
+    <media:thumbnail height="30" width="30" url="https://avatars.githubusercontent.com/u/81847?s=30&amp;v=4"/>
+    <author>
+      <name>claude</name>
+      <uri>https://github.com/claude</uri>
+    </author>
+    <content type="html">
+      &lt;pre style=&#39;white-space:pre-wrap;width:81ex&#39;&gt;Add LEARNINGS-gobbler: six findings from the Gobbler Evidence Loom replay&lt;/pre&gt;
+    </content>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Grit::Commit/09d76aa2d4daf869b0ab4c03b59f901d10aa6d52</id>
+    <link type="text/html" rel="alternate" href="https://github.com/hagopjay/x3d.loom/commit/09d76aa2d4daf869b0ab4c03b59f901d10aa6d52"/>
+    <title>
+        LOOM-v1: fix three places where the text breaks a table or names an i…
+    </title>
+    <updated>2026-11-17T05:47:31Z</updated>
+    <media:thumbnail height="30" width="30" url="https://avatars.githubusercontent.com/u/81847?s=30&amp;v=4"/>
+    <author>
+      <name>claude</name>
+      <uri>https://github.com/claude</uri>
+    </author>
+    <content type="html">
+      &lt;pre style=&#39;white-space:pre-wrap;width:81ex&#39;&gt;LOOM-v1: fix three places where the text breaks a table or names an id ambiguously (failure modes 87, 147; law 32)
+
+No law or failure mode is added or renumbered.&lt;/pre&gt;
+    </content>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Grit::Commit/3a2287fccfd53c71e30d6a243962c48df0ed9ee7</id>
+    <link type="text/html" rel="alternate" href="https://github.com/hagopjay/x3d.loom/commit/3a2287fccfd53c71e30d6a243962c48df0ed9ee7"/>
+    <title>
+        Add LEARNINGS-accretion.md: what the Accretion review and static view…
+    </title>
+    <updated>2026-11-17T05:42:25Z</updated>
+    <media:thumbnail height="30" width="30" url="https://avatars.githubusercontent.com/u/81847?s=30&amp;v=4"/>
+    <author>
+      <name>claude</name>
+      <uri>https://github.com/claude</uri>
+    </author>
+    <content type="html">
+      &lt;pre style=&#39;white-space:pre-wrap;width:81ex&#39;&gt;Add LEARNINGS-accretion.md: what the Accretion review and static viewer teach
+
+Co-Authored-By: Claude Sonnet 5.5 &amp;lt;noreply@anthropic.com&amp;gt;&lt;/pre&gt;
+    </content>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Grit::Commit/32f5ae7c9905ab2b0423e287cb771c5317cc352d</id>
+    <link type="text/html" rel="alternate" href="https://github.com/hagopjay/x3d.loom/commit/32f5ae7c9905ab2b0423e287cb771c5317cc352d"/>
+    <title>
+        Merge pull request #89 from hagopjay/claude/project-thread-ek8dru
+    </title>
+    <updated>2026-11-17T05:05:28Z</updated>
+    <media:thumbnail height="30" width="30" url="https://avatars.githubusercontent.com/u/7343285?s=30&amp;v=4"/>
+    <author>
+      <name>hagopjay</name>
+      <uri>https://github.com/hagopjay</uri>
+    </author>
+    <content type="html">
+      &lt;pre style=&#39;white-space:pre-wrap;width:81ex&#39;&gt;Merge pull request #89 from hagopjay/claude/project-thread-ek8dru
+
+Add LEARNINGS-mathlab: five findings from launching the Math Lab on Pages&lt;/pre&gt;
+    </content>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Grit::Commit/baaf2368f7bd362c7ae19c6220f685d5452c166d</id>
+    <link type="text/html" rel="alternate" href="https://github.com/hagopjay/x3d.loom/commit/baaf2368f7bd362c7ae19c6220f685d5452c166d"/>
+    <title>
+        Merge pull request #88 from hagopjay/claude/project-thread-3udaec
+    </title>
+    <updated>2026-11-17T05:05:09Z</updated>
+    <media:thumbnail height="30" width="30" url="https://avatars.githubusercontent.com/u/7343285?s=30&amp;v=4"/>
+    <author>
+      <name>hagopjay</name>
+      <uri>https://github.com/hagopjay</uri>
+    </author>
+    <content type="html">
+      &lt;pre style=&#39;white-space:pre-wrap;width:81ex&#39;&gt;Merge pull request #88 from hagopjay/claude/project-thread-3udaec
+
+Fold Giza Evidence Atlas v3 back into the Loom&lt;/pre&gt;
+    </content>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Grit::Commit/e2eaaf178cfe37aa00e4689177483ad8b58a44c5</id>
+    <link type="text/html" rel="alternate" href="https://github.com/hagopjay/x3d.loom/commit/e2eaaf178cfe37aa00e4689177483ad8b58a44c5"/>
+    <title>
+        Merge pull request #87 from hagopjay/claude/project-thread-rji2jo-2
+    </title>
+    <updated>2026-11-17T05:04:51Z</updated>
+    <media:thumbnail height="30" width="30" url="https://avatars.githubusercontent.com/u/7343285?s=30&amp;v=4"/>
+    <author>
+      <name>hagopjay</name>
+      <uri>https://github.com/hagopjay</uri>
+    </author>
+    <content type="html">
+      &lt;pre style=&#39;white-space:pre-wrap;width:81ex&#39;&gt;Merge pull request #87 from hagopjay/claude/project-thread-rji2jo-2
+
+Loom: failure modes 183-186 from the x3d.gamelab integration&lt;/pre&gt;
+    </content>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Grit::Commit/f3178a7ffab15f1da8b3fafb38aa91578562f6b7</id>
+    <link type="text/html" rel="alternate" href="https://github.com/hagopjay/x3d.loom/commit/f3178a7ffab15f1da8b3fafb38aa91578562f6b7"/>
+    <title>
+        Add LEARNINGS-mathlab: five findings from launching the Math Lab on P…
+    </title>
+    <updated>2026-11-17T05:02:26Z</updated>
+    <media:thumbnail height="30" width="30" url="https://avatars.githubusercontent.com/u/81847?s=30&amp;v=4"/>
+    <author>
+      <name>claude</name>
+      <uri>https://github.com/claude</uri>
+    </author>
+    <content type="html">
+      &lt;pre style=&#39;white-space:pre-wrap;width:81ex&#39;&gt;Add LEARNINGS-mathlab: five findings from launching the Math Lab on Pages
+
+Co-Authored-By: Claude Sonnet 5.5 &amp;lt;noreply@anthropic.com&amp;gt;&lt;/pre&gt;
+    </content>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Grit::Commit/12be105a5c06f670c1d601efaaa812067bb07790</id>
+    <link type="text/html" rel="alternate" href="https://github.com/hagopjay/x3d.loom/commit/12be105a5c06f670c1d601efaaa812067bb07790"/>
+    <title>
+        Giza fold-back: correct two counts
+    </title>
+    <updated>2026-11-17T04:49:02Z</updated>
+    <media:thumbnail height="30" width="30" url="https://avatars.githubusercontent.com/u/81847?s=30&amp;v=4"/>
+    <author>
+      <name>claude</name>
+      <uri>https://github.com/claude</uri>
+    </author>
+    <content type="html">
+      &lt;pre style=&#39;white-space:pre-wrap;width:81ex&#39;&gt;Giza fold-back: correct two counts&lt;/pre&gt;
+    </content>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Grit::Commit/7311c7ea1b4f42fbcedb093bd45b4843fee6a1fd</id>
+    <link type="text/html" rel="alternate" href="https://github.com/hagopjay/x3d.loom/commit/7311c7ea1b4f42fbcedb093bd45b4843fee6a1fd"/>
+    <title>
+        Fold Giza Evidence Atlas v3 back into the Loom: 12 graded lessons, de…
+    </title>
+    <updated>2026-11-17T04:48:52Z</updated>
+    <media:thumbnail height="30" width="30" url="https://avatars.githubusercontent.com/u/81847?s=30&amp;v=4"/>
+    <author>
+      <name>claude</name>
+      <uri>https://github.com/claude</uri>
+    </author>
+    <content type="html">
+      &lt;pre style=&#39;white-space:pre-wrap;width:81ex&#39;&gt;Fold Giza Evidence Atlas v3 back into the Loom: 12 graded lessons, dev-cycle contracts, destinations&lt;/pre&gt;
+    </content>
+  </entry>
+</feed>

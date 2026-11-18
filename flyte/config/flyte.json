@@ -1,0 +1,38 @@
+{
+  "schema": "gobbler.flyte.config/1",
+  "cadence_minutes": 30,
+  "authorized_humans": ["hagopjay"],
+  "hitl": {
+    "channel": "github-issues",
+    "repo": "hagopjay/x3d.gobbler",
+    "label": "flyte-decision",
+    "timeout_minutes": 240,
+    "max_open_decisions": 3,
+    "irreversible_never_auto": true
+  },
+  "inner_loop": {"max_weave_attempts": 3},
+  "scout": {"max_signals_per_tick": 6, "min_score": 0.5},
+  "llm": {
+    "provider": "anthropic",
+    "model": "claude-haiku-5-5",
+    "effort": "low",
+    "max_tokens": 1200,
+    "price_usd_per_mtok": {"input": 0.10, "output": 0.50},
+    "price_source": "claude-api skill model table, cached 2026-11-03 (list price, prompts up to 100K tokens)",
+    "per_cycle_cap_usd": 0.003
+  },
+  "sources": [
+    {"id": "web3d-news", "kind": "rss", "url": "https://www.web3d.org/rss.xml", "trust": "x3d-home"},
+    {"id": "hn-x3d", "kind": "hn", "url": "https://hn.algolia.com/api/v1/search?query=%22x3d%22&tags=story&hitsPerPage=30&restrictSearchableAttributes=title", "trust": "open"},
+    {"id": "hn-webgpu", "kind": "hn", "url": "https://hn.algolia.com/api/v1/search_by_date?query=webgpu%203d&tags=story&hitsPerPage=10", "trust": "open"},
+    {"id": "arxiv-x3d", "kind": "atom", "url": "https://export.arxiv.org/api/query?search_query=all:X3D+OR+all:VRML+OR+all:%22web3d%22&sortBy=submittedDate&max_results=15", "trust": "open"},
+    {"id": "loom-commits", "kind": "atom", "url": "https://github.com/hagopjay/x3d.loom/commits/main.atom", "trust": "family"},
+    {"id": "x_ite-releases", "kind": "github-releases", "repo": "create3000/x_ite", "trust": "x3d-home"},
+    {"id": "x3d_mcp-upstream", "kind": "github-releases", "repo": "Web3DConsortium/x3d_mcp", "trust": "x3d-home"},
+    {"id": "blender-x3d", "kind": "github-releases", "repo": "hagopjay/x3d-blender-io", "trust": "family"},
+    {"id": "threejs-releases", "kind": "github-releases", "repo": "mrdoob/three.js", "trust": "bridge"},
+    {"id": "babylon-releases", "kind": "github-releases", "repo": "BabylonJS/Babylon.js", "trust": "bridge"},
+    {"id": "reddit-threejs", "kind": "rss", "url": "https://www.reddit.com/r/threejs/new/.rss", "trust": "open"},
+    {"id": "reddit-webgl", "kind": "rss", "url": "https://www.reddit.com/r/webgl/new/.rss", "trust": "open"}
+  ]
+}

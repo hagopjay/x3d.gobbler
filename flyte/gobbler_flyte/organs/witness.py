@@ -1,0 +1,69 @@
+"""Witness: the referee. It never writes the world; it says pass or fail, and names its instrument.
+
+Pre-check = x3d.accrete gate_fragment on the exact candidate bytes. Keeper's
+commit re-runs the gate and then the pinned x3d_mcp XSD + semantic validators,
+so a Witness pass is necessary but never sufficient. Grades follow the project
+rule: Confirmed / Likely / Suspected.
+"""
+from __future__ import annotations
+
+from pathlib import Path
+
+from .. import accrete_bridge as accrete
+from ..loom import traps
+from ..state import row
+
+
+def grade(signal: dict, gate_ok: bool, target_seen: bool | None) -> str:
+    if not gate_ok:
+        return "Refused"
+    if signal.get("synthetic"):
+        return "Suspected"
+    return "Confirmed" if target_seen else "Likely"
+
+
+def target_seen(ctx, proposal: dict) -> bool | None:
+    """Does the loom pipeline the proposal names exist in a local x3d.loom checkout? None = not checked."""
+    loom = ctx.loom_dir
+    if not loom or not Path(loom).is_dir():
+        return None
+    probes = {"rerun-xite-rig": ["kit"], "bridge-check": ["x3d.threejs"], "blenderizer-roundtrip": ["LEARNINGS-blender-scivis.md"],
+              "validator-diff": ["LOOM-v1.md"], "foldback-docs": ["LOOM-v1.md"], "standards-note": ["LOOM-v1.md"],
+              "atlas-reading-card": ["SOURCES.md"], "adjacent-watch": ["x3d.webgpu"], "community-signal": ["README.md"]}
+    return all((Path(loom) / p).exists() for p in probes.get(proposal["action"], ["README.md"]))
+
+
+def witness(state: dict, ctx) -> dict:
+    cand, proposal, signal = state.get("candidate"), state["proposal"], state["signal"]
+    if not cand:
+        return {"witness": {"status": "fail", "errors": [{"code": "NO_CANDIDATE", "message": "Weaver made nothing"}]},
+                "log": [row("witness", "verdict", "nothing to witness")]}
+    g = accrete.gate(cand["x3d"], prefix=f"W{state['cycle']:05d}")
+    ok = g["status"] == "pass"
+    v = accrete.prevalidate(g["canonical_x3d"]) if ok else {"status": "not_run"}
+    if ok and v["status"] != "pass":
+        ok = False
+        g = {**g, "errors": v["errors"] or [{"code": "MCP_FAIL", "message": "pinned validator did not pass"}]}
+    trap_hits = []
+    if ok:
+        from accretion.world import wrap_scene
+        trap_hits = traps.check(wrap_scene(g["canonical_x3d"]).encode())
+        if any(h.severity == "error" for h in trap_hits):
+            ok = False
+            g = {**g, "errors": [{"code": "TRAP_" + h.rule.upper().replace("-", "_"), "message": h.detail} for h in trap_hits if h.severity == "error"]}
+    seen = target_seen(ctx, proposal)
+    verdict = {"status": "pass" if ok else "fail", "errors": g.get("errors", [])[:6], "grade": grade(signal, ok, seen),
+               "instrument": accrete.identity(), "metrics": g.get("metrics"), "target_seen": seen,
+               "canonical_sha256": g.get("canonical_sha256"), "validator": {k: v.get(k) for k in ("status", "xsd", "semantic")},
+               "traps": [{"rule": h.rule, "severity": h.severity, "where": h.where} for h in trap_hits]}
+    if ok:
+        m = g.get("metrics", {})
+        text = (f"gate {verdict['instrument'].get('gate_version')} PASS + x3d_mcp {verdict['instrument'].get('x3d_mcp_commit')} "
+                f"XSD {v.get('xsd')} / semantic {v.get('semantic')} ({m.get('nodes', '?')} nodes, "
+                f"{m.get('expanded_shapes', m.get('shapes', '?'))} shapes) + loom traps {len(trap_hits)} warning(s); grade {verdict['grade']}; loom target "
+                f"{'found' if seen else 'not checked' if seen is None else 'MISSING'}")
+    else:
+        codes = ", ".join(sorted({e['code'] for e in verdict['errors']}))
+        stage = "x3d_mcp" if v.get("status") not in (None, "not_run") else "gate"
+        text = f"{stage} REFUSED attempt {state.get('attempts')}: {codes}" + (f" ({verdict['errors'][0]['message'][:110]})" if stage == "x3d_mcp" else "")
+    return {"witness": verdict, "log": [row("witness", "verdict", text, errors=verdict["errors"][:3])]}

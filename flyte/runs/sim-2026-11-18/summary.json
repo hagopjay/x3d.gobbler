@@ -1,0 +1,63 @@
+{
+ "ticks": 48,
+ "tape_rows": 525,
+ "cycles_with_signal": 35,
+ "empty_cycles": 13,
+ "turns": 35,
+ "admitted": 35,
+ "drafted": 35,
+ "reused": 0,
+ "weave_attempts": 61,
+ "witness_refusals": 26,
+ "refusal_codes": {
+  "GATE_CONTAINMENT": 9,
+  "MCP_SEMANTIC_PROFILE_COMPONENT": 9,
+  "GATE_NODE_FORBIDDEN": 8
+ },
+ "model_calls_simulated": 52,
+ "tokens_in": 121380,
+ "tokens_out": 32320,
+ "spend_usd_at_list_price": 0.028298,
+ "allowance_usd": 0.03,
+ "questions": 8,
+ "answered_by_human": 3,
+ "timeouts": 5,
+ "namesakes_set_aside": 17,
+ "choices": {
+  "A": 28,
+  "B": 7
+ },
+ "grades": {
+  "Confirmed": 31,
+  "Suspected": 4
+ },
+ "actions": {
+  "standards-note": 9,
+  "foldback-docs": 11,
+  "community-signal": 7,
+  "adjacent-watch": 3,
+  "rerun-xite-rig": 1,
+  "validator-diff": 1,
+  "atlas-reading-card": 1,
+  "bridge-check": 1,
+  "blenderizer-roundtrip": 1
+ },
+ "generators": {
+  "procedural": 9,
+  "model": 26
+ },
+ "world_tail_hash": "d365bc42d1efbe8fc8e6ad3f207e1d3ab93d032a58d0d3ed3f1a702e726f9663",
+ "world_head": 35,
+ "archive_verify": {
+  "valid": true,
+  "checked": 35
+ },
+ "instruments": {
+  "gate": "x3d.accrete accretion.fragment-gate 2.0.0 @ 93063bf",
+  "validator": "hagopjay/x3d_mcp b5c9956 (vendored in x3d.accrete)",
+  "traps": "x3d.loom kit/loomkit/traps.py @ 4cf5c7a",
+  "renderer": "X_ITE 16.6.0 (x3d.accrete vendor) in Chromium 157.0.8103.78 headless, SwiftShader",
+  "python": "3.13.18",
+  "langgraph": "1.2.22"
+ }
+}
