@@ -1,0 +1,47 @@
+{
+  "_note": "SYNTHETIC. This container's proxy returned HTTP 403 for these repositories on 18 Nov 2026 01:46Z, so no real release list could be snapshotted. These rows only exercise the release path in tests and in the simulated day. Live mode on GitHub Actions reads the real API.",
+  "create3000/x_ite": [
+    {
+      "id": 9001,
+      "tag_name": "synthetic-x_ite-A",
+      "name": "SYNTHETIC X_ITE release (fixture)",
+      "html_url": "https://github.com/create3000/x_ite/releases",
+      "published_at": "2026-11-18T06:00:00Z",
+      "body": "Synthetic fixture: X_ITE release with PhysicalMaterial and shadow changes.",
+      "synthetic": true
+    }
+  ],
+  "mrdoob/three.js": [
+    {
+      "id": 9002,
+      "tag_name": "synthetic-three-B",
+      "name": "SYNTHETIC three.js release (fixture)",
+      "html_url": "https://github.com/mrdoob/three.js/releases",
+      "published_at": "2026-11-18T13:00:00Z",
+      "body": "Synthetic fixture: WebGPU renderer and node material changes.",
+      "synthetic": true
+    }
+  ],
+  "hagopjay/x3d-blender-io": [
+    {
+      "id": 9003,
+      "tag_name": "synthetic-blenderizer-C",
+      "name": "SYNTHETIC blenderizer release (fixture)",
+      "html_url": "https://github.com/hagopjay/x3d-blender-io/releases",
+      "published_at": "2026-11-18T19:00:00Z",
+      "body": "Synthetic fixture: X3D 4.0 exporter adds PhysicalMaterial texture fields.",
+      "synthetic": true
+    }
+  ],
+  "Web3DConsortium/x3d_mcp": [
+    {
+      "id": 9004,
+      "tag_name": "synthetic-x3d_mcp-D",
+      "name": "SYNTHETIC x3d_mcp upstream release (fixture)",
+      "html_url": "https://github.com/Web3DConsortium/x3d_mcp/releases",
+      "published_at": "2026-11-18T09:30:00Z",
+      "body": "Synthetic fixture: upstream validator adds a new semantic check for X3D scenes.",
+      "synthetic": true
+    }
+  ]
+}

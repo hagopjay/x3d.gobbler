@@ -1,0 +1,54 @@
+name: gobbler-flyte
+# The 24/7 heartbeat (every 30 min). It does nothing until the repository variable FLYTE_ENABLED is "true"
+# (Settings > Secrets and variables > Actions > Variables). Model calls also need the secret ANTHROPIC_API_KEY
+# (his Haiku 5.5 key) AND a typed "OK $x/day" from an authorized login on a flyte-decision issue.
+# State: text ledgers (tape, turns, spend, world-archive.json, outbox, memory) are committed to the
+# append-only branch gobbler-flyte-state; the two SQLite files ride in the Actions cache. If the cache is
+# ever evicted, sleeping questions expire and the world restarts as a new epoch; the committed archive keeps the old one.
+on:
+  schedule: [{cron: '*/30 * * * *'}]
+  workflow_dispatch: {}
+permissions: {contents: write, issues: write}
+concurrency: {group: gobbler-flyte, cancel-in-progress: false}
+jobs:
+  tick:
+    if: ${{ vars.FLYTE_ENABLED == 'true' || github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with: {repository: hagopjay/x3d.accrete, path: x3d.accrete}
+      - name: x3d.loom for Witness target probes (optional; private repos need a token)
+        uses: actions/checkout@v4
+        continue-on-error: true
+        with: {repository: hagopjay/x3d.loom, path: x3d.loom}
+      - name: state branch (created on the first run)
+        run: |
+          if git fetch -q origin gobbler-flyte-state; then git worktree add -q state-wt FETCH_HEAD && git -C state-wt checkout -q -B gobbler-flyte-state;
+          else git worktree add -q --detach state-wt && git -C state-wt checkout -q --orphan gobbler-flyte-state && git -C state-wt rm -rqf . || true; fi
+          mkdir -p state-wt/state
+      - name: SQLite state from the cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            state-wt/state/world.sqlite
+            state-wt/state/checkpoints.sqlite
+          key: flyte-sqlite-${{ github.run_id }}
+          restore-keys: flyte-sqlite-
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.13'}
+      - run: pip install -q -r flyte/requirements.txt -r x3d.accrete/requirements.txt
+      - name: one tick
+        env:
+          ACCRETE_DIR: ${{ github.workspace }}/x3d.accrete
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: cd flyte && python -m gobbler_flyte tick --state ../state-wt/state --mode live --loom ../x3d.loom
+      - name: commit the text ledgers (append-only branch, never force-pushed)
+        run: |
+          cd state-wt
+          printf '*.sqlite\n' > .gitignore
+          git config user.name "gobbler-flyte" && git config user.email "gobbler-flyte@users.noreply.github.com"
+          git add -A . && git commit -qm "tick $(date -u +%Y-%m-%dT%H:%MZ)" || echo "nothing changed"
+          git push -q origin gobbler-flyte-state

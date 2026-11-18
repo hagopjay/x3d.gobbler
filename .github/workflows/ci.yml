@@ -44,3 +44,15 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with: {name: shots, path: /tmp/shots*}
+  flyte:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with: {repository: hagopjay/x3d.accrete, path: x3d.accrete}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.13'}
+      - run: pip install -q -r flyte/requirements.txt -r x3d.accrete/requirements.txt
+      - name: Gobbler.flyte tests (no network, no API key)
+        env: {ACCRETE_DIR: '${{ github.workspace }}/x3d.accrete'}
+        run: cd flyte && python -m unittest discover -s tests -v

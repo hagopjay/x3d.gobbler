@@ -1,0 +1,395 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/frEKUm3Rg6v7TugqHmKz7KCB1AM</id>
+  <title>arXiv Query: search_query=all:X3D OR all:VRML OR all:"web3d"&amp;id_list=&amp;start=0&amp;max_results=15</title>
+  <updated>2026-11-18T01:46:25Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=all:X3D+OR+(all:VRML+OR+all:%22web3d%22)&amp;start=0&amp;max_results=15&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>15</opensearch:itemsPerPage>
+  <opensearch:totalResults>56</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2610.26491v1</id>
+    <title>PDNet: Exploring Pruning and Distillation for Real-Time Worker Activity Recognition in Industrial Assembly</title>
+    <updated>2026-10-19T14:31:09Z</updated>
+    <link href="https://arxiv.org/abs/2610.26491v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2610.26491v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In this work, we address real-time fine-grained human activity recognition (HAR) in industrial assembly and introduce PDNet, a new framework that jointly exploits structured pruning and knowledge distillation for 3D convolutional networks. We start by training a 3D-CNN backbone in a supervised manner. Then, PDNet applies channel-wise structured pruning to obtain a more compact network. In the third step, our method is optimized using knowledge distillation from the large unpruned teacher to recover accuracy lost due to pruning. On the challenging MECCANO dataset with an X3D-M backbone, the pruned model without distillation reaches a Top-1 accuracy of 25.54 %, while PDNet raises this to 39.46 %, with only 6.90 MB model size and 3.78 GFLOPs. These results show that distillation within PDNet is highly effective in restoring pruned model performance and highlight its high potential for resource-constrained HAR in industrial assembly.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-10-19T14:31:09Z</published>
+    <arxiv:comment>Published by SciTePress. ISBN 978-989-758-804-4</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <arxiv:journal_ref>Proceedings of the 21st International Conference on Computer Vision Theory and Applications (VISAPP 2026), Volume 3, pages 624-630</arxiv:journal_ref>
+    <author>
+      <name>Malek Baba</name>
+    </author>
+    <author>
+      <name>Thinesh Thiyakesan Ponbagavathi</name>
+    </author>
+    <author>
+      <name>Alina Roitberg</name>
+    </author>
+    <arxiv:doi>10.5220/0014477200004084</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.5220/0014477200004084" title="doi"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2610.13086v1</id>
+    <title>Safety Graph: When Safety Responses Become Attack Surfaces in Cyber-Physical Systems</title>
+    <updated>2026-10-09T06:40:17Z</updated>
+    <link href="https://arxiv.org/abs/2610.13086v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2610.13086v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Modern industrial control systems (ICS) are susceptible to cyber attacks triggering safety failures in the operational technology (OT) layer. The traditional way to mitigate any failure in OT is to implement safety responses. However, we show in this work that these responses can open up new attack surfaces, thereby vastly expanding the scope of lateral movement. Existing frameworks model cyber-to-physical escalation but provide no mechanism to reason about how these safety responses to OT-failures can trigger new cascading cyber attacks in the Information Technology (IT) layer. To enable such reasoning, we introduce Safety Graph (SG), a formal framework unifying three paradigms - Attack Graphs (AG), Fault Trees (FT), and Event Trees (ET) - over a shared propositional state space, capturing the full bidirectional IT-OT cascade. We provide a sound and complete compilation of SG to a classical AI planning problem, performing plan search using A* to find cross-layer cascade paths. Through a Web3D modeling and simulation of the Tennessee Eastman chemical process plant, which is a widely used chemical engineering benchmark serving as a standard for testing control, monitoring and fault propagation, we demonstrate that the planning compilation of SG automatically discovers safety-response-induced lateral movements, and identifies the responsible barriers that are unidentifiable under existing models. A complexity and scalability analysis characterizes how the planning compilation of SG scales with model size and cascade depth. To the best of our knowledge, SG is the first framework to formally model IT-OT attacks and enable operators to explore the problem of cyber attacks triggering cascading failures in ICS.</summary>
+    <category term="cs.CR" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-10-09T06:40:17Z</published>
+    <arxiv:primary_category term="cs.CR"/>
+    <author>
+      <name>Rakesh Podder</name>
+    </author>
+    <author>
+      <name>Philip D. Hopkins</name>
+    </author>
+    <author>
+      <name>Sarath Sreedharan</name>
+    </author>
+    <author>
+      <name>Indrakshi Ray</name>
+    </author>
+    <author>
+      <name>Indrajit Ray</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2609.24099v1</id>
+    <title>Ask Before It Tells: Benchmark-to-Robot Body-Cue Transfer for a Question-First Bedside Robot</title>
+    <updated>2026-09-21T04:35:12Z</updated>
+    <link href="https://arxiv.org/abs/2609.24099v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2609.24099v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Body-cue recognition can support assistive robots, but benchmark accuracy does not guarantee reliable behavior under a robot-camera viewpoint. We present Nuni, a bedside robot prototype that treats a detected distress cue as a reason to ask rather than a reason to alert. We compare two X3D-UGT RGB appearance classifiers, which reach 97.7% and 94.8% six-way accuracy on NTU RGB+D, with a pose-centric hybrid pipeline on 28 single-actor scripted clips recorded from the robot camera. The hybrid path achieved 0.71 six-way macro recall, versus 0.25 and 0.29 for the fine-tuned and from-scratch RGB variants. More importantly for interaction, it produced a question-triggering distress cue in 12/16 distress clips and would have prompted unnecessarily in 2/8 normal clips; the RGB variants yielded a question-triggering cue in only 2/16 and 3/16 distress clips. We separately tested the question-first controller through event injection. All 13 state-transition trials passed: valid responses caused stand-down, two unanswered prompts produced one alert, and three boundary conditions were handled correctly. These results are a preliminary technical evaluation, not a user study or medical validation, but they show how interaction policy can limit the consequences of uncertain perception.</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.HC" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-09-21T04:35:12Z</published>
+    <arxiv:comment>To appear in the 4th Workshop on Nonverbal Cues for Human-Robot Cooperative Intelligence (NOC), IROS 2026</arxiv:comment>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Dongsik Yoon</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2609.22849v1</id>
+    <title>LINGO: Latent Initialization and Gradient Optimization for Sparse-view X-ray Novel View Synthesis and CT Reconstruction with 3D Gaussian Splatting</title>
+    <updated>2026-09-19T07:45:41Z</updated>
+    <link href="https://arxiv.org/abs/2609.22849v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2609.22849v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In novel view synthesis and Computed Tomography (CT) reconstruction with sparse-view X-ray imaging, insufficient angular coverage leads to structural ambiguity and accumulated noise. Integrating 3D Gaussian Splatting (3DGS) with X-ray absorption physics can achieve promising results, but it suffers from noisy initialization, positional insensitivity, and weak gradients in low-density regions. In this paper, we propose a unified Latent Initialization and Gradient Optimization (LINGO) framework to address these issues. LINGO combines latent mask-space initialization with dynamic gradient optimization to improve point cloud structural completeness while accelerating training. It constructs voxel-level 3D filters from X-ray masks to robustly suppress background noise and provide reliable geometric priors. By employing an adaptive voxel scaling strategy and dynamically scaling loss, LINGO can adjust spatial resolution and explicitly amplify gradients in low-density structures. To evaluate the quality of initialization, we introduce the Initialization Point Cloud Structural Deviation (IPSD) metric. Experiments on the X3D dataset indicate that for the novel view synthesis task, LINGO improves the Peak Signal-to-Noise Ratio (PSNR) and Structural Similarity Index (SSIM) by an average of 0.72 and 0.0039, respectively, over baselines under identical sparse-view settings, achieving comparable reconstruction quality within 5k steps to state-of-the-art models typically trained with 30k iterations. For the CT reconstruction task, LINGO also demonstrates consistent improvements, with average PSNR and SSIM gains of 0.36 and 0.0134. These results highlight LINGO's effectiveness in both accelerating training and enhancing reconstruction quality across different sparse-view imaging scenarios.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.GR" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-09-19T07:45:41Z</published>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Lifeng Xing</name>
+    </author>
+    <author>
+      <name>Dequan Jin</name>
+    </author>
+    <author>
+      <name>Kunpeng Bu</name>
+    </author>
+    <author>
+      <name>Peigeng He</name>
+    </author>
+    <author>
+      <name>Shihui Ying</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2608.01696v1</id>
+    <title>Entity-Aware Sequence Transduction for Player-Centric Ball Action Spotting</title>
+    <updated>2026-08-03T04:48:54Z</updated>
+    <link href="https://arxiv.org/abs/2608.01696v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2608.01696v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Player-centric ball action spotting requires temporally precise event detection together with actor attribution in crowded, partially observed multi-agent sports videos. Existing Denoising Sequence Transduction (DST) baselines treat the player-role dimension as part of a flattened frame-level representation, which weakens the inductive bias for modeling player-specific temporal evolution and inter-player interactions. To address this limitation, we propose Multi-Entity Denoising Sequence Transduction (ME-DST). ME-DST keeps the role-slot dimension throughout encoding. It uses temporal attention to model the history of each role slot, and spatial attention to exchange information across role slots at each frame. This factorized design gives the model a direct structure for separating within-player evolution from inter-player context. We also add learnable role embeddings, tracking-derived tactical features, and fused visual predictions from X3D-L and Swin3D-S. Experiments on the FOOTPASS dataset show that ME-DST reaches a Micro F1 of 0.778. This improves the strongest official TAAD+DST baseline by 10.3 percentage points. Controlled ablations show that preserving the entity axis and encoding role identity are central to this gain. These results suggest that explicit entity modeling is an effective inductive bias for player-centric sports event understanding.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-08-03T04:48:54Z</published>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Ruifeng Wang</name>
+    </author>
+    <author>
+      <name>Di Yang</name>
+    </author>
+    <author>
+      <name>Jiangtao Wang</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2608.01058v1</id>
+    <title>Extended KAFR: A kinematic-adaptive paradigm for the efficient analysis of surgical video</title>
+    <updated>2026-08-02T07:48:48Z</updated>
+    <link href="https://arxiv.org/abs/2608.01058v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2608.01058v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Artificial Intelligence is increasingly applied to surgical video analysis for phase segmentation, skill assessment, and workflow optimization. A key challenge is the length of surgical recordings, often one to several hours, creating substantial computational burden. We previously developed Kinematics-Adaptive Frame Recognition (KAFR) for robotic surgery, showing that tracking tool motion effectively identifies informative frames while filtering redundant content. However, laparoscopic surgery introduces additional challenges: manual camera control causes frequent motion artifacts, and image quality is generally lower than robotic systems. This study evaluates whether KAFR generalizes to laparoscopic surgery using the Cholec80 benchmark, comprising 80 laparoscopic cholecystectomy procedures annotated for seven surgical phases. KAFR operates in three stages: a fine-tuned YOLO model detects and segments surgical tools; frames are adaptively selected based on tool displacement or velocity variation; and an X3D model classifies selected frames into surgical phases. KAFR achieved a 91.0\% F1 score using only 0.58\% of frames for phase classification, representing an approximately seven-fold reduction compared to typical 4\% frame sampling, while maintaining performance comparable to LoViT (90.2\%) and Trans-SVNet (89.7\%). These results demonstrate that kinematics-based frame selection transfers effectively to the challenging laparoscopic environment.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-08-02T07:48:48Z</published>
+    <arxiv:comment>18</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Huu Phong Nguyen</name>
+    </author>
+    <author>
+      <name>Shekhar Madhav Khairnar</name>
+    </author>
+    <author>
+      <name>Ganesh Sankaranarayanan</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2602.10818v2</id>
+    <title>Resource-Efficient RGB-Only Action Recognition for Edge Deployment</title>
+    <updated>2026-08-14T01:04:54Z</updated>
+    <link href="https://arxiv.org/abs/2602.10818v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2602.10818v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Resource-constrained assistive monitoring requires compact local video perception and an explicit understanding of how recognition reliability changes under common visual degradation. We present a compact RGB-only action-recognition network that combines an X3D-style hierarchy with temporal shift, a 3D Universal Inverted Bottleneck, Ghost pointwise convolutions, factorized depthwise operators, selective temporal adaptation, and parameter-free attention. The model attains 95.10/98.31% on NTU RGB+D 60 (X-Sub/X-View) and 90.88/92.66% on NTU RGB+D 120 (X-Sub/X-Set) with only 0.96-0.99M parameters. To connect compact deployment with assistive use, we evaluate frozen checkpoints without retraining on the datasets' official Medical Conditions groups while retaining the original 60-/120-way decision spaces. Medical macro recall reaches 93.19/97.93% on NTU60 and 91.47/91.48% on NTU120. Under controlled Level-2 visual stress on NTU60 X-Sub, medical recall drops by 1.77 points under low light, 2.23 under motion blur, 4.87 under crop perturbation, and 19.05 under occlusion; among the four selected Level-2 perturbations, occlusion causes the largest observed degradation. On Jetson Orin Nano, the TensorRT FP16 engine occupies 5.30 MiB, demonstrating strong static compactness but not throughput superiority. The results position the model as a compact perception component for lower-rate assistive monitoring, rather than as a complete clinical or robotic system.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.PF" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-02-11T13:01:56Z</published>
+    <arxiv:comment>Under review</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Dongsik Yoon</name>
+    </author>
+    <author>
+      <name>Jongeun Kim</name>
+    </author>
+    <author>
+      <name>Dayeon Lee</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2512.20025v1</id>
+    <title>A Contextual Analysis of Driver-Facing and Dual-View Video Inputs for Distraction Detection in Naturalistic Driving Environments</title>
+    <updated>2025-12-23T03:36:26Z</updated>
+    <link href="https://arxiv.org/abs/2512.20025v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2512.20025v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Despite increasing interest in computer vision-based distracted driving detection, most existing models rely exclusively on driver-facing views and overlook crucial environmental context that influences driving behavior. This study investigates whether incorporating road-facing views alongside driver-facing footage improves distraction detection accuracy in naturalistic driving conditions. Using synchronized dual-camera recordings from real-world driving, we benchmark three leading spatiotemporal action recognition architectures: SlowFast-R50, X3D-M, and SlowOnly-R50. Each model is evaluated under two input configurations: driver-only and stacked dual-view. Results show that while contextual inputs can improve detection in certain models, performance gains depend strongly on the underlying architecture. The single-pathway SlowOnly model achieved a 9.8 percent improvement with dual-view inputs, while the dual-pathway SlowFast model experienced a 7.2 percent drop in accuracy due to representational conflicts. These findings suggest that simply adding visual context is not sufficient and may lead to interference unless the architecture is specifically designed to support multi-view integration. This study presents one of the first systematic comparisons of single- and dual-view distraction detection models using naturalistic driving data and underscores the importance of fusion-aware design for future multimodal driver monitoring systems.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-12-23T03:36:26Z</published>
+    <arxiv:primary_category term="cs.CV"/>
+    <arxiv:journal_ref>2025 IEEE International Conference on Future Machine Learning and Data Science (FMLDS), 02-05 Nov. 2025</arxiv:journal_ref>
+    <author>
+      <name>Anthony Dontoh</name>
+    </author>
+    <author>
+      <name>Stephanie Ivey</name>
+    </author>
+    <author>
+      <name>Armstrong Aboah</name>
+    </author>
+    <arxiv:doi>10.1109/FMLDS67896.2025.00059</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1109/FMLDS67896.2025.00059" title="doi"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2507.12617v1</id>
+    <title>Predicting Soccer Penalty Kick Direction Using Human Action Recognition</title>
+    <updated>2025-07-16T20:27:11Z</updated>
+    <link href="https://arxiv.org/abs/2507.12617v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2507.12617v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Action anticipation has become a prominent topic in Human Action Recognition (HAR). However, its application to real-world sports scenarios remains limited by the availability of suitable annotated datasets. This work presents a novel dataset of manually annotated soccer penalty kicks to predict shot direction based on pre-kick player movements. We propose a deep learning classifier to benchmark this dataset that integrates HAR-based feature embeddings with contextual metadata. We evaluate twenty-two backbone models across seven architecture families (MViTv2, MViTv1, SlowFast, Slow, X3D, I3D, C2D), achieving up to 63.9% accuracy in predicting shot direction (left or right), outperforming the real goalkeepers' decisions. These results demonstrate the dataset's value for anticipatory action recognition and validate our model's potential as a generalizable approach for sports-based predictive tasks.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-07-16T20:27:11Z</published>
+    <arxiv:comment>Accepted at 23rd International Conference on Image Analysis and Processing (ICIAP 2025)</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>David Freire-Obregón</name>
+    </author>
+    <author>
+      <name>Oliverio J. Santana</name>
+    </author>
+    <author>
+      <name>Javier Lorenzo-Navarro</name>
+    </author>
+    <author>
+      <name>Daniel Hernández-Sosa</name>
+    </author>
+    <author>
+      <name>Modesto Castrillón-Santana</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2503.16237v1</id>
+    <title>3D radio data visualisation in open science platforms for next-generation observatories</title>
+    <updated>2025-03-20T15:34:51Z</updated>
+    <link href="https://arxiv.org/abs/2503.16237v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2503.16237v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Next-generation telescopes will bring groundbreaking discoveries but they will also present new technological challenges. The Square Kilometre Array Observatory (SKAO) will be one of the most demanding scientific infrastructures, with a projected data output of 700 PB per year to be distributed to a network of SKA Regional Centres. Current tools are not fully suited to manage such massive data volumes, therefore, new research is required to transform science archives from data providers into service providers. In this paper we examine how a science archive can deliver advanced visualisation capabilities for the SKA science archive. In particular, we have conducted a thorough exploration of existing visualisation software for astronomy and other fields to identify tools capable of addressing Big Data requirements. Using selected technologies, we have developed a prototype archive that provides access to interactive visualisations of 3D radio data through web-based interfaces, adhering to International Virtual Observatory Alliance (IVOA) recommendations to favour interoperability and Open Science practices. In addition, we discuss how current IVOA recommendations support these visualisation capabilities and how they could be expanded. Our prototype archive includes a service to generate 3D models on the fly as a server operation, enabling remote visualisations in a flexible manner; for instance, a set of parameters can be used to customise the models and their visualisation. We have used SKA precursor and pathfinder data to test its usability and scalability, concluding that remote visualisation is a viable solution for handling high-volume data. However, our prototype is constrained by memory limitations, requiring techniques to reduce memory usage.</summary>
+    <category term="astro-ph.IM" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="astro-ph.GA" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-03-20T15:34:51Z</published>
+    <arxiv:comment>18 pages, 10 figures and 2 tables. Accepted for publication in A&amp;C. GitHub repository in https://github.com/ixakalabadie/ViSL3D . Visualisation examples in https://amiga.iaa.csic.es/x3d-menu/</arxiv:comment>
+    <arxiv:primary_category term="astro-ph.IM"/>
+    <author>
+      <name>I. Labadie-García</name>
+    </author>
+    <author>
+      <name>J. Garrido</name>
+    </author>
+    <author>
+      <name>L. Verdes-Montenegro</name>
+    </author>
+    <author>
+      <name>M. Á. Mendoza</name>
+    </author>
+    <author>
+      <name>M. Parra-Royón</name>
+    </author>
+    <author>
+      <name>S. Sánchez-Expósito</name>
+    </author>
+    <author>
+      <name>R. Ianjamasimanana</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2501.11153v3</id>
+    <title>Efficient Frame Extraction: A Novel Approach Through Frame Similarity and Surgical Tool Tracking for Video Segmentation</title>
+    <updated>2025-04-28T19:02:47Z</updated>
+    <link href="https://arxiv.org/abs/2501.11153v3" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2501.11153v3" rel="related" type="application/pdf" title="pdf"/>
+    <summary>The interest in leveraging Artificial Intelligence (AI) for surgical procedures to automate analysis has witnessed a significant surge in recent years. One of the primary tools for recording surgical procedures and conducting subsequent analyses, such as performance assessment, is through videos. However, these operative videos tend to be notably lengthy compared to other fields, spanning from thirty minutes to several hours, which poses a challenge for AI models to effectively learn from them. Despite this challenge, the foreseeable increase in the volume of such videos in the near future necessitates the development and implementation of innovative techniques to tackle this issue effectively. In this article, we propose a novel technique called Kinematics Adaptive Frame Recognition (KAFR) that can efficiently eliminate redundant frames to reduce dataset size and computation time while retaining useful frames to improve accuracy. Specifically, we compute the similarity between consecutive frames by tracking the movement of surgical tools. Our approach follows these steps: $i)$ Tracking phase: a YOLOv8 model is utilized to detect tools presented in the scene, $ii)$ Similarity phase: Similarities between consecutive frames are computed by estimating variation in the spatial positions and velocities of the tools, $iii$) Classification phase: An X3D CNN is trained to classify segmentation. We evaluate the effectiveness of our approach by analyzing datasets obtained through retrospective reviews of cases at two referral centers. The newly annotated Gastrojejunostomy (GJ) dataset covers procedures performed between 2017 and 2021, while the previously annotated Pancreaticojejunostomy (PJ) dataset spans from 2011 to 2022 at the same centers.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-01-19T19:36:09Z</published>
+    <arxiv:comment>18</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Huu Phong Nguyen</name>
+    </author>
+    <author>
+      <name>Shekhar Madhav Khairnar</name>
+    </author>
+    <author>
+      <name>Sofia Garces Palacios</name>
+    </author>
+    <author>
+      <name>Amr Al-Abbas</name>
+    </author>
+    <author>
+      <name>Melissa E. Hogg</name>
+    </author>
+    <author>
+      <name>Amer H. Zureikat</name>
+    </author>
+    <author>
+      <name>Patricio M. Polanco</name>
+    </author>
+    <author>
+      <name>Herbert Zeh</name>
+    </author>
+    <author>
+      <name>Ganesh Sankaranarayanan</name>
+    </author>
+    <arxiv:doi>10.1109/ACCESS.2025.3573264</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1109/ACCESS.2025.3573264" title="doi"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2412.11228v1</id>
+    <title>Uni-AdaFocus: Spatial-temporal Dynamic Computation for Video Recognition</title>
+    <updated>2024-12-15T15:51:44Z</updated>
+    <link href="https://arxiv.org/abs/2412.11228v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2412.11228v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>This paper presents a comprehensive exploration of the phenomenon of data redundancy in video understanding, with the aim to improve computational efficiency. Our investigation commences with an examination of spatial redundancy, which refers to the observation that the most informative region in each video frame usually corresponds to a small image patch, whose shape, size and location shift smoothly across frames. Motivated by this phenomenon, we formulate the patch localization problem as a dynamic decision task, and introduce a spatially adaptive video recognition approach, termed AdaFocus. In specific, a lightweight encoder is first employed to quickly process the full video sequence, whose features are then utilized by a policy network to identify the most task-relevant regions. Subsequently, the selected patches are inferred by a high-capacity deep network for the final prediction. The full model can be trained in end-to-end conveniently. Furthermore, AdaFocus can be extended by further considering temporal and sample-wise redundancies, i.e., allocating the majority of computation to the most task-relevant frames, and minimizing the computation spent on relatively "easier" videos. Our resulting approach, Uni-AdaFocus, establishes a comprehensive framework that seamlessly integrates spatial, temporal, and sample-wise dynamic computation, while it preserves the merits of AdaFocus in terms of efficient end-to-end training and hardware friendliness. In addition, Uni-AdaFocus is general and flexible as it is compatible with off-the-shelf efficient backbones (e.g., TSM and X3D), which can be readily deployed as our feature extractor, yielding a significantly improved computational efficiency. Empirically, extensive experiments based on seven benchmark datasets and three application scenarios substantiate that Uni-AdaFocus is considerably more efficient than the competitive baselines.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-12-15T15:51:44Z</published>
+    <arxiv:comment>Accepted by IEEE TPAMI. Journal version of arXiv:2105.03245 (AdaFocusV1, ICCV 2021 Oral), arXiv:2112.14238 (AdaFocusV2, CVPR 2022), and arXiv:2209.13465 (AdaFocusV3, ECCV 2022). Code and pre-trained models: https://github.com/LeapLabTHU/Uni-AdaFocus</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Yulin Wang</name>
+    </author>
+    <author>
+      <name>Haoji Zhang</name>
+    </author>
+    <author>
+      <name>Yang Yue</name>
+    </author>
+    <author>
+      <name>Shiji Song</name>
+    </author>
+    <author>
+      <name>Chao Deng</name>
+    </author>
+    <author>
+      <name>Junlan Feng</name>
+    </author>
+    <author>
+      <name>Gao Huang</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2412.02127v1</id>
+    <title>Streamlining Video Analysis for Efficient Violence Detection</title>
+    <updated>2024-11-29T06:32:36Z</updated>
+    <link href="https://arxiv.org/abs/2412.02127v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2412.02127v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>This paper addresses the challenge of automated violence detection in video frames captured by surveillance cameras, specifically focusing on classifying scenes as "fight" or "non-fight." This task is critical for enhancing unmanned security systems, online content filtering, and related applications. We propose an approach using a 3D Convolutional Neural Network (3D CNN)-based model named X3D to tackle this problem. Our approach incorporates pre-processing steps such as tube extraction, volume cropping, and frame aggregation, combined with clustering techniques, to accurately localize and classify fight scenes. Extensive experimentation demonstrates the effectiveness of our method in distinguishing violent from non-violent events, providing valuable insights for advancing practical violence detection systems.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-11-29T06:32:36Z</published>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Gourang Pathak</name>
+    </author>
+    <author>
+      <name>Abhay Kumar</name>
+    </author>
+    <author>
+      <name>Sannidhya Rawat</name>
+    </author>
+    <author>
+      <name>Shikha Gupta</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2407.03179v2</id>
+    <title>Motion meets Attention: Video Motion Prompts</title>
+    <updated>2024-10-02T13:32:56Z</updated>
+    <link href="https://arxiv.org/abs/2407.03179v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2407.03179v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Videos contain rich spatio-temporal information. Traditional methods for extracting motion, used in tasks such as action recognition, often rely on visual contents rather than precise motion features. This phenomenon is referred to as 'blind motion extraction' behavior, which proves inefficient in capturing motions of interest due to a lack of motion-guided cues. Recently, attention mechanisms have enhanced many computer vision tasks by effectively highlighting salient visual areas. Inspired by this, we propose a modified Sigmoid function with learnable slope and shift parameters as an attention mechanism to modulate motion signals from frame differencing maps. This approach generates a sequence of attention maps that enhance the processing of motion-related video content. To ensure temporal continuity and smoothness of the attention maps, we apply pair-wise temporal attention variation regularization to remove unwanted motions (e.g., noise) while preserving important ones. We then perform Hadamard product between each pair of attention maps and the original video frames to highlight the evolving motions of interest over time. These highlighted motions, termed video motion prompts, are subsequently used as inputs to the model instead of the original video frames. We formalize this process as a motion prompt layer and incorporate the regularization term into the loss function to learn better motion prompts. This layer serves as an adapter between the model and the video data, bridging the gap between traditional 'blind motion extraction' and the extraction of relevant motions of interest. We show that our lightweight, plug-and-play motion prompt layer seamlessly integrates into models like SlowFast, X3D, and TimeSformer, enhancing performance on benchmarks such as FineGym and MPII Cooking 2.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-07-03T14:59:46Z</published>
+    <arxiv:comment>Accepted at the 16th Asian Conference on Machine Learning (ACML 2024)</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Qixiang Chen</name>
+    </author>
+    <author>
+      <name>Lei Wang</name>
+    </author>
+    <author>
+      <name>Piotr Koniusz</name>
+    </author>
+    <author>
+      <name>Tom Gedeon</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2406.06703v2</id>
+    <title>Video-based Exercise Classification and Activated Muscle Group Prediction with Hybrid X3D-SlowFast Network</title>
+    <updated>2025-07-20T01:56:21Z</updated>
+    <link href="https://arxiv.org/abs/2406.06703v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2406.06703v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>This paper introduces a simple yet effective strategy for exercise classification and muscle group activation prediction (MGAP). These tasks have significant implications for personal fitness, facilitating more affordable, accessible, safer, and simpler exercise routines. This is particularly relevant for novices and individuals with disabilities. Previous research in the field is mostly dominated by the reliance on mounted sensors and a limited scope of exercises, reducing practicality for everyday use. Furthermore, existing MGAP methodologies suffer from a similar dependency on sensors and a restricted range of muscle groups, often excluding strength training exercises, which are pivotal for a comprehensive fitness regimen. Addressing these limitations, our research employs a video-based deep learning framework that encompasses a broad spectrum of exercises and muscle groups, including those vital for strength training. Utilizing the "Workout/Exercises Video" dataset, our approach integrates the X3D and SlowFast video activity recognition models in an effective way to enhance exercise classification and MGAP performance. Our findings demonstrate that this hybrid method, obtained via weighted ensemble, outperforms existing baseline models in accuracy. Pretrained models play a crucial role in enhancing overall performance, with optimal channel reduction values for the SlowFast model identified near 10. Through an ablation study that explores fine-tuning, we further elucidate the interrelation between the two tasks. Our composite model, a weighted-average ensemble of X3D and SlowFast, sets a new benchmark in both exercise classification and MGAP across all evaluated categories, offering a robust solution to the limitations of previous approaches.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-06-10T18:05:02Z</published>
+    <arxiv:comment>13 pages, 1 figure, submitted to Nature Scientific Reports</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Manvik Pasula</name>
+    </author>
+    <author>
+      <name>Pramit Saha</name>
+    </author>
+  </entry>
+</feed>

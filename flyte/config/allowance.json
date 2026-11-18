@@ -1,0 +1,10 @@
+{
+  "schema": "gobbler.flyte.allowance/1",
+  "daily_usd": 0.0,
+  "monthly_usd": 0.0,
+  "model": "claude-haiku-5-5",
+  "approved_by": null,
+  "approved_ref": null,
+  "approved_utc": null,
+  "note": "Zero until HagopJay types an OK (an issue comment such as 'OK $0.03/day' on a flyte-decision issue). With zero, every organ runs its deterministic path and no model is called."
+}
