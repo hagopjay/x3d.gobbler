@@ -34,6 +34,7 @@ jobs:
           path: |
             state-wt/state/world.sqlite
             state-wt/state/checkpoints.sqlite
+            state-wt/state/memory.sqlite
           key: flyte-sqlite-${{ github.run_id }}
           restore-keys: flyte-sqlite-
       - uses: actions/setup-python@v5

@@ -193,3 +193,33 @@ A second model reviewed main at 11a5616 (`../docs/FLYTE-REVIEW.md` and the other
 Tests: 32 pass, normally and under `-O`. The re-run day is in `runs/sim-2026-11-18-r2/` and the original run is untouched. Its counts match the first run exactly: 35 admitted, 61 attempts, 26 refusals, 8 questions, 5 timeouts, $0.028298. Only the grades and facets differ. The world hashes differ because each entry now carries its operation key.
 
 Still open, as the review states: cross-store exactly-once across the world, checkpoints, outbox and an external send (this pass covers the world and the ledger only); transactional spend reservations; GitHub answer lifecycle (edits and deletions); capability identity beyond a checkout path; and real adoption evidence.
+
+## 15. Agentic-memory integration (18 Nov 2026, from the "X3D Agentic Flywheels" package)
+
+HagopJay sent a LangGraph reference package for comment: 17 flywheel prompts and context contracts, 33 tests, a scripted demo, a technical design and a JSON Schema for agentic memory. It was treated as untrusted code:
+- unpacked in isolation;
+- SHA256SUMS checked (45 of 45 match);
+- grepped for network, subprocess and eval (none);
+- tests run in a separate venv: 33 of 33 pass, and the demo is accepted after 2 scripted iterations with 0 model calls.
+
+Nothing from it was installed into this repo. Each claim below was probed before it was adopted.
+
+| Claim in the package | Probe result | Here |
+|---|---|---|
+| 9 memory kinds (episode, semantic_claim, procedure, counterexample, experiment, decision, open_question, summary, preference) and 9 transport record types (memory, evidence, artifact, entity, run, context_snapshot, dataset_partition, memory_event, graph_assertion) | The schema meta-validates. Its 4 examples validate with 0 errors. | **Adopted.** `gobbler_flyte/memory.py` uses the same 9 kinds. `gobbler_flyte/transport.py` exports counterexample, episode and decision memories plus evidence records to the schema, which is copied byte for byte (`schemas/agentic-memory.schema.json`, sha256 916d65c3…195a). Simulated day: 44 records, 0 schema errors, and all 44 ids verify with the package's own `build_schema.verify_hash`. |
+| The context manager filters before it ranks: tenant, principal, valid time, review state, scope, revocation, lineage and contradiction bundles | Held for every one of those cases. | **Adopted**, with every exclusion returned with its reason and every compiled context journaled. |
+| Contamination tracking keeps sealed and selection material out of development context | **2 leaks found.** (1) A memory labelled `development` that cites a **sealed evidence id** reached the context with its text. (2) A memory citing an evidence id **unknown to the registry** also reached it. The filter read only the memory's own label. | **Adopted and fixed.** Effective exposure is now the union over the lineage and every cited evidence id, and unknown evidence is excluded. Regression tests: `Memory.test_reference_package_leaks_are_closed`. Added `audit_contamination`, which proves from the context journal that no held-out record reached a prompt; its negative control is a hand-built leaking context, which the audit flags. |
+| Candidate contract: extra fields forbidden, sizes bounded, no invented artifact refs or evidence | Held: extra field, empty summary and a bad artifact name were all rejected. | **Adopted** as `WeaverCandidate`. A Haiku reply that breaks it never reaches Witness as a real candidate. |
+| Sealed tests | The package specifies them but holds none out in its demo. | **Built.** About 1 in 5 Witness refusals is sealed by its own bytes (`seal_bucket`), never by its outcome. Sealed counterexamples, and episodes that descend from them, stay out of Weaver's context. Simulated day: 45 contexts, 2 held out, 0 leaks. |
+| Counterexample with a lawful twin | A schema slot only. | **Filled.** When Weaver is refused and then admitted in the same cycle, the admitted fragment is the refused one's lawful twin. Simulated day: 3 of 3 counterexamples have one. |
+
+Honest scale: the simulated day yields only 3 distinct counterexamples, because the scripted replies repeat fragments, and identical bytes share one record. A live day will give more.
+
+Not adopted, and why:
+
+| Part | Reason |
+|---|---|
+| The 17 flywheel prompts and catalog | These are other lanes (chess, Blender IO, STEM authoring and others). Gobbler.flyte has 9 playbook actions. They are kept as a reference for those lanes, not vendored. |
+| Its LangGraph engine (intake, prepare, propose, evaluate, review, persist) | Gobbler's graph already has its council, the 4 h timeout pick and per-cycle interrupts. The engine's mandatory review on every run conflicts with the timeout rule. Its execution-binding idea matches the op keys already in place (section 14). |
+| Tenant and principal model, Neo4j Cypher, LangChain adapter | This is a single-tenant repo with no graph server (GCP is off and spend is near zero). The transport export keeps records portable to that store later. |
+| Its ranking | Lexical overlap only, so not a semantic retriever. It is kept, because it is cheap and deterministic, and counterexamples rank first. |

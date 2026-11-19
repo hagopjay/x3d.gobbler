@@ -355,5 +355,111 @@ class Facets(unittest.TestCase):
             self.assertNotEqual(t["grade"], "Confirmed")               # no broad grade from structure + path existence
 
 
+class Memory(unittest.TestCase):
+    """Filter before rank, contamination, and the Candidate contract (adapted from the agentic-flywheels package)."""
+    NOW = "2026-11-18T20:00:00Z"
+
+    def mem(self, i, **u):
+        from gobbler_flyte.memory import MemoryRecord
+        f = dict(memory_id=i, kind="counterexample", text="Refused GATE_CONTAINMENT: nested Transform", readers=["weaver"],
+                 valid_from="2026-11-17T00:00:00Z", recorded_by="witness")
+        f.update(u)
+        return MemoryRecord(**f)
+
+    def ctx_ids(self, views, evidence=(), scope=None):
+        from gobbler_flyte.memory import MemoryStore, Reader, compile_context
+        s = MemoryStore()
+        for e in evidence:
+            s.put_evidence(e)
+        for v in views:
+            s.put(v)
+        p = compile_context(s, Reader("weaver", self.NOW, scope or {}), kinds=("counterexample", "procedure", "episode"), query="nested")
+        return [m["memory_id"] for m in p["memories"]], p["excluded"]
+
+    def ev(self, i, exposure):
+        from gobbler_flyte.memory import EvidenceRef
+        return EvidenceRef(evidence_id=i, exposure=exposure, sha256="0" * 64, instrument="test")
+
+    def test_filters_run_before_ranking(self):
+        ids, ex = self.ctx_ids([self.mem("a"), self.mem("s", exposures=["development", "sealed"]),
+                                self.mem("x", readers=["keeper"]), self.mem("p", review_state="provisional"),
+                                self.mem("e", valid_to="2026-11-18T00:00:00Z"), self.mem("sc", scope={"world": "other"})],
+                               scope={"world": "mine"})
+        self.assertEqual(ids, ["a"])
+        self.assertEqual(ex, {"e": "outside_valid_time", "p": "not_accepted", "s": "held_out", "sc": "scope_mismatch", "x": "not_a_reader"})
+
+    def test_sealed_parent_taints_child_and_revocation_taints_lineage(self):
+        from gobbler_flyte.memory import MemoryStore, Reader, compile_context
+        ids, ex = self.ctx_ids([self.mem("s", exposures=["sealed"]), self.mem("c", kind="episode", parent_ids=["s"])])
+        self.assertEqual((ids, ex["c"]), ([], "held_out"))
+        s = MemoryStore(); s.put(self.mem("root")); s.put(self.mem("kid", parent_ids=["root"])); s.revoke("root", "wrong")
+        p = compile_context(s, Reader("weaver", self.NOW, {}), kinds=("counterexample",), query="x")
+        self.assertEqual(p["memories"], []); self.assertEqual(p["excluded"]["kid"], "revoked_lineage")
+
+    def test_reference_package_leaks_are_closed(self):
+        """In the reference, both of these reached the context (probe 18 Nov). Here both are filtered."""
+        ids, ex = self.ctx_ids([self.mem("leak", evidence_ids=["ev-sealed"], text="answer from the sealed case")],
+                               evidence=[self.ev("ev-sealed", "sealed")])
+        self.assertEqual((ids, ex["leak"]), ([], "held_out"))
+        ids, ex = self.ctx_ids([self.mem("ghost", evidence_ids=["ev-unknown"])])
+        self.assertEqual((ids, ex["ghost"]), ([], "unknown_evidence"))
+        ids, _ = self.ctx_ids([self.mem("ok", evidence_ids=["ev-dev"])], evidence=[self.ev("ev-dev", "development")])
+        self.assertEqual(ids, ["ok"])
+
+    def test_contradictions_travel_together(self):
+        ids, ex = self.ctx_ids([self.mem("k", contradicts=["h"]), self.mem("h", readers=["keeper"])])
+        self.assertEqual(ids, []); self.assertEqual(ex["k"], "contradiction_partner_hidden")
+        ids, _ = self.ctx_ids([self.mem("k", contradicts=["h"]), self.mem("h")])
+        self.assertEqual(sorted(ids), ["h", "k"])
+
+    def test_audit_catches_a_prompt_built_with_a_sealed_record(self):
+        from gobbler_flyte.memory import MemoryStore, audit_contamination, digest
+        s = MemoryStore(); s.put(self.mem("s", exposures=["sealed"]))
+        self.assertTrue(audit_contamination(s)["clean"])
+        bad = {"schema": "gobbler.context/1", "memories": [{"memory_id": "s"}]}
+        bad["context_sha256"] = digest(bad)
+        s.journal_context(bad)                       # negative control: a context compiled around the filter
+        a = audit_contamination(s)
+        self.assertFalse(a["clean"]); self.assertEqual(a["leaks"][0]["memory_id"], "s")
+
+    def test_immutable_ids_and_put_once(self):
+        from gobbler_flyte.memory import MemoryStore
+        s = MemoryStore(); s.put(self.mem("a"))
+        with self.assertRaises(ValueError):
+            s.put(self.mem("a", text="different"))
+        self.assertFalse(s.put_once(self.mem("a", text="different")))
+
+    def test_candidate_contract(self):
+        from gobbler_flyte.memory import WeaverCandidate
+        ok = dict(x3d="<Shape/>", title="t", instruction="i")
+        WeaverCandidate(**ok)
+        for bad in ({**ok, "grade": "Confirmed"}, {**ok, "x3d": ""}, {**ok, "x3d": "x" * 64_001}, {**ok, "title": "t" * 121}):
+            with self.assertRaises(Exception):
+                WeaverCandidate(**bad)
+
+    def test_seal_bucket_is_deterministic_and_about_one_in_five(self):
+        import hashlib
+        from gobbler_flyte.memory import seal_bucket
+        picks = [seal_bucket(hashlib.sha256(str(i).encode()).hexdigest()) for i in range(1000)]
+        self.assertEqual(picks, [seal_bucket(hashlib.sha256(str(i).encode()).hexdigest()) for i in range(1000)])
+        self.assertTrue(150 <= picks.count("sealed") <= 250, picks.count("sealed"))
+
+
+@needs_world
+class MemoryInTheLoop(unittest.TestCase):
+    def test_simulated_day_memory_is_clean_and_schema_valid(self):
+        with tempfile.TemporaryDirectory() as d:
+            r = run_day(Path(d) / "day", ticks=48, allowance_usd=0.03)
+            self.assertTrue(r["audit"]["clean"]); self.assertGreater(r["audit"]["contexts"], 0)
+            self.assertGreaterEqual(r["audit"]["held_out"], 1)              # something really was held out
+            self.assertEqual(set(r["memory_kinds"]) , {"counterexample", "decision", "episode"})
+            self.assertTrue(r["transport"]["valid"], r["transport"].get("errors"))
+            recs = [json.loads(x) for x in (Path(d) / "day" / "memory-transport.jsonl").read_text().splitlines()]
+            cx = [x for x in recs if x["record_type"] == "memory" and x["payload"]["kind"] == "counterexample"]
+            self.assertTrue(any(x["payload"]["lawful_twin_artifact_id"] for x in cx))   # refused, then admitted in the same cycle
+            tape = (Path(d) / "day" / "tape.jsonl").read_text()
+            self.assertIn("filtered out before ranking", tape)
+
+
 if __name__ == "__main__":
     unittest.main()

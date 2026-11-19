@@ -85,6 +85,23 @@ def keeper(state: dict, ctx) -> dict:
             "grade": state["witness"].get("grade"), "attempts": state.get("attempts"),
             "decision": state.get("decision"), "spend_usd": round(sum(s["actual_usd"] for s in state.get("spend", [])), 6),
             "utc": ctx.now}
+    if getattr(ctx, "mem", None) is not None:
+        from ..memory import MemoryRecord
+        scope = {"world": ctx.world_id}
+        dec = state.get("decision") or {}
+        if dec.get("by") and dec["by"] not in ("timeout",):
+            ctx.mem.put_once(MemoryRecord(memory_id=f"decision:cycle-{state['cycle']}", kind="decision", readers=["weaver", "gobbler"],
+                                     text=f"{dec['by']} picked {dec.get('choice')} for {proposal['action']} on {proposal['target']}"[:400],
+                                     evidence_level="C", valid_from=ctx.now, recorded_by="human", scope=scope, cycle=state["cycle"]))
+        if entry and entry.get("status") == "committed":
+            import hashlib
+            twins = [m.memory_id for m in ctx.mem.by_cycle(state["cycle"], "counterexample")]   # refused earlier this cycle
+            ctx.mem.put_once(MemoryRecord(memory_id=f"episode:{entry['hash'][:24]}", kind="episode", readers=["weaver", "gobbler"],
+                                     text=f"Admitted entry #{entry['n']} ({proposal['action']}, attempt {state.get('attempts')})"
+                                          + (f" after {len(twins)} refused fragment(s): the lawful twin of each" if twins else ""),
+                                     evidence_level="C", valid_from=ctx.now, recorded_by="keeper", scope=scope,
+                                     parent_ids=twins, cycle=state["cycle"],
+                                     subject_sha256=hashlib.sha256(state["candidate"]["x3d"].encode("utf-8")).hexdigest()))
     turns = ctx.state_dir / "turns.jsonl"
     done = {json.loads(x)["cycle"] for x in turns.read_text().splitlines() if x.strip()} if turns.exists() else set()
     if state["cycle"] in done:                       # the same cycle re-run after a crash: one ledger row per cycle

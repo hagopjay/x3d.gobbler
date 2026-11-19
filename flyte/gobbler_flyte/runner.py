@@ -46,6 +46,8 @@ class Ctx:
         self.world = accrete.World(self.state_dir / "world.sqlite") if accrete.available() else None
         self.world_id = (self.world.archive().get("world_id") or "world")[:16] if self.world else "no-world"
         self.outbox = self.state_dir / "outbox"
+        from .memory import MemoryStore
+        self.mem = MemoryStore(self.state_dir / "memory.sqlite")
         self.loom_dir = loom_dir
         self.channel = channel
         self._llm_factory = llm_factory
@@ -132,6 +134,7 @@ def tick(state_dir: str | Path, *, mode: str = "offline", now: str | None = None
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     except BlockingIOError:
         lock.close()
+        ctx.mem.close()
         raise RuntimeError(f"another tick holds {state_dir / '.tick.lock'}")
     conn = sqlite3.connect(state_dir / "checkpoints.sqlite", check_same_thread=False)
     try:
@@ -183,5 +186,7 @@ def tick(state_dir: str | Path, *, mode: str = "offline", now: str | None = None
         return summary
     finally:
         conn.close()
+        if ctx is not None:
+            ctx.mem.close()
         fcntl.flock(lock, fcntl.LOCK_UN)
         lock.close()
