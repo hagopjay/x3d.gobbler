@@ -2,7 +2,7 @@
   "schema": "gobbler.release-check/1",
   "status": "pass",
   "base_commit": "11a561623b7539f1f9bf20f8ef7bc5b9706c10d2",
-  "started_utc": "2026-11-18T03:56:42.158286+00:00",
+  "started_utc": "2026-11-18T23:59:39.899156+00:00",
   "runner_python": "3.13.18",
   "python_command": "/tmp/claude-0/flyvenv/bin/python",
   "node_command": "/opt/node22/bin/node",
@@ -21,7 +21,7 @@
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "stdout_tail": "validation and workflow dependencies import\n",
       "stderr_tail": "",
-      "elapsed_seconds": 0.29353742399996463
+      "elapsed_seconds": 0.3329190389999894
     },
     {
       "id": "baseline-runtime-identity",
@@ -32,7 +32,7 @@
         "inventory_sha256": "3f045f856842fd0e99047c438eca7b3da3265c71b46f8e954264641410ea1b6d",
         "scope": "Exact unchanged vendor/x_ite bytes from repository baseline; no fresh publisher-archive verification, authenticity or native execution inferred."
       },
-      "elapsed_seconds": 0.01773061799997322
+      "elapsed_seconds": 0.02209150400000226
     },
     {
       "id": "lab-producer-and-input-identity",
@@ -42,7 +42,7 @@
         "catalog_sha256": "cd29920cf83f0d8c2942e6cf9795085744aa6c7fdf3e3417ee8c44cb000fbd42",
         "scene_sha256": "0834763c526b0d6697eb55394e3998b7638874b9a72a2b1e8cad28c4d178e0f2"
       },
-      "elapsed_seconds": 0.00040670099997441866
+      "elapsed_seconds": 0.00044506500000807137
     },
     {
       "id": "atlas-normal",
@@ -51,15 +51,15 @@
         "-c",
         "\nimport json, pathlib, sys, unittest\nsuite=unittest.TestLoader().discover(sys.argv[1],pattern='test*.py')\nresult=unittest.TextTestRunner(verbosity=1).run(suite)\nreport={'tests_run':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),\n 'skipped':[{'test':str(t),'reason':reason} for t,reason in result.skipped],\n 'expected_failures':len(result.expectedFailures),'unexpected_successes':len(result.unexpectedSuccesses),\n 'successful':result.wasSuccessful()}\npathlib.Path(sys.argv[2]).write_text(json.dumps(report,indent=2)+'\\n')\nraise SystemExit(0 if result.wasSuccessful() and result.testsRun else 1)\n",
         "flywheel-review/atlas/tests",
-        "/tmp/gobbler-release-5wjgib4i/atlas-normal.json"
+        "/tmp/gobbler-release-bji2wjmo/atlas-normal.json"
       ],
       "status": "pass",
       "returncode": 0,
       "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "stderr_sha256": "2c341d53336cf9614e7b05ddccd11e8895e6cf5163c78136a53b8ab1ca7b4939",
+      "stderr_sha256": "9743dc9bbeb4650b72e341bd30122fcd64109343ab0d215a5efba9005a967e8c",
       "stdout_tail": "",
-      "stderr_tail": "................................................................\n----------------------------------------------------------------------\nRan 64 tests in 0.219s\n\nOK\n",
-      "elapsed_seconds": 0.3018975530000034,
+      "stderr_tail": "................................................................\n----------------------------------------------------------------------\nRan 64 tests in 0.252s\n\nOK\n",
+      "elapsed_seconds": 0.3259129990000247,
       "unittest": {
         "tests_run": 64,
         "failures": 0,
@@ -77,15 +77,15 @@
         "-c",
         "\nimport json, pathlib, sys, unittest\nsuite=unittest.TestLoader().discover(sys.argv[1],pattern='test*.py')\nresult=unittest.TextTestRunner(verbosity=1).run(suite)\nreport={'tests_run':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),\n 'skipped':[{'test':str(t),'reason':reason} for t,reason in result.skipped],\n 'expected_failures':len(result.expectedFailures),'unexpected_successes':len(result.unexpectedSuccesses),\n 'successful':result.wasSuccessful()}\npathlib.Path(sys.argv[2]).write_text(json.dumps(report,indent=2)+'\\n')\nraise SystemExit(0 if result.wasSuccessful() and result.testsRun else 1)\n",
         "tools",
-        "/tmp/gobbler-release-5wjgib4i/tools-normal.json"
+        "/tmp/gobbler-release-bji2wjmo/tools-normal.json"
       ],
       "status": "pass",
       "returncode": 0,
       "stdout_sha256": "de8334c8188c28b3e2de29f35cacd1a174b977999e19dd99cd83401c0dfe6f91",
-      "stderr_sha256": "64ca45d80341463d7937787b88e63d0999752099d553643cca660e516f5c8622",
+      "stderr_sha256": "78055ddada0de69695c2d1a9162464d5101cc888ebd10bffc156128b89cf471f",
       "stdout_tail": "single.html 6219038 bytes\n",
-      "stderr_tail": ".................\n----------------------------------------------------------------------\nRan 17 tests in 0.746s\n\nOK\n",
-      "elapsed_seconds": 0.8415556980000929,
+      "stderr_tail": ".................\n----------------------------------------------------------------------\nRan 17 tests in 2.788s\n\nOK\n",
+      "elapsed_seconds": 2.909112025000013,
       "unittest": {
         "tests_run": 17,
         "failures": 0,
@@ -103,17 +103,17 @@
         "-c",
         "\nimport json, pathlib, sys, unittest\nsuite=unittest.TestLoader().discover(sys.argv[1],pattern='test*.py')\nresult=unittest.TextTestRunner(verbosity=1).run(suite)\nreport={'tests_run':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),\n 'skipped':[{'test':str(t),'reason':reason} for t,reason in result.skipped],\n 'expected_failures':len(result.expectedFailures),'unexpected_successes':len(result.unexpectedSuccesses),\n 'successful':result.wasSuccessful()}\npathlib.Path(sys.argv[2]).write_text(json.dumps(report,indent=2)+'\\n')\nraise SystemExit(0 if result.wasSuccessful() and result.testsRun else 1)\n",
         "flyte/tests",
-        "/tmp/gobbler-release-5wjgib4i/flyte-normal.json"
+        "/tmp/gobbler-release-bji2wjmo/flyte-normal.json"
       ],
       "status": "pass",
       "returncode": 0,
       "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "stderr_sha256": "19fd7ce5b2d7928f7dff48dffcd7afbe0714bd52d799cbf537095aa0cd28fcb6",
+      "stderr_sha256": "c6872520a4c7d565aa7b73dcca03a1327217839f56f166f893fb94c8832ea270",
       "stdout_tail": "",
-      "stderr_tail": "................................\n----------------------------------------------------------------------\nRan 32 tests in 5.179s\n\nOK\n",
-      "elapsed_seconds": 5.814182188000018,
+      "stderr_tail": ".........................................\n----------------------------------------------------------------------\nRan 41 tests in 10.802s\n\nOK\n",
+      "elapsed_seconds": 11.57176462800004,
       "unittest": {
-        "tests_run": 32,
+        "tests_run": 41,
         "failures": 0,
         "errors": 0,
         "skipped": [],
@@ -130,15 +130,15 @@
         "-c",
         "\nimport json, pathlib, sys, unittest\nsuite=unittest.TestLoader().discover(sys.argv[1],pattern='test*.py')\nresult=unittest.TextTestRunner(verbosity=1).run(suite)\nreport={'tests_run':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),\n 'skipped':[{'test':str(t),'reason':reason} for t,reason in result.skipped],\n 'expected_failures':len(result.expectedFailures),'unexpected_successes':len(result.unexpectedSuccesses),\n 'successful':result.wasSuccessful()}\npathlib.Path(sys.argv[2]).write_text(json.dumps(report,indent=2)+'\\n')\nraise SystemExit(0 if result.wasSuccessful() and result.testsRun else 1)\n",
         "flywheel-review/atlas/tests",
-        "/tmp/gobbler-release-5wjgib4i/atlas-optimized.json"
+        "/tmp/gobbler-release-bji2wjmo/atlas-optimized.json"
       ],
       "status": "pass",
       "returncode": 0,
       "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "stderr_sha256": "9bf5ed88257b066a08f6eafff7b372898ddde10ec13acfbc181a80f078b49d26",
+      "stderr_sha256": "29b36c9bf743aefc2437c6a553f4d299d43d691c2d0d6367bd7971418d33e595",
       "stdout_tail": "",
-      "stderr_tail": "................................................................\n----------------------------------------------------------------------\nRan 64 tests in 0.241s\n\nOK\n",
-      "elapsed_seconds": 0.33141411299993706,
+      "stderr_tail": "................................................................\n----------------------------------------------------------------------\nRan 64 tests in 0.257s\n\nOK\n",
+      "elapsed_seconds": 0.3528820880000012,
       "unittest": {
         "tests_run": 64,
         "failures": 0,
@@ -157,15 +157,15 @@
         "-c",
         "\nimport json, pathlib, sys, unittest\nsuite=unittest.TestLoader().discover(sys.argv[1],pattern='test*.py')\nresult=unittest.TextTestRunner(verbosity=1).run(suite)\nreport={'tests_run':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),\n 'skipped':[{'test':str(t),'reason':reason} for t,reason in result.skipped],\n 'expected_failures':len(result.expectedFailures),'unexpected_successes':len(result.unexpectedSuccesses),\n 'successful':result.wasSuccessful()}\npathlib.Path(sys.argv[2]).write_text(json.dumps(report,indent=2)+'\\n')\nraise SystemExit(0 if result.wasSuccessful() and result.testsRun else 1)\n",
         "tools",
-        "/tmp/gobbler-release-5wjgib4i/tools-optimized.json"
+        "/tmp/gobbler-release-bji2wjmo/tools-optimized.json"
       ],
       "status": "pass",
       "returncode": 0,
       "stdout_sha256": "de8334c8188c28b3e2de29f35cacd1a174b977999e19dd99cd83401c0dfe6f91",
-      "stderr_sha256": "3892e7ef35d1e5b3295157fb9023714fef1f688c9154b781417f8591d275997e",
+      "stderr_sha256": "6926891f0a38f6143441964fa7c0921dc3b97812ac2655ba9fb85648006fc3d3",
       "stdout_tail": "single.html 6219038 bytes\n",
-      "stderr_tail": ".................\n----------------------------------------------------------------------\nRan 17 tests in 0.766s\n\nOK\n",
-      "elapsed_seconds": 0.8651662409999972,
+      "stderr_tail": ".................\n----------------------------------------------------------------------\nRan 17 tests in 0.838s\n\nOK\n",
+      "elapsed_seconds": 0.9413640479999685,
       "unittest": {
         "tests_run": 17,
         "failures": 0,
@@ -184,17 +184,17 @@
         "-c",
         "\nimport json, pathlib, sys, unittest\nsuite=unittest.TestLoader().discover(sys.argv[1],pattern='test*.py')\nresult=unittest.TextTestRunner(verbosity=1).run(suite)\nreport={'tests_run':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),\n 'skipped':[{'test':str(t),'reason':reason} for t,reason in result.skipped],\n 'expected_failures':len(result.expectedFailures),'unexpected_successes':len(result.unexpectedSuccesses),\n 'successful':result.wasSuccessful()}\npathlib.Path(sys.argv[2]).write_text(json.dumps(report,indent=2)+'\\n')\nraise SystemExit(0 if result.wasSuccessful() and result.testsRun else 1)\n",
         "flyte/tests",
-        "/tmp/gobbler-release-5wjgib4i/flyte-optimized.json"
+        "/tmp/gobbler-release-bji2wjmo/flyte-optimized.json"
       ],
       "status": "pass",
       "returncode": 0,
       "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "stderr_sha256": "924528fe9c800b345314f3905d8b97b22b5db9285c86790c0058c77edd4747fc",
+      "stderr_sha256": "7e02c1173624392b0166922483a0277fecc36c15b0b15cf6c3a07f7ab2460d6d",
       "stdout_tail": "",
-      "stderr_tail": "................................\n----------------------------------------------------------------------\nRan 32 tests in 5.389s\n\nOK\n",
-      "elapsed_seconds": 6.082537195999976,
+      "stderr_tail": ".........................................\n----------------------------------------------------------------------\nRan 41 tests in 10.856s\n\nOK\n",
+      "elapsed_seconds": 11.612011960000018,
       "unittest": {
-        "tests_run": 32,
+        "tests_run": 41,
         "failures": 0,
         "errors": 0,
         "skipped": [],
@@ -212,11 +212,11 @@
       ],
       "status": "pass",
       "returncode": 0,
-      "stdout_sha256": "bb06fb05e432270d1528f0d4a8a776029f952e9fe3fb4ddd46c3ccc736c8474a",
+      "stdout_sha256": "77b0b298a58f80f0ac268f64e9f4cb893bc614335a4b70f1d9dc63626e28a271",
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "stdout_tail": "TAP version 13\n# PASS independent task keys, latest intent and permanent disposal\n# PASS bounded request wait rejects instead of indefinite loading\n# PASS readiness waits for actual scene completion; callbacks and frames dispose\n# PASS pending boot cannot commit a scene after pagehide\n# PASS pagehide cancels pending waits without needing a network completion\n# PASS a partial scene-hookup failure clears callbacks and exposes fatal status\n# PASS reduced-motion changes pause clocks; hidden pages stop cadence\n# PASS tab keyboard navigation keeps exactly one roving tab stop\n# PASS abandoned search failure cannot overwrite current empty search\n# PASS Atlas identity mismatch refuses results and produces a visible error\n# PASS audio resolving after disposal is paused and never labeled playing\n# PASS saved guard result is reported as recorded data without a hardcoded pass\n# {\"status\":\"pass\",\"controls\":12,\"scope\":\"Actual frontend controller with DOM/SAI/media adapters. Not a native browser, listening or pixel acceptance result.\"}\n# Subtest: tools/observatory-controls.test.mjs\nok 1 - tools/observatory-controls.test.mjs\n  ---\n  duration_ms: 100.513394\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 106.306401\n",
+      "stdout_tail": "TAP version 13\n# PASS independent task keys, latest intent and permanent disposal\n# PASS bounded request wait rejects instead of indefinite loading\n# PASS readiness waits for actual scene completion; callbacks and frames dispose\n# PASS pending boot cannot commit a scene after pagehide\n# PASS pagehide cancels pending waits without needing a network completion\n# PASS a partial scene-hookup failure clears callbacks and exposes fatal status\n# PASS reduced-motion changes pause clocks; hidden pages stop cadence\n# PASS tab keyboard navigation keeps exactly one roving tab stop\n# PASS abandoned search failure cannot overwrite current empty search\n# PASS Atlas identity mismatch refuses results and produces a visible error\n# PASS audio resolving after disposal is paused and never labeled playing\n# PASS saved guard result is reported as recorded data without a hardcoded pass\n# {\"status\":\"pass\",\"controls\":12,\"scope\":\"Actual frontend controller with DOM/SAI/media adapters. Not a native browser, listening or pixel acceptance result.\"}\n# Subtest: tools/observatory-controls.test.mjs\nok 1 - tools/observatory-controls.test.mjs\n  ---\n  duration_ms: 682.252983\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 691.391117\n",
       "stderr_tail": "",
-      "elapsed_seconds": 0.13696698500007187
+      "elapsed_seconds": 0.738068855999984
     },
     {
       "id": "intervention-controls",
@@ -227,11 +227,11 @@
       ],
       "status": "pass",
       "returncode": 0,
-      "stdout_sha256": "9d0dabe7832aa833fd387ac0b6ffb54a93e0157c99fb970dd0a23505edc7eea6",
+      "stdout_sha256": "0f640587b1433d682159b2b7376319b8077d6e9fc86ff3c905c244d490fddc26",
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "stdout_tail": "TAP version 13\n# {\"status\":\"pass\",\"fixtures\":5,\"experiments\":3,\"scope\":\"Actual Web Crypto byte controls, positive/negative discrimination, content-based retry identity, malformed records, export literals and static UI targets. Not native browser execution.\"}\n# Subtest: tools/intervention-tests.mjs\nok 1 - tools/intervention-tests.mjs\n  ---\n  duration_ms: 40.020093\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 45.434638\n",
+      "stdout_tail": "TAP version 13\n# {\"status\":\"pass\",\"fixtures\":5,\"experiments\":3,\"scope\":\"Actual Web Crypto byte controls, positive/negative discrimination, content-based retry identity, malformed records, export literals and static UI targets. Not native browser execution.\"}\n# Subtest: tools/intervention-tests.mjs\nok 1 - tools/intervention-tests.mjs\n  ---\n  duration_ms: 37.914224\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 44.803604\n",
       "stderr_tail": "",
-      "elapsed_seconds": 0.07381024500000422
+      "elapsed_seconds": 0.08327660800000558
     },
     {
       "id": "intervention-ui-controls",
@@ -242,11 +242,11 @@
       ],
       "status": "pass",
       "returncode": 0,
-      "stdout_sha256": "0c8e19a1a95b258d1dbed3adde632951fae8fa0ffddc24dbdae97a2a35047844",
+      "stdout_sha256": "b93cc3be5d269e6e31018d0011f6620c0567d7f9787d4e3515c8862989feee22",
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "stdout_tail": "TAP version 13\n# PASS hash-matched catalog and scene boot; actual fields receive typed colors and rotations\n# PASS unknown manifest is refused before catalog or native scene creation\n# PASS catalog bytes mismatching manifest are refused before native creation\n# PASS rebound catalog with internally stale fixture digest is refused\n# PASS scene identity mismatch is refused before native parsing\n# PASS missing native Gate rejects readiness instead of preserving false success\n# PASS an unused malformed native Gate is checked before readiness\n# PASS incorrect native field type is refused before successful readiness\n# PASS stale identity calculation cannot overwrite the controls experiment\n# PASS scene finishing after pagehide never commits or becomes ready\n# PASS pagehide aborts the active fetch and suppresses its late error\n# {\"status\":\"pass\",\"controls\":11,\"scope\":\"Actual intervention controller, actual Web Crypto, owned fixture/scene bytes, strict typed DOM/SAI adapter and asynchronous negative controls. Not native X_ITE pixels or device validation.\"}\n# Subtest: tools/intervention-ui.test.mjs\nok 1 - tools/intervention-ui.test.mjs\n  ---\n  duration_ms: 219.604789\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 225.229835\n",
+      "stdout_tail": "TAP version 13\n# PASS hash-matched catalog and scene boot; actual fields receive typed colors and rotations\n# PASS unknown manifest is refused before catalog or native scene creation\n# PASS catalog bytes mismatching manifest are refused before native creation\n# PASS rebound catalog with internally stale fixture digest is refused\n# PASS scene identity mismatch is refused before native parsing\n# PASS missing native Gate rejects readiness instead of preserving false success\n# PASS an unused malformed native Gate is checked before readiness\n# PASS incorrect native field type is refused before successful readiness\n# PASS stale identity calculation cannot overwrite the controls experiment\n# PASS scene finishing after pagehide never commits or becomes ready\n# PASS pagehide aborts the active fetch and suppresses its late error\n# {\"status\":\"pass\",\"controls\":11,\"scope\":\"Actual intervention controller, actual Web Crypto, owned fixture/scene bytes, strict typed DOM/SAI adapter and asynchronous negative controls. Not native X_ITE pixels or device validation.\"}\n# Subtest: tools/intervention-ui.test.mjs\nok 1 - tools/intervention-ui.test.mjs\n  ---\n  duration_ms: 211.651357\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 217.21121\n",
       "stderr_tail": "",
-      "elapsed_seconds": 0.25291864300004363
+      "elapsed_seconds": 0.2470150139999987
     },
     {
       "id": "browser-http-boundaries",
@@ -261,7 +261,7 @@
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "stdout_tail": "{\"status\":\"pass\",\"controls\":5,\"scope\":\"Actual loopback HTTP MIME, malformed URI, sibling-prefix and symlink confinement. No browser executed.\"}\n",
       "stderr_tail": "",
-      "elapsed_seconds": 0.05623872299997856
+      "elapsed_seconds": 0.06243637599999374
     },
     {
       "id": "source-and-generated-consistency",
@@ -272,10 +272,10 @@
       "status": "pass",
       "returncode": 0,
       "stdout_sha256": "2982f5134159dfbbf423c5d201dbd3b5a185e84fad56701d248bf8638f134dae",
-      "stderr_sha256": "411d5ad77725dc4e012f1d390cc8693344d7cda2dc3a6e4835193ed78d96dd7e",
+      "stderr_sha256": "c4bc1eaf83cf8fe2d295ba816c296528289afdfd4d9fdf644c5dd5092f35ccb9",
       "stdout_tail": "PASS kernel and snapshot regression tests\n{\"demoSynthetic\": true, \"edges\": 7222, \"nodes\": 2181, \"ok\": true, \"output\": \"/home/user/x3d.gobbler/gobbler-flyte/observatory.json\", \"sha256\": \"1b4fe6083d53839229df277d480d05f44cce1c2143927985bd301b8f2ea70c1f\"}\nPASS compiled archive view matches source bytes\nobservatory.x3d: 854,229 bytes; 12 feathers; 17 shared meshes\nPASS scene generator rebuilds to identical bytes\nPASS executed intervention cases and scene rebuild identically\nPASS new scene XML and named references\nPASS one scene selector for every manifest feather\nPASS scene binds Atlas and domain manifest digests\nPASS animation keys and tuple counts\nPASS browser controls resolve scene names\nPASS browser controls resolve document IDs\nPASS entry page local assets exist\nPASS scene has no Script or external URL\nPASS committed single-file export is current\nPASS leak sweep\n",
-      "stderr_tail": "cted) ... ok\ntest_raw_glsl_in_mfstring_is_rejected (test_shader_guard.ShaderGuardTests.test_raw_glsl_in_mfstring_is_rejected) ... ok\ntest_shader_data_uri_cdata_preserves_spaces_and_newlines (test_shader_guard.ShaderGuardTests.test_shader_data_uri_cdata_preserves_spaces_and_newlines) ... ok\ntest_shader_data_uri_in_mfstring_is_accepted (test_shader_guard.ShaderGuardTests.test_shader_data_uri_in_mfstring_is_accepted) ... ok\ntest_unquoted_raw_glsl_is_also_rejected (test_shader_guard.ShaderGuardTests.test_unquoted_raw_glsl_is_also_rejected) ... ok\ntest_altered_bytes_fail_archived_hash (test_snapshot_audit.SnapshotAuditTests.test_altered_bytes_fail_archived_hash) ... ok\ntest_consistent_fixture_passes_without_promoting_claims (test_snapshot_audit.SnapshotAuditTests.test_consistent_fixture_passes_without_promoting_claims) ... ok\ntest_dangling_edge_fails_even_with_consistent_new_hash (test_snapshot_audit.SnapshotAuditTests.test_dangling_edge_fails_even_with_consistent_new_hash) ... ok\ntest_duplicate_edge_fails_even_after_counts_and_hashes_are_updated (test_snapshot_audit.SnapshotAuditTests.test_duplicate_edge_fails_even_after_counts_and_hashes_are_updated) ... ok\ntest_duplicate_id_fails_even_with_consistent_new_hash (test_snapshot_audit.SnapshotAuditTests.test_duplicate_id_fails_even_with_consistent_new_hash) ... ok\ntest_hash_consistent_ledger_must_contain_a_typed_quote_witness (test_snapshot_audit.SnapshotAuditTests.test_hash_consistent_ledger_must_contain_a_typed_quote_witness) ... ok\ntest_invalid_hash_shape_fails_with_explanation (test_snapshot_audit.SnapshotAuditTests.test_invalid_hash_shape_fails_with_explanation) ... ok\ntest_invalid_metadata_shape_returns_failure_instead_of_crashing (test_snapshot_audit.SnapshotAuditTests.test_invalid_metadata_shape_returns_failure_instead_of_crashing) ... ok\ntest_invalid_node_type_returns_failed_check_instead_of_crashing (test_snapshot_audit.SnapshotAuditTests.test_invalid_node_type_returns_failed_check_instead_of_crashing) ... ok\ntest_missing_ledger_row_fails_coverage (test_snapshot_audit.SnapshotAuditTests.test_missing_ledger_row_fails_coverage) ... ok\ntest_receipt_cannot_hash_outside_snapshot (test_snapshot_audit.SnapshotAuditTests.test_receipt_cannot_hash_outside_snapshot) ... ok\ntest_receipt_pins_cannot_be_absent (test_snapshot_audit.SnapshotAuditTests.test_receipt_pins_cannot_be_absent) ... ok\ntest_receipt_pins_must_match_graph (test_snapshot_audit.SnapshotAuditTests.test_receipt_pins_must_match_graph) ... ok\ntest_receipt_requires_all_eight_canonical_hashes (test_snapshot_audit.SnapshotAuditTests.test_receipt_requires_all_eight_canonical_hashes) ... ok\ntest_scene_unresolved_route_is_rejected (test_snapshot_audit.SnapshotAuditTests.test_scene_unresolved_route_is_rejected) ... ok\ntest_x3d_root_alone_does_not_supply_a_scene (test_snapshot_audit.SnapshotAuditTests.test_x3d_root_alone_does_not_supply_a_scene) ... ok\n\n----------------------------------------------------------------------\nRan 64 tests in 0.221s\n\nOK\n",
-      "elapsed_seconds": 0.905427707000058
+      "stderr_tail": "cted) ... ok\ntest_raw_glsl_in_mfstring_is_rejected (test_shader_guard.ShaderGuardTests.test_raw_glsl_in_mfstring_is_rejected) ... ok\ntest_shader_data_uri_cdata_preserves_spaces_and_newlines (test_shader_guard.ShaderGuardTests.test_shader_data_uri_cdata_preserves_spaces_and_newlines) ... ok\ntest_shader_data_uri_in_mfstring_is_accepted (test_shader_guard.ShaderGuardTests.test_shader_data_uri_in_mfstring_is_accepted) ... ok\ntest_unquoted_raw_glsl_is_also_rejected (test_shader_guard.ShaderGuardTests.test_unquoted_raw_glsl_is_also_rejected) ... ok\ntest_altered_bytes_fail_archived_hash (test_snapshot_audit.SnapshotAuditTests.test_altered_bytes_fail_archived_hash) ... ok\ntest_consistent_fixture_passes_without_promoting_claims (test_snapshot_audit.SnapshotAuditTests.test_consistent_fixture_passes_without_promoting_claims) ... ok\ntest_dangling_edge_fails_even_with_consistent_new_hash (test_snapshot_audit.SnapshotAuditTests.test_dangling_edge_fails_even_with_consistent_new_hash) ... ok\ntest_duplicate_edge_fails_even_after_counts_and_hashes_are_updated (test_snapshot_audit.SnapshotAuditTests.test_duplicate_edge_fails_even_after_counts_and_hashes_are_updated) ... ok\ntest_duplicate_id_fails_even_with_consistent_new_hash (test_snapshot_audit.SnapshotAuditTests.test_duplicate_id_fails_even_with_consistent_new_hash) ... ok\ntest_hash_consistent_ledger_must_contain_a_typed_quote_witness (test_snapshot_audit.SnapshotAuditTests.test_hash_consistent_ledger_must_contain_a_typed_quote_witness) ... ok\ntest_invalid_hash_shape_fails_with_explanation (test_snapshot_audit.SnapshotAuditTests.test_invalid_hash_shape_fails_with_explanation) ... ok\ntest_invalid_metadata_shape_returns_failure_instead_of_crashing (test_snapshot_audit.SnapshotAuditTests.test_invalid_metadata_shape_returns_failure_instead_of_crashing) ... ok\ntest_invalid_node_type_returns_failed_check_instead_of_crashing (test_snapshot_audit.SnapshotAuditTests.test_invalid_node_type_returns_failed_check_instead_of_crashing) ... ok\ntest_missing_ledger_row_fails_coverage (test_snapshot_audit.SnapshotAuditTests.test_missing_ledger_row_fails_coverage) ... ok\ntest_receipt_cannot_hash_outside_snapshot (test_snapshot_audit.SnapshotAuditTests.test_receipt_cannot_hash_outside_snapshot) ... ok\ntest_receipt_pins_cannot_be_absent (test_snapshot_audit.SnapshotAuditTests.test_receipt_pins_cannot_be_absent) ... ok\ntest_receipt_pins_must_match_graph (test_snapshot_audit.SnapshotAuditTests.test_receipt_pins_must_match_graph) ... ok\ntest_receipt_requires_all_eight_canonical_hashes (test_snapshot_audit.SnapshotAuditTests.test_receipt_requires_all_eight_canonical_hashes) ... ok\ntest_scene_unresolved_route_is_rejected (test_snapshot_audit.SnapshotAuditTests.test_scene_unresolved_route_is_rejected) ... ok\ntest_x3d_root_alone_does_not_supply_a_scene (test_snapshot_audit.SnapshotAuditTests.test_x3d_root_alone_does_not_supply_a_scene) ... ok\n\n----------------------------------------------------------------------\nRan 64 tests in 0.263s\n\nOK\n",
+      "elapsed_seconds": 1.0368050929999981
     },
     {
       "id": "full-pinned-x3d",
@@ -289,7 +289,7 @@
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "stdout_tail": "{\n  \"status\": \"pass\",\n  \"files\": 4,\n  \"passed\": 4,\n  \"paired_controls_caught\": 3,\n  \"output\": \"/home/user/x3d.gobbler/receipts/review-x3d.json\"\n}\n",
       "stderr_tail": "",
-      "elapsed_seconds": 2.4690649540000322
+      "elapsed_seconds": 2.716567363999957
     },
     {
       "id": "full-validator-receipt-identity",
@@ -297,9 +297,9 @@
       "detail": {
         "documents": 4,
         "negative_controls_caught": 3,
-        "receipt_sha256": "4f1899877d428db379cd7d496138ac5f2efe190e751d9c100b055721f538ee54"
+        "receipt_sha256": "3d77d2a3eba1369ab643b7eea1a1e0b9e27cadafed839008cf72037a8fb4ea8a"
       },
-      "elapsed_seconds": 0.005078570999899057
+      "elapsed_seconds": 0.005882119000034436
     },
     {
       "id": "blender-source-tool-image-binding",
@@ -309,7 +309,7 @@
         "receipt_sha256": "2163f9ff58f3c6275aa6791644881f5f6d20013eb08096b589b4e2738f8c6f64",
         "scope": "Existing actual import/render receipt bound to current source, tool and image; Blender was not rerun by this aggregate."
       },
-      "elapsed_seconds": 0.0010700970000243615
+      "elapsed_seconds": 0.0012367919999860533
     },
     {
       "id": "external-accrete-stability",
@@ -334,16 +334,16 @@
           "rpds-py": "2026.9.1"
         }
       },
-      "elapsed_seconds": 2.5578000077075558e-05
+      "elapsed_seconds": 5.200699996521507e-05
     },
     {
       "id": "source-stability",
       "status": "pass",
       "detail": {
-        "files": 414,
-        "inventory_sha256": "ba2f933e93b251ac8cb782b60af3d1c9b268f7b9f7a035915c8f6a95dd18e920"
+        "files": 459,
+        "inventory_sha256": "7513f29109284b97531264ada1a558f91e877b7af1617e8d69b0f7c4746d3324"
       },
-      "elapsed_seconds": 0.00011506399994232197
+      "elapsed_seconds": 0.00017125699997677657
     }
   ],
   "limitations": [
@@ -365,7 +365,7 @@
       "serve.py": "11a2aa9ab83721a9c4fc7f39d93d95d4e6f3ba27ec7c1aff3cd41507e73dc06a",
       "verify.py": "5219509d2bcc11fbda7429564a2206240b08df0ae09c5e8ad1e7d3bc0008c9e3",
       ".github/workflows/ci.yml": "324534e2cc451cc12ab94e0d5ec45dbc709e618d33804438d651e60f758836d5",
-      ".github/workflows/gobbler-flyte.yml": "ffa8919a178e6c2222d71ff29de6e57ca93a7e4b6a4deaf50b9604db6c83bb40",
+      ".github/workflows/gobbler-flyte.yml": "4fc32037ae2d55c3ba9c11263baebf7ab97561653ff0af13c0e3bcbc14c72574",
       "docs/FLYTE-REVIEW.md": "8cd5c48b9d207e82e374fbb4a12d693077dc40edad37f4c79136218774ac48d2",
       "docs/FRONTEND-REVIEW.md": "a74b416724c8b7f646d11414d5f10c4bcd68a44b9b07fae2202c649555119797",
       "docs/GOBBLER-REVIEW.md": "85aa791c9fbbd7b2d17cf956a4db2a26d0421ef8b72a441aa5d11bfb1227a0ff",
@@ -387,8 +387,8 @@
       "evidence-lab/lab.css": "5bab3764e3324fdee84141bc316335fe789baddb4c75c8adfc155a89fafade01",
       "evidence-lab/model.mjs": "96998ca5c60a584115647e093b8176b0c317ac7643b2e1499659c50959bb741a",
       "flyte/.gitignore": "4d24ef2a8912ba63480fe75084d230cab07d055690b6776992617aa3788ec1a1",
-      "flyte/DESIGN.md": "3e4b002cce961d506f70835aeeb345de70236911c1c0f7c339e234672073f33e",
-      "flyte/README.md": "9aa9f988a1c82c7a136359dcc634011e966d7817761f4b30beb06bec39fe1ff0",
+      "flyte/DESIGN.md": "93a3b06bb41345ed48714954726c9a415f129c019533231817a66a23d370dbe3",
+      "flyte/README.md": "5fd3e0a6804525f9026a4cf1ab654bd90857f23dc438a864bbd5bb42e6535afa",
       "flyte/flyte_wf.py": "07673f0fce29a3c31d63f50dc43619d74096213942897676f70a7014af9d982f",
       "flyte/requirements.txt": "9bc5100a608c1e87e7d59196f02d55100492a93d3f1a2b012e6c121654479b1a",
       "flyte/config/allowance.json": "a5a14ee74870657fb2af90bd370e54b25799725885e99b3256580b68f0509b10",
@@ -408,19 +408,21 @@
       "flyte/gobbler_flyte/gobbler.py": "af41e11a627d1551af8aa82c7261a3279af0cc870218101f6d35a0044967b742",
       "flyte/gobbler_flyte/hitl.py": "d8824ab9180af8861097a5bbc634ec2fb48e3ce80321222cf7a9b801f0993e75",
       "flyte/gobbler_flyte/llm.py": "2804fd41cabc008dcd0d3f85122c9ba024e9d50b1082465d8bc3b23c401f2339",
+      "flyte/gobbler_flyte/memory.py": "cd2da4e7fd026c12b2639cf90086cbbe6551777edba8360f7a0082d84c355877",
       "flyte/gobbler_flyte/relevance.py": "07e44c2fe4bf56be18625e72b1dff1a8969f09ca7b4bebd4214f7749118a0ac8",
-      "flyte/gobbler_flyte/runner.py": "a1f8d8d75db988cd831ee3cece42274fe2e3bf3e0cce0e1589becfa137c32111",
-      "flyte/gobbler_flyte/sim.py": "5e1166f4c6543acee2598387ff6a1bf016a0d61ab2e32cfd29991c838abeea16",
+      "flyte/gobbler_flyte/runner.py": "83bf19518fa9ca3197e2c01efcda92e2050ee702d67ef193fd4d6ebf0cb1687b",
+      "flyte/gobbler_flyte/sim.py": "2f49428d1dc51e029803cda5c2f2d06f73cdff61f06d8c69e3ba029bce01560a",
       "flyte/gobbler_flyte/sources.py": "fe768c789b6760b9b598904d82b188327819f48050fb74e162b51b411aa82ce9",
       "flyte/gobbler_flyte/state.py": "665e6e5a4f106414e14253292cb4248da202bc22afd8e4e9196a36e8061fe500",
+      "flyte/gobbler_flyte/transport.py": "6aa61c3227ae430e93e9ded61b0361ec01f40039c9aabbb54d44460110ef2931",
       "flyte/gobbler_flyte/loom/__init__.py": "04536e187d25ac2d02d4eda9fba178f61499995d935ee88a695bed2df897a6a4",
       "flyte/gobbler_flyte/loom/traps.py": "880195a4974650b9b682e4526fb4852c86446d44d4083e64c5182fe5593601cc",
       "flyte/gobbler_flyte/loom/untrusted.py": "046d8b79b3ab3b72ac24b39bc7237d3d4aada69d959cece6e166d932ba4666f1",
       "flyte/gobbler_flyte/organs/__init__.py": "f406095723ef41a89d00941b8c9949296ca0590306aff5cb69f7a89379636db1",
-      "flyte/gobbler_flyte/organs/keeper.py": "6cda346fa86381555301278da6327cf7d581c82e9fb9ce3f696740ffe71a2888",
+      "flyte/gobbler_flyte/organs/keeper.py": "c9563ebc4a1b20f8197bd33a3d3fa15a54c6dd04fee99da5423bc144ffee88ce",
       "flyte/gobbler_flyte/organs/scout.py": "45d1a88710c917a0c287ce603fe3c83836428b87c6cdc48e89c116f66fe39d34",
-      "flyte/gobbler_flyte/organs/weaver.py": "5d88b50a8e25926a89d30ef3b2f523c1363da40fd8e70d83d7846463c6379c53",
-      "flyte/gobbler_flyte/organs/witness.py": "85d1c30ee107f341581b1f6e8db5ba5a8c104750e0b93aa63cf1fa716d5674bd",
+      "flyte/gobbler_flyte/organs/weaver.py": "5473f1ea8061f23ec1b7ab1bf1edf68f3a07ff5cb3f734a564e5bf7629a897b4",
+      "flyte/gobbler_flyte/organs/witness.py": "36c402f4686c2ccedc4a8628e3dc44d9e5fcc597644fd23bcec4702dcec9a6a9",
       "flyte/runs/synergy-sweep.json": "b39ac96d60561afe02a421c88ff6438d56c10007a9c7c8be4308b18f17ee26b1",
       "flyte/runs/sim-2026-11-18/spend.jsonl": "6064a8f0eb3dfba68cc9d244a7d8a39852056a22c9aeca653163ac530b55bc16",
       "flyte/runs/sim-2026-11-18/summary.json": "648b132a001af9b04f30f3276da7eeba6366e6206c5015fc2be626d97fb40a66",
@@ -509,7 +511,50 @@
       "flyte/runs/sim-2026-11-18-r2/outbox/00044-community-signal.md": "37929ee73e8fa349b2b087652a3723935a830d7accf90f67658cb509c4fc5b03",
       "flyte/runs/sim-2026-11-18-r2/outbox/00045-community-signal.md": "c6377da90114194357026a537e7b1b06ba0fd3a8aa58ae0378c28000609cdd15",
       "flyte/runs/sim-2026-11-18-r2/stills/world-35.png": "952c607bb663f50dc3e4ff4557a9dadfd6786732af3617e14f8e47ca51f39df5",
-      "flyte/tests/test_flyte.py": "37dcc315c9401a3e21c7737bcd77821afec2aae3df023e2e43ad111d18bfbc73",
+      "flyte/runs/sim-2026-11-18-r3/contamination-audit.json": "2a4495cfce11a26171e98266287f6d75028114c0f97b18606248e2e7cea99a56",
+      "flyte/runs/sim-2026-11-18-r3/memory-transport-validation.json": "5c546083fe87e1bc73b253e9cc9f9a929c9bc30818b439f29a2db93dd5c356db",
+      "flyte/runs/sim-2026-11-18-r3/memory-transport.jsonl": "2393d7c493368b42c2a9fb0a36df6c4d61836e49e5d28607f030895067d1c5a7",
+      "flyte/runs/sim-2026-11-18-r3/spend.jsonl": "7bedadabbae70c73379c5ddf3dca62cbe42c72fad76e88aef61681e6ca97043c",
+      "flyte/runs/sim-2026-11-18-r3/tape.jsonl": "8e804e0f93b56a007e457b881cb1bb377600af68540830ccb2a8619206acebf1",
+      "flyte/runs/sim-2026-11-18-r3/turns.jsonl": "cd9ac926e4fabdf24662d474e36d47cdd16443d065c8f604966c85e2e99dd075",
+      "flyte/runs/sim-2026-11-18-r3/world-archive.json": "e995342143de04abe32adfd3fbe410a63a76ae652eef524e246ee40e9b683f1f",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00001-standards-note.md": "46497a28317837034eaf5f3bbe6b9360f2afa7a4dbd92109ea2958bf2ba9e7e2",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00002-foldback-docs.md": "6a8ed5f332ba7db9ceb36a1c87d6ce32457eeddb317fcda0bd14e4f6cb5eadc3",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00003-adjacent-watch.md": "4d599fe00ceec6b612fe7b0996e24ded0221ca2212a8be889266f2b21843934a",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00004-community-signal.md": "98aae7027140ae589782ff9a05783feb0c9ab7f31d4005778160920f21f09680",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00005-standards-note.md": "58320fe1b31fff38457be1cee8209bd89416a5f9baf4a6d11f90d6ab5600ccb2",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00006-adjacent-watch.md": "18267922c15a80ca21442500b7f63f585428836fa3ba908ad867bd80422a8913",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00007-foldback-docs.md": "fc16eefb2823a33b9858e5d8b849df9663b71867b98df3964634ffddcdefb564",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00008-foldback-docs.md": "688f2a5dc16818afad9641ec204777e640d343b5bc467a1a933ce3e8bc5fb2ab",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00009-standards-note.md": "8799e605f60b709d39419de41103f2c34e5aa3968704dbe889b87ba80930c33b",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00010-standards-note.md": "cf98a048b0d98be966f6b344fdba2a6d947bcf03eb62ebb198a2b8b5015dc51f",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00011-foldback-docs.md": "73baa48183ff475c6557240e30b8f168412b66da3980204ed77e9cb8b4a6816a",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00012-adjacent-watch.md": "a93ec279d278d861c08936d22c4800930b57880336bf6ba888325caf558bc63f",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00013-rerun-xite-rig.md": "e078019b6d9cc63e4588fe596c3844deb3fcefa89d3cee79a203b0f217b2a0c7",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00016-standards-note.md": "177b230fd414dcd784f272f121b22d217dbcdb7cb53e9442bb0cd80af8ddded9",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00017-standards-note.md": "8038dad6cc833d1ae6c53e89897dd5d84fee08967cdacda2e0afa15b3a2e3c9d",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00018-foldback-docs.md": "a812d5c0bed303805ed83a92b8bdf9d1dbe0f45b8be6bc2a3cbaab3c2b1c0787",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00019-community-signal.md": "cccad672fa514f691fd580e6151a1cd25bdfee2e9ea85b33b0b1bf3e8625cdc5",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00020-validator-diff.md": "f28183222f845fd8a1fb3e8c0e70fc6bb756c4001f1dc2c5b08f58bf1362e25b",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00021-community-signal.md": "7bb9baf1978fa986d6aa7a2d11095e971d6baad9129ed996b24e511a32f500aa",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00027-community-signal.md": "e724c0c5d550f7f7bd7f06c0b57b9791f128afc3f11629d8f620edcb39288c07",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00028-foldback-docs.md": "bf22c16b6844ddd08e8be0f70d4df1ce2eaf3b8f21397a9c4bbc2c748b9818ef",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00029-community-signal.md": "6834cebf21ac7eb65de591a59f5928337a08085c49e05d47f22940f8b12ad202",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00030-foldback-docs.md": "a0f1008c4f8a06589ed3f897843277ba9cf3800b046802e83d7fb65035e6b014",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00031-bridge-check.md": "1986dcf661fcf486615fd66796c787374c9a9363a1a4bb699340f63005b45bd0",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00032-foldback-docs.md": "16d7192e7cbb875296ce74d051a25472f7701c32ec7e8a18325f6aba9dfcc195",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00036-foldback-docs.md": "896f8793a2b5e012e5ad853880bd2ab0f149b806fe9c03f5c1297b178ff3835b",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00037-standards-note.md": "3f7dc6c8642742b8c314f34a5791f2ce070f563d08a4710b4e24b700c7dcb3bc",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00038-atlas-reading-card.md": "e50651fb58022de5f009d96fecf32298cc0ec9c19020000ed154b6c03a1adcfe",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00039-blenderizer-roundtrip.md": "1fba834f7a128d1b4ccd6adb63c23b3958ba9b110da890358be430a5a12542a7",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00040-standards-note.md": "b30790fe5ff4e460d3cf268b1e12decec395646e52ca650bf773ab567f8470b3",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00041-foldback-docs.md": "535a68b6b2401098d031ca0a574f3985bd33f2e4d85f7b5031085be2faab146f",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00042-standards-note.md": "43580562467b4ed49ea1eb392b4a8620c5ae4710ece3d0abcfbff9f62f54ff96",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00043-foldback-docs.md": "91482f15ab4715470d79461e8006dd6283758d9d50e373f48d2515ee433076a1",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00044-community-signal.md": "6f189b742ec59443783864e7baf27755d911a3f366d41e594f54bf6ee2818371",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00045-community-signal.md": "029ec5f3ff63562a84b1f1ac58b9dd582c803e3b14f7a7c2e8d624c992cf2091",
+      "flyte/schemas/agentic-memory.schema.json": "916d65c335f4a562f6aebd90b971680cac604ab1a965e0305db2442c2a1f195a",
+      "flyte/tests/test_flyte.py": "4b4879c307889e73903e9ded12bd90c92051e68ef3fe1aed5eb09095ad299fb6",
       "flywheel-review/ATLAS-INSIGHTS.html": "61e536ff89feb1c67f0353423dd800f260e36f4b4aebfe5de27db29ccca2b7eb",
       "flywheel-review/ATLAS-INSIGHTS.md": "f851a33778689e6ac385f777c4677e520c38ad4a90d670a5124f05423bbe9574",
       "flywheel-review/FLYWHEEL.md": "e1d0d841862651ee759f0ff096afb4da7d97a0f6ab978d3d04846b34e5bc2d30",
@@ -769,7 +814,7 @@
       "vendor/x_ite/assets/lib/woff2_decoder.js": "a11032721079bcff222e2664cfb49c518de7d4e2ee0468d4d128a9fe03c91e8b",
       "vendor/x_ite/assets/linetype/linetypes.png": "824a23ce80644950a9957bba5f879dc72cb36c86964bcb750d7e17e56c3fca1b"
     },
-    "inventory_sha256": "ba2f933e93b251ac8cb782b60af3d1c9b268f7b9f7a035915c8f6a95dd18e920"
+    "inventory_sha256": "7513f29109284b97531264ada1a558f91e877b7af1617e8d69b0f7c4746d3324"
   },
   "external_before": {
     "admission_instrument": {
@@ -1681,7 +1726,7 @@
       "serve.py": "11a2aa9ab83721a9c4fc7f39d93d95d4e6f3ba27ec7c1aff3cd41507e73dc06a",
       "verify.py": "5219509d2bcc11fbda7429564a2206240b08df0ae09c5e8ad1e7d3bc0008c9e3",
       ".github/workflows/ci.yml": "324534e2cc451cc12ab94e0d5ec45dbc709e618d33804438d651e60f758836d5",
-      ".github/workflows/gobbler-flyte.yml": "ffa8919a178e6c2222d71ff29de6e57ca93a7e4b6a4deaf50b9604db6c83bb40",
+      ".github/workflows/gobbler-flyte.yml": "4fc32037ae2d55c3ba9c11263baebf7ab97561653ff0af13c0e3bcbc14c72574",
       "docs/FLYTE-REVIEW.md": "8cd5c48b9d207e82e374fbb4a12d693077dc40edad37f4c79136218774ac48d2",
       "docs/FRONTEND-REVIEW.md": "a74b416724c8b7f646d11414d5f10c4bcd68a44b9b07fae2202c649555119797",
       "docs/GOBBLER-REVIEW.md": "85aa791c9fbbd7b2d17cf956a4db2a26d0421ef8b72a441aa5d11bfb1227a0ff",
@@ -1703,8 +1748,8 @@
       "evidence-lab/lab.css": "5bab3764e3324fdee84141bc316335fe789baddb4c75c8adfc155a89fafade01",
       "evidence-lab/model.mjs": "96998ca5c60a584115647e093b8176b0c317ac7643b2e1499659c50959bb741a",
       "flyte/.gitignore": "4d24ef2a8912ba63480fe75084d230cab07d055690b6776992617aa3788ec1a1",
-      "flyte/DESIGN.md": "3e4b002cce961d506f70835aeeb345de70236911c1c0f7c339e234672073f33e",
-      "flyte/README.md": "9aa9f988a1c82c7a136359dcc634011e966d7817761f4b30beb06bec39fe1ff0",
+      "flyte/DESIGN.md": "93a3b06bb41345ed48714954726c9a415f129c019533231817a66a23d370dbe3",
+      "flyte/README.md": "5fd3e0a6804525f9026a4cf1ab654bd90857f23dc438a864bbd5bb42e6535afa",
       "flyte/flyte_wf.py": "07673f0fce29a3c31d63f50dc43619d74096213942897676f70a7014af9d982f",
       "flyte/requirements.txt": "9bc5100a608c1e87e7d59196f02d55100492a93d3f1a2b012e6c121654479b1a",
       "flyte/config/allowance.json": "a5a14ee74870657fb2af90bd370e54b25799725885e99b3256580b68f0509b10",
@@ -1724,19 +1769,21 @@
       "flyte/gobbler_flyte/gobbler.py": "af41e11a627d1551af8aa82c7261a3279af0cc870218101f6d35a0044967b742",
       "flyte/gobbler_flyte/hitl.py": "d8824ab9180af8861097a5bbc634ec2fb48e3ce80321222cf7a9b801f0993e75",
       "flyte/gobbler_flyte/llm.py": "2804fd41cabc008dcd0d3f85122c9ba024e9d50b1082465d8bc3b23c401f2339",
+      "flyte/gobbler_flyte/memory.py": "cd2da4e7fd026c12b2639cf90086cbbe6551777edba8360f7a0082d84c355877",
       "flyte/gobbler_flyte/relevance.py": "07e44c2fe4bf56be18625e72b1dff1a8969f09ca7b4bebd4214f7749118a0ac8",
-      "flyte/gobbler_flyte/runner.py": "a1f8d8d75db988cd831ee3cece42274fe2e3bf3e0cce0e1589becfa137c32111",
-      "flyte/gobbler_flyte/sim.py": "5e1166f4c6543acee2598387ff6a1bf016a0d61ab2e32cfd29991c838abeea16",
+      "flyte/gobbler_flyte/runner.py": "83bf19518fa9ca3197e2c01efcda92e2050ee702d67ef193fd4d6ebf0cb1687b",
+      "flyte/gobbler_flyte/sim.py": "2f49428d1dc51e029803cda5c2f2d06f73cdff61f06d8c69e3ba029bce01560a",
       "flyte/gobbler_flyte/sources.py": "fe768c789b6760b9b598904d82b188327819f48050fb74e162b51b411aa82ce9",
       "flyte/gobbler_flyte/state.py": "665e6e5a4f106414e14253292cb4248da202bc22afd8e4e9196a36e8061fe500",
+      "flyte/gobbler_flyte/transport.py": "6aa61c3227ae430e93e9ded61b0361ec01f40039c9aabbb54d44460110ef2931",
       "flyte/gobbler_flyte/loom/__init__.py": "04536e187d25ac2d02d4eda9fba178f61499995d935ee88a695bed2df897a6a4",
       "flyte/gobbler_flyte/loom/traps.py": "880195a4974650b9b682e4526fb4852c86446d44d4083e64c5182fe5593601cc",
       "flyte/gobbler_flyte/loom/untrusted.py": "046d8b79b3ab3b72ac24b39bc7237d3d4aada69d959cece6e166d932ba4666f1",
       "flyte/gobbler_flyte/organs/__init__.py": "f406095723ef41a89d00941b8c9949296ca0590306aff5cb69f7a89379636db1",
-      "flyte/gobbler_flyte/organs/keeper.py": "6cda346fa86381555301278da6327cf7d581c82e9fb9ce3f696740ffe71a2888",
+      "flyte/gobbler_flyte/organs/keeper.py": "c9563ebc4a1b20f8197bd33a3d3fa15a54c6dd04fee99da5423bc144ffee88ce",
       "flyte/gobbler_flyte/organs/scout.py": "45d1a88710c917a0c287ce603fe3c83836428b87c6cdc48e89c116f66fe39d34",
-      "flyte/gobbler_flyte/organs/weaver.py": "5d88b50a8e25926a89d30ef3b2f523c1363da40fd8e70d83d7846463c6379c53",
-      "flyte/gobbler_flyte/organs/witness.py": "85d1c30ee107f341581b1f6e8db5ba5a8c104750e0b93aa63cf1fa716d5674bd",
+      "flyte/gobbler_flyte/organs/weaver.py": "5473f1ea8061f23ec1b7ab1bf1edf68f3a07ff5cb3f734a564e5bf7629a897b4",
+      "flyte/gobbler_flyte/organs/witness.py": "36c402f4686c2ccedc4a8628e3dc44d9e5fcc597644fd23bcec4702dcec9a6a9",
       "flyte/runs/synergy-sweep.json": "b39ac96d60561afe02a421c88ff6438d56c10007a9c7c8be4308b18f17ee26b1",
       "flyte/runs/sim-2026-11-18/spend.jsonl": "6064a8f0eb3dfba68cc9d244a7d8a39852056a22c9aeca653163ac530b55bc16",
       "flyte/runs/sim-2026-11-18/summary.json": "648b132a001af9b04f30f3276da7eeba6366e6206c5015fc2be626d97fb40a66",
@@ -1825,7 +1872,50 @@
       "flyte/runs/sim-2026-11-18-r2/outbox/00044-community-signal.md": "37929ee73e8fa349b2b087652a3723935a830d7accf90f67658cb509c4fc5b03",
       "flyte/runs/sim-2026-11-18-r2/outbox/00045-community-signal.md": "c6377da90114194357026a537e7b1b06ba0fd3a8aa58ae0378c28000609cdd15",
       "flyte/runs/sim-2026-11-18-r2/stills/world-35.png": "952c607bb663f50dc3e4ff4557a9dadfd6786732af3617e14f8e47ca51f39df5",
-      "flyte/tests/test_flyte.py": "37dcc315c9401a3e21c7737bcd77821afec2aae3df023e2e43ad111d18bfbc73",
+      "flyte/runs/sim-2026-11-18-r3/contamination-audit.json": "2a4495cfce11a26171e98266287f6d75028114c0f97b18606248e2e7cea99a56",
+      "flyte/runs/sim-2026-11-18-r3/memory-transport-validation.json": "5c546083fe87e1bc73b253e9cc9f9a929c9bc30818b439f29a2db93dd5c356db",
+      "flyte/runs/sim-2026-11-18-r3/memory-transport.jsonl": "2393d7c493368b42c2a9fb0a36df6c4d61836e49e5d28607f030895067d1c5a7",
+      "flyte/runs/sim-2026-11-18-r3/spend.jsonl": "7bedadabbae70c73379c5ddf3dca62cbe42c72fad76e88aef61681e6ca97043c",
+      "flyte/runs/sim-2026-11-18-r3/tape.jsonl": "8e804e0f93b56a007e457b881cb1bb377600af68540830ccb2a8619206acebf1",
+      "flyte/runs/sim-2026-11-18-r3/turns.jsonl": "cd9ac926e4fabdf24662d474e36d47cdd16443d065c8f604966c85e2e99dd075",
+      "flyte/runs/sim-2026-11-18-r3/world-archive.json": "e995342143de04abe32adfd3fbe410a63a76ae652eef524e246ee40e9b683f1f",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00001-standards-note.md": "46497a28317837034eaf5f3bbe6b9360f2afa7a4dbd92109ea2958bf2ba9e7e2",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00002-foldback-docs.md": "6a8ed5f332ba7db9ceb36a1c87d6ce32457eeddb317fcda0bd14e4f6cb5eadc3",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00003-adjacent-watch.md": "4d599fe00ceec6b612fe7b0996e24ded0221ca2212a8be889266f2b21843934a",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00004-community-signal.md": "98aae7027140ae589782ff9a05783feb0c9ab7f31d4005778160920f21f09680",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00005-standards-note.md": "58320fe1b31fff38457be1cee8209bd89416a5f9baf4a6d11f90d6ab5600ccb2",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00006-adjacent-watch.md": "18267922c15a80ca21442500b7f63f585428836fa3ba908ad867bd80422a8913",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00007-foldback-docs.md": "fc16eefb2823a33b9858e5d8b849df9663b71867b98df3964634ffddcdefb564",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00008-foldback-docs.md": "688f2a5dc16818afad9641ec204777e640d343b5bc467a1a933ce3e8bc5fb2ab",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00009-standards-note.md": "8799e605f60b709d39419de41103f2c34e5aa3968704dbe889b87ba80930c33b",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00010-standards-note.md": "cf98a048b0d98be966f6b344fdba2a6d947bcf03eb62ebb198a2b8b5015dc51f",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00011-foldback-docs.md": "73baa48183ff475c6557240e30b8f168412b66da3980204ed77e9cb8b4a6816a",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00012-adjacent-watch.md": "a93ec279d278d861c08936d22c4800930b57880336bf6ba888325caf558bc63f",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00013-rerun-xite-rig.md": "e078019b6d9cc63e4588fe596c3844deb3fcefa89d3cee79a203b0f217b2a0c7",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00016-standards-note.md": "177b230fd414dcd784f272f121b22d217dbcdb7cb53e9442bb0cd80af8ddded9",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00017-standards-note.md": "8038dad6cc833d1ae6c53e89897dd5d84fee08967cdacda2e0afa15b3a2e3c9d",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00018-foldback-docs.md": "a812d5c0bed303805ed83a92b8bdf9d1dbe0f45b8be6bc2a3cbaab3c2b1c0787",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00019-community-signal.md": "cccad672fa514f691fd580e6151a1cd25bdfee2e9ea85b33b0b1bf3e8625cdc5",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00020-validator-diff.md": "f28183222f845fd8a1fb3e8c0e70fc6bb756c4001f1dc2c5b08f58bf1362e25b",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00021-community-signal.md": "7bb9baf1978fa986d6aa7a2d11095e971d6baad9129ed996b24e511a32f500aa",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00027-community-signal.md": "e724c0c5d550f7f7bd7f06c0b57b9791f128afc3f11629d8f620edcb39288c07",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00028-foldback-docs.md": "bf22c16b6844ddd08e8be0f70d4df1ce2eaf3b8f21397a9c4bbc2c748b9818ef",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00029-community-signal.md": "6834cebf21ac7eb65de591a59f5928337a08085c49e05d47f22940f8b12ad202",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00030-foldback-docs.md": "a0f1008c4f8a06589ed3f897843277ba9cf3800b046802e83d7fb65035e6b014",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00031-bridge-check.md": "1986dcf661fcf486615fd66796c787374c9a9363a1a4bb699340f63005b45bd0",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00032-foldback-docs.md": "16d7192e7cbb875296ce74d051a25472f7701c32ec7e8a18325f6aba9dfcc195",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00036-foldback-docs.md": "896f8793a2b5e012e5ad853880bd2ab0f149b806fe9c03f5c1297b178ff3835b",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00037-standards-note.md": "3f7dc6c8642742b8c314f34a5791f2ce070f563d08a4710b4e24b700c7dcb3bc",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00038-atlas-reading-card.md": "e50651fb58022de5f009d96fecf32298cc0ec9c19020000ed154b6c03a1adcfe",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00039-blenderizer-roundtrip.md": "1fba834f7a128d1b4ccd6adb63c23b3958ba9b110da890358be430a5a12542a7",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00040-standards-note.md": "b30790fe5ff4e460d3cf268b1e12decec395646e52ca650bf773ab567f8470b3",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00041-foldback-docs.md": "535a68b6b2401098d031ca0a574f3985bd33f2e4d85f7b5031085be2faab146f",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00042-standards-note.md": "43580562467b4ed49ea1eb392b4a8620c5ae4710ece3d0abcfbff9f62f54ff96",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00043-foldback-docs.md": "91482f15ab4715470d79461e8006dd6283758d9d50e373f48d2515ee433076a1",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00044-community-signal.md": "6f189b742ec59443783864e7baf27755d911a3f366d41e594f54bf6ee2818371",
+      "flyte/runs/sim-2026-11-18-r3/outbox/00045-community-signal.md": "029ec5f3ff63562a84b1f1ac58b9dd582c803e3b14f7a7c2e8d624c992cf2091",
+      "flyte/schemas/agentic-memory.schema.json": "916d65c335f4a562f6aebd90b971680cac604ab1a965e0305db2442c2a1f195a",
+      "flyte/tests/test_flyte.py": "4b4879c307889e73903e9ded12bd90c92051e68ef3fe1aed5eb09095ad299fb6",
       "flywheel-review/ATLAS-INSIGHTS.html": "61e536ff89feb1c67f0353423dd800f260e36f4b4aebfe5de27db29ccca2b7eb",
       "flywheel-review/ATLAS-INSIGHTS.md": "f851a33778689e6ac385f777c4677e520c38ad4a90d670a5124f05423bbe9574",
       "flywheel-review/FLYWHEEL.md": "e1d0d841862651ee759f0ff096afb4da7d97a0f6ab978d3d04846b34e5bc2d30",
@@ -2085,7 +2175,7 @@
       "vendor/x_ite/assets/lib/woff2_decoder.js": "a11032721079bcff222e2664cfb49c518de7d4e2ee0468d4d128a9fe03c91e8b",
       "vendor/x_ite/assets/linetype/linetypes.png": "824a23ce80644950a9957bba5f879dc72cb36c86964bcb750d7e17e56c3fca1b"
     },
-    "inventory_sha256": "ba2f933e93b251ac8cb782b60af3d1c9b268f7b9f7a035915c8f6a95dd18e920"
+    "inventory_sha256": "7513f29109284b97531264ada1a558f91e877b7af1617e8d69b0f7c4746d3324"
   },
   "native_browser": {
     "status": "pass",
@@ -2095,7 +2185,7 @@
     "included_in_aggregate": false,
     "scope": "Independent native receipt, not rerun by this aggregate. A blocked launch is not a pass."
   },
-  "finished_utc": "2026-11-18T03:57:01.052010+00:00",
+  "finished_utc": "2026-11-19T00:00:16.278102+00:00",
   "tool_sha256": "bab3eb97b6c27f981602ac03edf2d589767bb52c962dff831270862c605fc764",
-  "report_sha256": "3403b74a34f653effe46b7bbc12e7ca126f8601b90bb02f7ab7cb194d4d1f7f5"
+  "report_sha256": "6ba8b3cb9365e4345ca117f5839d3df9871019814496c4601d0e396669566ad9"
 }

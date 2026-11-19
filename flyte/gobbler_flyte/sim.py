@@ -91,11 +91,30 @@ def run_day(out_dir: Path, start: str = "2026-11-18T00:00:00Z", ticks: int = 48,
     tape = [json.loads(line) for line in (out_dir / "tape.jsonl").read_text().splitlines()]
     turns = [json.loads(line) for line in (out_dir / "turns.jsonl").read_text().splitlines()] if (out_dir / "turns.jsonl").exists() else []
     spend = [json.loads(line) for line in (out_dir / "spend.jsonl").read_text().splitlines()] if (out_dir / "spend.jsonl").exists() else []
-    return {"ticks": ticks, "summaries": summaries, "tape": tape, "turns": turns, "spend": spend}
+    from .memory import MemoryStore, audit_contamination
+    mem = MemoryStore(out_dir / "memory.sqlite")
+    audit = audit_contamination(mem)
+    kinds = {}
+    for m in mem.all():
+        kinds[m.kind] = kinds.get(m.kind, 0) + 1
+    try:
+        from .transport import export, validate
+        records = export(mem, world_id=(json.loads((out_dir / "world-archive.json").read_text()).get("world_id") or "world")[:16]
+                         if (out_dir / "world-archive.json").exists() else "world")
+        (out_dir / "memory-transport.jsonl").write_text("".join(json.dumps(r, sort_keys=True) + "\n" for r in records))
+        transport = validate(records)
+    except ImportError as e:                      # jsonschema missing: say so, never pretend it validated
+        transport = {"valid": None, "not_run": str(e)}
+    (out_dir / "memory-transport-validation.json").write_text(json.dumps(transport, indent=1, sort_keys=True))
+    mem.close()
+    (out_dir / "contamination-audit.json").write_text(json.dumps({**audit, "memory_kinds": kinds}, indent=1, sort_keys=True))
+    return {"ticks": ticks, "summaries": summaries, "tape": tape, "turns": turns, "spend": spend, "audit": audit, "memory_kinds": kinds, "transport": transport}
 
 
 if __name__ == "__main__":
     import sys
     r = run_day(Path(sys.argv[1] if len(sys.argv) > 1 else "sim-out"), loom_dir=sys.argv[2] if len(sys.argv) > 2 else None)
     print(json.dumps({"ticks": r["ticks"], "rows": len(r["tape"]), "turns": len(r["turns"]),
-                      "admitted": sum(t["admitted"] for t in r["turns"]), "spend_usd": round(sum(s["actual_usd"] for s in r["spend"]), 6)}))
+                      "admitted": sum(t["admitted"] for t in r["turns"]), "spend_usd": round(sum(s["actual_usd"] for s in r["spend"]), 6),
+                      "contexts": r["audit"]["contexts"], "held_out": r["audit"]["held_out"], "leaks": len(r["audit"]["leaks"]),
+                      "memory_kinds": r["memory_kinds"]}))

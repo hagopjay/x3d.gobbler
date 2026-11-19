@@ -9,7 +9,7 @@ Design, numbers and limits: [DESIGN.md](DESIGN.md). A simulated day, with its ta
 ```bash
 cd flyte
 pip install -r requirements.txt -r ../../x3d.accrete/requirements.txt   # or set ACCRETE_DIR to an x3d.accrete checkout
-python -m unittest discover -s tests            # 32 tests, no network, no API key
+python -m unittest discover -s tests            # 41 tests, no network, no API key
 python -m gobbler_flyte tick --state state      # one offline tick on the snapshot feeds
 python -m gobbler_flyte.sim /tmp/day ../../x3d.loom   # 48 ticks on a simulated clock (about 5 s)
 python -m gobbler_flyte answer 7 A --by hagopjay       # local mode: answer a waiting question
