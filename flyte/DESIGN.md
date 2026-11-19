@@ -253,3 +253,48 @@ T5 (judge validity) and T9 (swarms) have no subject in this loop. The map says s
 **The re-run day** is in `runs/sim-2026-11-18-r4/`, with r3 untouched. Per-turn outcomes are identical to r3: 35 admitted, the same actions, choices, attempts, grades and spend ($0.028298). All 48 cycles were assayed, with 0 stops. The canary held 4 of 4 once. T3 state_of_record passed 35 of 35. Pooled over 61 attempts, pass@1 is 0.574 and pass^3 is 0.182. The pooling is stated in the report: these are different tasks, not K5's repeated trials. 18 of 35 turns were admitted on the first attempt, and the most frequent refusal was GATE_CONTAINMENT (9, tied with MCP_SEMANTIC_PROFILE_COMPONENT).
 
 Where every Atlas theme lives, what is built, what is ready and what comes next: [ATLAS-MAP.md](ATLAS-MAP.md). Tests: 49 pass, normally and under `-O`.
+
+## 17. Second external review: hardening (19 Nov 2026)
+
+HagopJay sent the loop to an outside reviewer with a prompt that named our own weak spots. The reviewer returned a ranked review, six patch groups, 26 before/after probes and a complete patch against `9d4671d`. The patch is applied **unchanged** as one commit. This thread then re-ran the evidence on its own host instead of relying on the reviewer's receipts (`receipts/review2-reproduction.json`, grade C):
+
+- **Probes.** Each of the 26 probes fails on an untouched `9d4671d` worktree and passes on the patched tree. Every baseline failure is a real assertion or the reported KeyError, not an import error.
+- **Crash campaign.** In the reviewer's seven after-write process deaths, the baseline fails 3: world append (episode subject differs from the committed candidate), tape append (duplicate cycle-open event) and library seed (incomplete). The patched tree passes 7 of 7.
+- **Tests and checks.** 94 tests pass, also under `-O`. `check_release.py` passes 19/19, and `verify.py` reports 0 FAIL.
+- **Simulated day** (`runs/sim-2026-11-18-r5/`, with r1 to r4 untouched).
+  - Unchanged from r4: the per-turn outcomes (35 admitted; same actions, choices, attempts and grades) and the actual spend ($0.028298 over 52 calls).
+  - Changed: the pre-call estimates, because the prompt changed.
+  - Contexts fall from 45 to 37 unique hashes, because hidden exclusions no longer enter the packet.
+  - The canary now holds 5 of 5 across gate, validator and traps. T3 is checked on all 48 cycles, not just the 35 with turns.
+
+What changed in substance:
+
+| Area | Before | After |
+|---|---|---|
+| Sleeper recovery | Checkpoint deleted before the scheduler saved; a crash wedged the next tick | Scheduler state saved first; in-flight cycles resume at their saved node with the original candidate |
+| STOP | Checked once per tick, and a cleared long stop let overdue sleepers take the timeout pick at once | Checked after every resumed cycle; a cleared stop reopens a full 4 h window |
+| Prompt boundary | Sealed refusals could re-enter through the direct retry text; model-echoed validator text reached later prompts raw | One admission path for all feedback; diagnostics quoted or withheld; the compiled prompt is hash-bound before the adapter |
+| Context packet | Hidden ids appeared in `excluded`; the byte cap applied before final serialization | Exclusions go to an operator-only sink; the cap is enforced on the final bytes |
+| Transport | Catalogue rows exported as executed C failures; a tampered `payload_sha256` validated after silent repair; reviewer guessed from the first word | A conservative projection with `restorable: false`; supplied hashes are checked; unknown decisions abstain; twins stay null without structured proof |
+| Assayer | The canary skipped traps and ran once a day whatever changed; T3 only ran with a turn; egress only checked the chosen signal; a future pin date passed | Instrument-bound canary with trap controls; T3 on every cycle; per-fetch receipts; future dates refused; `assay-day/2` with explicit denominators and same-signal reliability left unmeasured |
+| Atlas library | Seeded if `aie:T13` existed; theses graded L regardless of premises | Full-inventory check with resumable seed; weakest-premise thesis grades (6 theses fall to S); explicit archived rebuild for old libraries |
+
+**This thread's own pass.** 21 of the 94 tests are pytest functions (parametrize, raises). CI ran `python -m unittest discover`, which silently skips them: it runs 73. CI and the README now use pytest, normally and under `-O`.
+
+**Statistics corrected** (the reviewer's reading, which we accept):
+- "pass@1 0.574" was 35 Witness passes in 61 adaptive attempts.
+- Task first-attempt admission is 18 of 35 (0.514).
+- The old pass^3 was a combination ratio over different tasks, not reliability.
+- "2 held out" means two linked memory records, not two contexts.
+- Matching r3 to r5 is a regression result. FakeLLM ignores its prompt, so these runs say nothing about whether memory helps a model.
+
+**Narrower claims.** The contamination audit measures exposure-policy compliance, not grader gaming. The retry cap is an invariant, not an RL method. A typed date is not a re-audit. The Atlas's read statuses are attributed self-reports. The two bad checks caught in §16 were first-run debugging, not autonomous self-correction.
+
+**Deployment.** The cron has never run (`FLYTE_ENABLED` is unset), so no live `library.sqlite` needs the archived rebuild. If one ever does: stop the runner, then run `python -m gobbler_flyte.atlas rebuild-library /abs/path/library.sqlite`. It archives the old database; it does not delete it.
+
+**Next, from the review.** In order:
+1. Give each Assayer check a contract record: claim, predicate, scope, instrument and control digests, positive and negative controls, failure action, and expiry.
+2. Write a lossless export with execution receipts and reference closure.
+3. Measure improvement directly: memory on vs off over fixed task families, repeated trials on identical signals with fallbacks counted apart, and reuse witnessed downstream.
+
+Live issue delivery, provider-billing reconciliation and power-loss recovery remain unvalidated.

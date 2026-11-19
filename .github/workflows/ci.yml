@@ -52,7 +52,9 @@ jobs:
         with: {repository: hagopjay/x3d.accrete, path: x3d.accrete}
       - uses: actions/setup-python@v5
         with: {python-version: '3.13'}
-      - run: pip install -q -r flyte/requirements.txt -r x3d.accrete/requirements.txt
+      - run: pip install -q -r flyte/requirements.txt -r x3d.accrete/requirements.txt pytest==9.2.0
+      # pytest, not unittest: 21 of the review tests are pytest functions (parametrize, raises) that
+      # unittest discovery silently skips (73 of 94 would run).
       - name: Gobbler.flyte tests (no network, no API key)
         env: {ACCRETE_DIR: '${{ github.workspace }}/x3d.accrete'}
-        run: cd flyte && python -m unittest discover -s tests -v
+        run: cd flyte && python -m pytest -q tests && python -O -m pytest -q tests

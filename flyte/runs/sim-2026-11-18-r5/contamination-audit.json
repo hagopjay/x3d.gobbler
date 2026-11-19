@@ -1,0 +1,13 @@
+{
+ "clean": true,
+ "contexts": 37,
+ "held_out": 2,
+ "leaks": [],
+ "memory_kinds": {
+  "counterexample": 3,
+  "decision": 3,
+  "episode": 35
+ },
+ "schema": "gobbler.contamination-audit/1",
+ "scope": "Journal of compiled contexts against current held-out labels; a prompt built outside compile_context is not covered."
+}

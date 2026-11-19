@@ -1,6 +1,6 @@
 {
   "schema": "gobbler.pinned-x3d-validation/1",
-  "created_utc": "2026-11-19T00:18:00.269943+00:00",
+  "created_utc": "2026-11-19T01:02:27.458922+00:00",
   "status": "pass",
   "input_cap_bytes": 8388608,
   "instrument": {
@@ -11678,5 +11678,5 @@
     "Parameterized model fidelity and exported visual semantics require separate application controls.",
     "This unsigned local report is not a formal Loom acceptance receipt or publisher authentication."
   ],
-  "report_sha256": "f4bd10b58331f77481870270f2a0e90342387242e75fe2b29f813a264bc8a5ef"
+  "report_sha256": "f476006981ea7be7c0074fe7ab7b1d0fdfec1ca8b293c4eadb2e1c47023dad98"
 }
