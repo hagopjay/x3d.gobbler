@@ -223,3 +223,33 @@ Not adopted, and why:
 | Its LangGraph engine (intake, prepare, propose, evaluate, review, persist) | Gobbler's graph already has its council, the 4 h timeout pick and per-cycle interrupts. The engine's mandatory review on every run conflicts with the timeout rule. Its execution-binding idea matches the op keys already in place (section 14). |
 | Tenant and principal model, Neo4j Cypher, LangChain adapter | This is a single-tenant repo with no graph server (GCP is off and spend is near zero). The transport export keeps records portable to that store later. |
 | Its ranking | Lexical overlap only, so not a semantic retriever. It is kept, because it is cheap and deterministic, and counterexamples rank first. |
+
+## 16. The Assayer: the AI Engineering agent (19 Nov 2026)
+
+HagopJay asked for a "Chip Huyen AI Engineering agent" and supplied its content: the AI Engineering Atlas, an agent-written catalogue of Chip Huyen's *AI Engineering* (O'Reilly, 2024) and the `chiphuyen/aie-book` repo (rev 28, 2026-10-20). The Atlas has 129 sources, 218 concepts, 67 code sketches, 51 gaps and conflicts, 16 themes and 13 theses. It was handled as data: only the page's DATA block was evaluated, as literals, and none of the page's code was kept. It is pinned at `atlas/aie-atlas.json` (SHA-256 `b8717094…`), and a test fails if it drifts.
+
+**Two ontologies, kept apart.** THE WORLD's memory (`memory.sqlite`) is experience: refusals, admissions and decisions, written by trusted organ code. The library (`library.sqlite`) is knowledge: the Atlas as 129 evidence refs, 218 semantic claims, 80 procedures and 51 open questions. Claims are graded L when a cited source was read, else S; none is C. Only the Assayer reads the library, so it never enters Weaver's context. A test proves that every library row is `not_a_reader` for Weaver.
+
+**The fifth organ.** Every path to `close` now passes the Assayer. It runs one deterministic check per testable thesis, cites the thesis from the library by id, makes no model call and costs nothing.
+
+| Thesis | Check | On failure |
+|---|---|---|
+| T1 A score is a tuple | instrument pins, mode, attempts, utc and model on every turn | warn |
+| T2 Graders have bugs | once per UTC day, 3 known-bad and 1 known-good fragment through the same gate and pinned validator | **stop** |
+| T3 Grade state, not narrative | the world store, read by this cycle's operation key, must agree with the turn row | **stop** |
+| T6 Benchmarks have half-lives | instrument pins re-audited within 30 days (`config.assay.pins_audited_utc`) | warn |
+| T7 The sandbox is part of the system | the signal came from a configured https source (an item's own link is data, not egress) | **stop** |
+| T8 Agents optimize the grader they imagine | the contamination audit: no held-out record ever reached a prompt | **stop** |
+| T10 Evidence needs provenance | grade never above Likely; archived source bytes hashed | warn |
+| T11 Context is a budget | tokens in per call and dollars per cycle under their caps | warn |
+| T13 Misbehavior is trained in | attempts never pass the inner-loop limit | **stop** |
+| T12 Operate evals like production | any **stop** writes `STOP-THE-LINE.json`; the runner then starts no cycle and resumes no sleeper until a human deletes it | halts |
+| T4 Reliability is a distribution | `assay-report.json` for the day: pass@1 and pass^3 (Atlas sketch K5), the attempts histogram and refusal codes | report |
+
+T5 (judge validity) and T9 (swarms) have no subject in this loop. The map says so rather than passing them.
+
+**It caught a bug on its first run.** The first version of the egress check also required the signal's own link to be https. An HN item linking to an http page stopped the line at cycle 19, and the simulated day admitted 18 turns instead of 35. The check was wrong, not the loop: Scout fetched from the configured https API, and the item's link is never fetched. The check now judges the fetch source. The first canary also had a "known-bad" fragment that the gate admits. It lacked the interpolator and ROUTEs that the real refusal had nested inside the Group, and adding them brings GATE_CONTAINMENT back (Likely: the exact rule was not read). The canary reported itself not held instead of passing. Both mistakes were caught by the mechanism they were testing.
+
+**The re-run day** is in `runs/sim-2026-11-18-r4/`, with r3 untouched. Per-turn outcomes are identical to r3: 35 admitted, the same actions, choices, attempts, grades and spend ($0.028298). All 48 cycles were assayed, with 0 stops. The canary held 4 of 4 once. T3 state_of_record passed 35 of 35. Pooled over 61 attempts, pass@1 is 0.574 and pass^3 is 0.182. The pooling is stated in the report: these are different tasks, not K5's repeated trials. 18 of 35 turns were admitted on the first attempt, and the most frequent refusal was GATE_CONTAINMENT (9, tied with MCP_SEMANTIC_PROFILE_COMPONENT).
+
+Where every Atlas theme lives, what is built, what is ready and what comes next: [ATLAS-MAP.md](ATLAS-MAP.md). Tests: 49 pass, normally and under `-O`.

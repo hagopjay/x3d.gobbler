@@ -11,6 +11,8 @@
     "irreversible_never_auto": true
   },
   "inner_loop": {"max_weave_attempts": 3},
+  "assay": {"pins_audited_utc": "2026-11-18T00:00:00Z", "pin_max_age_days": 30, "max_tokens_in_per_call": 6000,
+            "source": "AI Engineering Atlas rev 28 theses T1-T13 (flyte/atlas/aie-atlas.json)"},
   "scout": {"max_signals_per_tick": 6, "min_score": 0.5},
   "llm": {
     "provider": "anthropic",

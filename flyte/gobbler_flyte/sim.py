@@ -108,7 +108,11 @@ def run_day(out_dir: Path, start: str = "2026-11-18T00:00:00Z", ticks: int = 48,
     (out_dir / "memory-transport-validation.json").write_text(json.dumps(transport, indent=1, sort_keys=True))
     mem.close()
     (out_dir / "contamination-audit.json").write_text(json.dumps({**audit, "memory_kinds": kinds}, indent=1, sort_keys=True))
-    return {"ticks": ticks, "summaries": summaries, "tape": tape, "turns": turns, "spend": spend, "audit": audit, "memory_kinds": kinds, "transport": transport}
+    from .organs.assayer import assay_day
+    assay = assay_day(tape, turns)
+    (out_dir / "assay-report.json").write_text(json.dumps(assay, indent=1, sort_keys=True))
+    return {"ticks": ticks, "summaries": summaries, "tape": tape, "turns": turns, "spend": spend, "audit": audit, "memory_kinds": kinds,
+            "transport": transport, "assay": assay}
 
 
 if __name__ == "__main__":
@@ -117,4 +121,4 @@ if __name__ == "__main__":
     print(json.dumps({"ticks": r["ticks"], "rows": len(r["tape"]), "turns": len(r["turns"]),
                       "admitted": sum(t["admitted"] for t in r["turns"]), "spend_usd": round(sum(s["actual_usd"] for s in r["spend"]), 6),
                       "contexts": r["audit"]["contexts"], "held_out": r["audit"]["held_out"], "leaks": len(r["audit"]["leaks"]),
-                      "memory_kinds": r["memory_kinds"]}))
+                      "memory_kinds": r["memory_kinds"], "assayed": r["assay"]["assayed_cycles"], "stops": r["assay"]["stops"]}))

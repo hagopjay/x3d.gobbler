@@ -14,7 +14,10 @@
                                        wait  (interrupt(): the cycle sleeps until an authorized
                                          |    human answers or the timeout picks for them)
                                          v      v
-                                          keeper -> close -> END
+                                          keeper -> assayer -> close -> END
+
+Every path to close passes the Assayer (scout with no signal, a held council, a committed turn): it tests the
+cycle against the AI Engineering Atlas theses and can stop the line.
 """
 from __future__ import annotations
 
@@ -24,6 +27,7 @@ from functools import partial
 from langgraph.graph import END, START, StateGraph
 from langgraph.types import interrupt
 
+from .organs.assayer import assayer
 from .organs.keeper import keeper
 from .organs.scout import scout
 from .organs.weaver import weaver
@@ -101,7 +105,7 @@ def close_cycle(state: dict, ctx) -> dict:
 
 
 def after_scout(state: dict) -> str:
-    return "weaver" if state.get("signal") else "close"
+    return "weaver" if state.get("signal") else "assayer"
 
 
 def after_witness(state: dict, max_attempts: int) -> str:
@@ -111,23 +115,24 @@ def after_witness(state: dict, max_attempts: int) -> str:
 
 
 def after_council(state: dict) -> str:
-    return {"ask": "ask", "proceed": "keeper", "hold": "close"}[state["council"]["ruling"]]
+    return {"ask": "ask", "proceed": "keeper", "hold": "assayer"}[state["council"]["ruling"]]
 
 
 def build(ctx, checkpointer):
     g = StateGraph(FlyteState)
     for name, fn in [("open", open_cycle), ("scout", scout), ("weaver", weaver), ("witness", witness), ("council", council),
-                     ("ask", ask), ("wait", wait), ("keeper", keeper), ("close", close_cycle)]:
+                     ("ask", ask), ("wait", wait), ("keeper", keeper), ("assayer", assayer), ("close", close_cycle)]:
         g.add_node(name, partial(fn, ctx=ctx))
     g.add_edge(START, "open")
     g.add_edge("open", "scout")
-    g.add_conditional_edges("scout", after_scout, {"weaver": "weaver", "close": "close"})
+    g.add_conditional_edges("scout", after_scout, {"weaver": "weaver", "assayer": "assayer"})
     g.add_edge("weaver", "witness")
     g.add_conditional_edges("witness", partial(after_witness, max_attempts=ctx.config["inner_loop"]["max_weave_attempts"]),
                             {"council": "council", "weaver": "weaver"})
-    g.add_conditional_edges("council", after_council, {"ask": "ask", "keeper": "keeper", "close": "close"})
+    g.add_conditional_edges("council", after_council, {"ask": "ask", "keeper": "keeper", "assayer": "assayer"})
     g.add_edge("ask", "wait")
     g.add_edge("wait", "keeper")
-    g.add_edge("keeper", "close")
+    g.add_edge("keeper", "assayer")
+    g.add_edge("assayer", "close")
     g.add_edge("close", END)
     return g.compile(checkpointer=checkpointer, name="gobbler.flyte")

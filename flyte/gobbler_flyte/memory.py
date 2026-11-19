@@ -61,7 +61,7 @@ class MemoryRecord(Record):
     review_state: Literal["provisional", "accepted", "retracted", "superseded"] = "accepted"
     valid_from: str = Field(pattern=r"^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$")
     valid_to: str | None = Field(default=None, pattern=r"^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$")
-    recorded_by: Literal["witness", "keeper", "gobbler", "human"]
+    recorded_by: Literal["witness", "keeper", "gobbler", "human", "assayer", "library"]
     cycle: int | None = Field(default=None, ge=1)
     subject_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")   # the exact bytes it is about
 
