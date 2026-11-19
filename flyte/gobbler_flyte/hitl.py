@@ -9,6 +9,7 @@ login sets the model allowance.
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 from pathlib import Path
 import re
@@ -35,7 +36,8 @@ def render_question(q: dict) -> str:
     opts = "\n".join(f"- **{o['id']}**: {o['label']} ({o['effect']})" for o in q["options"])
     when = (f"If nobody authorized answers by **{q['deadline_utc']}**, the Gobbler takes **{q['preferred']}**."
             if q["reversible"] else "This one is irreversible: it waits for a typed answer and is never taken on a timeout.")
-    return (f"{q['question']}\n\nWhy ask: {q['why']}\n\n{opts}\n\nPreferred pick: **{q['preferred']}**. {when}\n\n"
+    marker = q.get("operation_key") or hashlib.sha256((str(q["cycle"]) + q["question"] + q.get("asked_utc", "")).encode()).hexdigest()
+    return (f"<!-- gobbler-question:{marker} -->\n{q['question']}\n\nWhy ask: {q['why']}\n\n{opts}\n\nPreferred pick: **{q['preferred']}**. {when}\n\n"
             f"Reply with A, B or C (or `ok` for the preferred pick){' and the word send for A' if not q['reversible'] else ''}. "
             f"Only {', '.join(q['authorized'])} can answer.\n")
 
@@ -63,6 +65,9 @@ class FileChannel:
             return None
         pick = parse_answer(a.get("text", ""), q)
         return {"choice": pick, "by": a["by"], "via": "file", "utc": a.get("utc", now), "ref": ref} if pick else None
+
+    def update(self, ref: str, q: dict) -> None:
+        self.post(q)
 
     def allowance(self) -> dict | None:
         p = self.a / "allowance.json"
@@ -95,9 +100,25 @@ class GitHubIssues:
             return json.loads(r.read() or b"null")
 
     def post(self, q: dict) -> str:
-        issue = self._api("POST", "/issues", {"title": f"[Gobbler.flyte] {q['question'][:110]}", "body": render_question(q),
+        body = render_question(q)
+        marker = body.splitlines()[0]
+        # A crash after GitHub accepted POST but before the local ref was saved
+        # must recover the existing question, not post it a second time.
+        page = 1
+        while True:
+            issues = self._api("GET", f"/issues?labels={self.label}&state=all&per_page=100&page={page}")
+            for issue in issues:
+                if marker in (issue.get("body") or ""):
+                    return str(issue["number"])
+            if len(issues) < 100:
+                break
+            page += 1
+        issue = self._api("POST", "/issues", {"title": f"[Gobbler.flyte] {q['question'][:110]}", "body": body,
                                                "labels": [self.label]})
         return str(issue["number"])
+
+    def update(self, ref: str, q: dict) -> None:
+        self._api("PATCH", f"/issues/{ref}", {"body": render_question(q)})
 
     def poll(self, ref: str, q: dict, now: str) -> dict | None:
         for c in self._api("GET", f"/issues/{ref}/comments?per_page=100"):
@@ -119,7 +140,16 @@ class GitHubIssues:
         return found
 
     def close(self, ref: str, d: dict) -> None:
-        self._api("POST", f"/issues/{ref}/comments", {"body": f"Resolved: **{d['choice']}** by {d['by']} ({d['status']})."})
+        marker = f"<!-- gobbler-resolution:{hashlib.sha256(json.dumps(d, sort_keys=True).encode()).hexdigest()} -->"
+        page, found = 1, False
+        while True:
+            comments = self._api("GET", f"/issues/{ref}/comments?per_page=100&page={page}")
+            found = any(marker in (c.get("body") or "") for c in comments)
+            if found or len(comments) < 100:
+                break
+            page += 1
+        if not found:
+            self._api("POST", f"/issues/{ref}/comments", {"body": f"{marker}\nResolved: **{d['choice']}** by {d['by']} ({d['status']})."})
         self._api("PATCH", f"/issues/{ref}", {"state": "closed"})
 
 
@@ -149,6 +179,9 @@ class SimHumans:
     def allowance(self) -> dict | None:
         a, self.allowance_reply = self.allowance_reply, None      # typed once
         return a
+
+    def update(self, ref: str, q: dict) -> None:
+        pass
 
     def close(self, ref: str, d: dict) -> None:
         pass

@@ -7,7 +7,7 @@ sleeps while later cycles keep turning.
 """
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import json
 import os
 from pathlib import Path
@@ -23,6 +23,7 @@ from .gobbler import build
 from .hitl import FileChannel, GitHubIssues
 from .llm import HaikuLLM
 from .memory import MemoryStore                   # imported here so its sqlite binding is the real one
+from .state import append_jsonl_batch_once, append_jsonl_once
 
 HERE = Path(__file__).resolve().parents[1]
 
@@ -45,13 +46,13 @@ class Ctx:
         self.sources = config["sources"]
         self.budget = Budget(config, allowance, self.state_dir / "spend.jsonl", config["authorized_humans"])
         self.world = accrete.World(self.state_dir / "world.sqlite") if accrete.available() else None
-        self.world_id = (self.world.archive().get("world_id") or "world")[:16] if self.world else "no-world"
+        self.world_id = self.world.world_id[:16] if self.world else "no-world"
         self.outbox = self.state_dir / "outbox"
         self.mem = MemoryStore(self.state_dir / "memory.sqlite")
         # The library (AI Engineering Atlas) is knowledge, kept apart from the world's experience; seeded once, idempotent.
         self.library = MemoryStore(self.state_dir / "library.sqlite")
-        if self.library.get("aie:T13") is None:
-            from .atlas import seed_library
+        from .atlas import seed_complete, seed_library
+        if not seed_complete(self.library):
             seed_library(self.library)
         self.loom_dir = loom_dir
         self.channel = channel
@@ -109,9 +110,10 @@ def default_channel(config: dict, state_dir: Path, mode: str):
 
 
 def _tape(ctx: Ctx, cycle: int, rows: list[dict], already: int) -> int:
-    with (ctx.state_dir / "tape.jsonl").open("a") as f:
-        for r in rows[already:]:
-            f.write(json.dumps({"t": ctx.now, "cycle": cycle, **r}, sort_keys=True, default=str) + "\n")
+    append_jsonl_batch_once(ctx.state_dir / "tape.jsonl",
+                            [{"t": ctx.now, "cycle": cycle, **item,
+                              "event_id": f"{ctx.world_id}:cycle-{cycle}:log-{index}"}
+                             for index, item in enumerate(rows[already:], start=already)], "event_id")
     return len(rows)
 
 
@@ -122,53 +124,156 @@ def tick(state_dir: str | Path, *, mode: str = "offline", now: str | None = None
     config = config or load_config()
     now = now or utc_now()
     state_dir = Path(state_dir)
-    channel = channel or default_channel(config, state_dir, mode)
-    # an allowance typed since the last tick takes effect now
-    typed = channel.allowance()
-    if typed:
-        a = {**load_allowance(state_dir), **typed}
-        (state_dir / "allowance.json").parent.mkdir(parents=True, exist_ok=True)
-        (state_dir / "allowance.json").write_text(json.dumps(a, indent=1))
-    ctx = Ctx(state_dir=state_dir, mode=mode, now=now, config=config, allowance=load_allowance(state_dir), channel=channel,
-              llm_factory=llm_factory, visible=visible, loom_dir=loom_dir)
-    # One tick at a time per state directory: a second overlapping tick fails fast instead of reading the same
-    # cycle number. (Actions already serialises with a concurrency group; this covers Flyte and local runs.)
+    _time(now)
+    state_dir.mkdir(parents=True, exist_ok=True)
+    # Lock BEFORE constructing Ctx: that constructor reads scheduler state and
+    # seeds stores. A context read before the lock can become stale while waiting.
     import fcntl
     lock = open(state_dir / ".tick.lock", "w")
     try:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     except BlockingIOError:
         lock.close()
-        ctx.mem.close()
-        ctx.library.close()
         raise RuntimeError(f"another tick holds {state_dir / '.tick.lock'}")
-    stop = state_dir / "STOP-THE-LINE.json"
-    if stop.exists():                      # Atlas thesis T12: a failed critical check halts work until a human clears it
-        try:
-            held = json.loads(stop.read_text())
-        except ValueError:
-            held = {"unreadable": True}
-        with (state_dir / "tape.jsonl").open("a") as f:
-            f.write(json.dumps({"t": now, "cycle": None, "node": "gobbler", "kind": "stopped",
-                                "text": f"line stopped by the Assayer since {held.get('utc')}: no cycle started, no sleeper resumed"},
-                               sort_keys=True) + "\n")
-        ctx.mem.close()
-        ctx.library.close()
-        fcntl.flock(lock, fcntl.LOCK_UN)
-        lock.close()
-        return {"utc": now, "stopped": held, "resumed": [], "started": None, "waiting": []}
-    conn = sqlite3.connect(state_dir / "checkpoints.sqlite", check_same_thread=False)
+    ctx, conn = None, None
     try:
-        saver = SqliteSaver(conn)
-        graph = build(ctx, saver)
+        stop = state_dir / "STOP-THE-LINE.json"
+        channel = channel or default_channel(config, state_dir, mode)
+        # A stopped line performs no channel API polling, including allowance polling.
+        if not stop.exists():
+            typed = channel.allowance()
+            if typed:
+                a = {**load_allowance(state_dir), **typed}
+                (state_dir / "allowance.json").write_text(json.dumps(a, indent=1))
+        ctx = Ctx(state_dir=state_dir, mode=mode, now=now, config=config, allowance=load_allowance(state_dir), channel=channel,
+                  llm_factory=llm_factory, visible=visible, loom_dir=loom_dir)
         summary = {"utc": now, "resumed": [], "started": None, "waiting": []}
 
-        # 1. sleeping cycles: answer -> resume; reversible past deadline -> preferred pick; else keep sleeping
+        def stopped():
+            if not stop.exists():
+                return False
+            try:
+                held = json.loads(stop.read_text())
+            except ValueError:
+                held = {"unreadable": True}
+            # Persist the pause even if the stop file is cleared before the next tick.
+            ctx.memory.setdefault("stop_pause", {"started_utc": held.get("utc") or now})
+            ctx.save()
+            summary["stopped"] = held
+            summary["waiting"] = sorted(int(k) for k, t in ctx.memory["threads"].items() if t["status"] == "waiting")
+            append_jsonl_once(state_dir / "tape.jsonl",
+                              {"t": now, "cycle": None, "node": "gobbler", "kind": "stopped",
+                               "text": f"line stopped since {held.get('utc')}: remaining sleepers and new work held",
+                               "event_id": f"stop-observed:{now}"}, "event_id")
+            return True
+
+        if stopped():
+            return summary
+        conn = sqlite3.connect(state_dir / "checkpoints.sqlite", check_same_thread=False)
+        saver = SqliteSaver(conn)
+        graph = build(ctx, saver)
+
+        def config_for_thread(thread):
+            return {"configurable": {"thread_id": thread["thread_id"]}}
+
+        def remember(out):
+            # Scout's mutable side effects must survive a crash after its checkpoint.
+            for signal in [out.get("signal"), *out.get("collisions", [])]:
+                if signal:
+                    ctx.memory["seen"].add(signal["id"])
+
+        def settle(cycle, thread, out, *, interrupted=False):
+            remember(out)
+            thread["taped"] = _tape(ctx, cycle, out.get("log", []), thread.get("taped", 0))
+            if interrupted or "__interrupt__" in out:
+                q = out["__interrupt__"][0].value if "__interrupt__" in out else out["decision"]
+                thread["ref"] = thread.get("ref") or channel.post(q)
+                thread["status"] = "waiting"
+                ctx.save()                       # retain checkpoint until scheduler state is durable
+            else:
+                thread["status"] = "done"
+                if thread.get("ref") and out.get("decision"):
+                    thread["close_pending"] = out["decision"]
+                ctx.save()                       # terminal scheduler commit BEFORE checkpoint deletion
+                saver.delete_thread(thread["thread_id"])
+                if thread.get("close_pending"):
+                    channel.close(thread["ref"], thread["close_pending"])
+                    thread.pop("close_pending", None)
+                    ctx.save()
+
+        # Recover an orphan from the older scheduler too: its completed checkpoint
+        # is authoritative; never delete it and generate a different candidate.
+        orphan_cycle = ctx.memory["cycles"] + 1
+        orphan_cfg = {"configurable": {"thread_id": f"cycle-{orphan_cycle}"}}
+        orphan = graph.get_state(orphan_cfg)
+        if orphan.values:
+            ctx.memory["cycles"] = orphan_cycle
+            ctx.memory["threads"][str(orphan_cycle)] = {"thread_id": f"cycle-{orphan_cycle}", "status": "running",
+                "taped": 0, "started_utc": orphan.values.get("started_utc", now), "mode": orphan.values.get("mode", mode)}
+            ctx.save()
+
+        # Resume reserved/in-flight cycles at their saved node, preserving candidate,
+        # decision, signal and operation key across world/ledger/checkpoint crashes.
+        for key, thread in sorted(ctx.memory["threads"].items(), key=lambda kv: int(kv[0])):
+            if thread["status"] == "done":
+                if thread.get("close_pending"):
+                    channel.close(thread["ref"], thread["close_pending"])
+                    thread.pop("close_pending", None)
+                    ctx.save()
+                saver.delete_thread(thread["thread_id"])
+                continue
+            if thread["status"] != "running":
+                continue
+            if thread.get("mode", mode) != mode:
+                raise RuntimeError("cannot recover a cycle under a different run mode")
+            cfg = config_for_thread(thread)
+            snap = graph.get_state(cfg)
+            if snap.values and snap.next == ("wait",) and snap.values.get("decision", {}).get("status") == "asked":
+                settle(int(key), thread, snap.values, interrupted=True)
+            else:
+                out = (graph.invoke(None, cfg) if snap.values and snap.next else dict(snap.values)) if snap.values else \
+                    graph.invoke({"cycle": int(key), "started_utc": thread["started_utc"], "mode": mode}, cfg)
+                settle(int(key), thread, out)
+            summary.setdefault("recovered", []).append(int(key))
+            if stopped():
+                return summary
+
+        # Silence during an enforced stop is not a response opportunity. Give every
+        # reversible sleeper a fresh full window after clearing, update its posted
+        # question, and persist this before considering timeout defaults.
+        if ctx.memory.get("stop_pause"):
+            deadline = (datetime.strptime(now, "%Y-%m-%dT%H:%M:%SZ") +
+                        timedelta(minutes=config["hitl"]["timeout_minutes"])).strftime("%Y-%m-%dT%H:%M:%SZ")
+            for thread in ctx.memory["threads"].values():
+                if thread["status"] != "waiting":
+                    continue
+                cfg = config_for_thread(thread)
+                snap = graph.get_state(cfg)
+                q = snap.values.get("decision")
+                if q and q["reversible"] and q.get("status") == "asked":
+                    q = {**q, "deadline_utc": deadline, "reopened_utc": now}
+                    graph.update_state(cfg, {"decision": q}, as_node="ask")
+                    if hasattr(channel, "update"):
+                        channel.update(thread["ref"], q)
+                    else:
+                        channel.post(q)
+            ctx.memory.pop("stop_pause")
+            ctx.save()
+
+        # Sleeping cycles: typed answer or a genuine uninterrupted response window.
         for key, t in sorted(ctx.memory["threads"].items(), key=lambda kv: int(kv[0])):
             if t["status"] != "waiting":
                 continue
             cfg = {"configurable": {"thread_id": t["thread_id"]}}
             snap = graph.get_state(cfg)
+            if snap.values and not snap.next:
+                settle(int(key), t, snap.values)
+                summary.setdefault("recovered", []).append(int(key))
+                if stopped():
+                    return summary
+                continue
+            if not snap.values:
+                raise RuntimeError(f"waiting cycle {key} has no checkpoint; manual ledger reconciliation required")
             q = snap.values["decision"]
             answer = channel.poll(t["ref"], q, now)
             if not answer and q["reversible"] and q["deadline_utc"] and now >= q["deadline_utc"]:
@@ -177,36 +282,32 @@ def tick(state_dir: str | Path, *, mode: str = "offline", now: str | None = None
                 summary["waiting"].append(int(key))
                 continue
             out = graph.invoke(Command(resume=answer), cfg)
-            t["taped"] = _tape(ctx, int(key), out["log"], t["taped"])
-            t["status"] = "done"
-            saver.delete_thread(t["thread_id"])          # finished cycles live on in tape/turns; checkpoints hold only sleepers
-            channel.close(t["ref"], out["decision"])
+            settle(int(key), t, out)
             summary["resumed"].append({"cycle": int(key), **{k: answer[k] for k in ("choice", "by")}})
             ctx.open_decisions -= 1
+            if stopped():
+                return summary
 
         # 2. a new cycle every tick
         cycle = ctx.memory["cycles"] + 1
         ctx.memory["cycles"] = cycle
         cfg = {"configurable": {"thread_id": f"cycle-{cycle}"}}
-        saver.delete_thread(f"cycle-{cycle}")       # a crashed earlier attempt at this cycle leaves no half-run graph state
+        thread = {"thread_id": f"cycle-{cycle}", "status": "running", "taped": 0, "started_utc": now, "mode": mode}
+        ctx.memory["threads"][str(cycle)] = thread
+        ctx.save()                               # reserve the cycle BEFORE any graph side effect
         out = graph.invoke({"cycle": cycle, "started_utc": now, "mode": mode}, cfg)
-        taped = _tape(ctx, cycle, out["log"], 0)
-        if "__interrupt__" in out:
-            q = out["__interrupt__"][0].value
-            ref = channel.post(q)
-            ctx.memory["threads"][str(cycle)] = {"thread_id": f"cycle-{cycle}", "status": "waiting", "ref": ref, "taped": taped}
-            summary["waiting"].append(cycle)
-        else:
-            saver.delete_thread(f"cycle-{cycle}")
+        settle(cycle, thread, out)
         summary["started"] = {"cycle": cycle, "signal": (out.get("signal") or {}).get("title"),
                               "ruling": (out.get("council") or {}).get("ruling"), "entry": (out.get("entry") or {}).get("n")}
-        ctx.save()
+        summary["waiting"] = sorted(int(k) for k, t in ctx.memory["threads"].items() if t["status"] == "waiting")
+        stopped()
         if ctx.world:                                     # the world as text: append-friendly for git, verifiable offline
             (state_dir / "world-archive.json").write_text(json.dumps(ctx.world.archive(), indent=1, sort_keys=True))
         conn.execute("VACUUM")
         return summary
     finally:
-        conn.close()
+        if conn is not None:
+            conn.close()
         if ctx is not None:
             ctx.mem.close()
             ctx.library.close()

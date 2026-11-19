@@ -76,6 +76,7 @@ def ask(state: dict, ctx) -> dict:
     now = datetime.strptime(ctx.now, "%Y-%m-%dT%H:%M:%SZ")
     deadline = now + timedelta(minutes=ctx.config["hitl"]["timeout_minutes"])
     q = {"status": "asked", "cycle": state["cycle"], "asked_utc": ctx.now,
+         "operation_key": f"{ctx.world_id}:cycle-{state['cycle']}:question",
          "deadline_utc": _iso(deadline) if p["reversible"] else None,
          "question": f"Cycle {state['cycle']}: {p['action']} on {p['target']} for \"{p['title']}\"?",
          "options": p["options"], "preferred": p["preferred"], "reversible": p["reversible"],

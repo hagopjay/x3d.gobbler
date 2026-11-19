@@ -11,7 +11,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from ..state import row
+from ..state import append_jsonl_once, read_jsonl, row
 
 FOLDBACK = {
     "rerun-xite-rig": ("x3d.loom", "LEARNINGS-gobbler.md"),
@@ -103,10 +103,13 @@ def keeper(state: dict, ctx) -> dict:
                                      parent_ids=twins, cycle=state["cycle"],
                                      subject_sha256=hashlib.sha256(state["candidate"]["x3d"].encode("utf-8")).hexdigest()))
     turns = ctx.state_dir / "turns.jsonl"
-    done = {json.loads(x)["cycle"] for x in turns.read_text().splitlines() if x.strip()} if turns.exists() else set()
+    done = {item["cycle"]: item for item in read_jsonl(turns)}
     if state["cycle"] in done:                       # the same cycle re-run after a crash: one ledger row per cycle
+        saved = done[state["cycle"]]
+        if any(saved.get(key) != turn.get(key) for key in ("signal", "action", "choice", "entry_hash", "admitted")):
+            raise RuntimeError("cycle operation conflicts with its committed turn ledger")
+        turn = saved
         log.append(row("keeper", "recovered", f"turn row for cycle {state['cycle']} already written; not duplicated"))
     else:
-        with turns.open("a") as f:
-            f.write(json.dumps(turn, sort_keys=True, default=str) + "\n")
+        turn = append_jsonl_once(turns, turn, "cycle")
     return {"entry": entry or {}, "turn": turn, "log": log}

@@ -311,27 +311,29 @@ class CrashRecovery(unittest.TestCase):
     def test_crash_after_append_does_not_duplicate(self):
         from gobbler_flyte import runner as R
         with tempfile.TemporaryDirectory() as d:
-            real_save = R.Ctx.save
-            def crash(self):
-                raise RuntimeError("injected crash after keeper, before memory save")
-            R.Ctx.save = crash
+            real_tape = R._tape
+            def crash(*args, **kwargs):
+                raise RuntimeError("injected crash after graph commit, before tape finalization")
+            R._tape = crash
             try:
                 with self.assertRaises(RuntimeError):
                     tick(d, mode="offline", now="2026-11-18T00:00:00Z", config=CFG)
             finally:
-                R.Ctx.save = real_save
+                R._tape = real_tape
             w = accrete.World(Path(d) / "world.sqlite")
             self.assertEqual(w.head()["head"], 1)                       # the crashed attempt did admit once
             s = tick(d, mode="offline", now="2026-11-18T00:00:00Z", config=CFG)
-            self.assertEqual(s["started"]["cycle"], 1)                  # memory was never saved: same cycle again
-            self.assertEqual(accrete.World(Path(d) / "world.sqlite").head()["head"], 1)   # ... and no second admission
-            turns = (Path(d) / "turns.jsonl").read_text().splitlines()
-            self.assertEqual(len(turns), 1)
-            tape = (Path(d) / "tape.jsonl").read_text()
-            self.assertIn("already holds operation", tape)
+            self.assertIn(1, s["recovered"])
+            self.assertEqual(s["started"]["cycle"], 2)  # recovery completes cycle 1, then the next cycle starts
+            turns = [json.loads(x) for x in (Path(d) / "turns.jsonl").read_text().splitlines()]
+            self.assertEqual(sum(t["cycle"] == 1 for t in turns), 1)
+            entries = accrete.World(Path(d) / "world.sqlite").archive()["entries"]
+            operations = [e["payload"]["generation"]["op"] for e in entries]
+            self.assertEqual(len(operations), len(set(operations)))
+            self.assertEqual(sum(op.endswith(":cycle-1") for op in operations), 1)
             self.assertTrue(accrete.World(Path(d) / "world.sqlite").verify()["valid"])
             nxt = tick(d, mode="offline", now="2026-11-18T00:30:00Z", config=CFG)
-            self.assertEqual(nxt["started"]["entry"], 2)                # the loop carries on normally
+            self.assertEqual(nxt["started"]["cycle"], 3)              # the loop carries on normally
 
     def test_overlapping_tick_fails_fast(self):
         import fcntl
@@ -373,8 +375,10 @@ class Memory(unittest.TestCase):
             s.put_evidence(e)
         for v in views:
             s.put(v)
-        p = compile_context(s, Reader("weaver", self.NOW, scope or {}), kinds=("counterexample", "procedure", "episode"), query="nested")
-        return [m["memory_id"] for m in p["memories"]], p["excluded"]
+        diagnostics = {}
+        p = compile_context(s, Reader("weaver", self.NOW, scope or {}), kinds=("counterexample", "procedure", "episode"), query="nested", diagnostics=diagnostics)
+        self.assertEqual(p["excluded"], {})  # hidden identifiers belong only in trusted diagnostics
+        return [m["memory_id"] for m in p["memories"]], diagnostics["excluded"]
 
     def ev(self, i, exposure):
         from gobbler_flyte.memory import EvidenceRef
@@ -393,8 +397,9 @@ class Memory(unittest.TestCase):
         ids, ex = self.ctx_ids([self.mem("s", exposures=["sealed"]), self.mem("c", kind="episode", parent_ids=["s"])])
         self.assertEqual((ids, ex["c"]), ([], "held_out"))
         s = MemoryStore(); s.put(self.mem("root")); s.put(self.mem("kid", parent_ids=["root"])); s.revoke("root", "wrong")
-        p = compile_context(s, Reader("weaver", self.NOW, {}), kinds=("counterexample",), query="x")
-        self.assertEqual(p["memories"], []); self.assertEqual(p["excluded"]["kid"], "revoked_lineage")
+        diagnostics = {}
+        p = compile_context(s, Reader("weaver", self.NOW, {}), kinds=("counterexample",), query="x", diagnostics=diagnostics)
+        self.assertEqual(p["memories"], []); self.assertEqual(diagnostics["excluded"]["kid"], "revoked_lineage")
 
     def test_reference_package_leaks_are_closed(self):
         """In the reference, both of these reached the context (probe 18 Nov). Here both are filtered."""
@@ -456,7 +461,9 @@ class MemoryInTheLoop(unittest.TestCase):
             self.assertTrue(r["transport"]["valid"], r["transport"].get("errors"))
             recs = [json.loads(x) for x in (Path(d) / "day" / "memory-transport.jsonl").read_text().splitlines()]
             cx = [x for x in recs if x["record_type"] == "memory" and x["payload"]["kind"] == "counterexample"]
-            self.assertTrue(any(x["payload"]["lawful_twin_artifact_id"] for x in cx))   # refused, then admitted in the same cycle
+            self.assertTrue(cx)
+            self.assertTrue(all(x["payload"]["lawful_twin_artifact_id"] is None for x in cx))
+            # Same-cycle admission is a lineage link, not proof of the same edit done lawfully.
             tape = (Path(d) / "day" / "tape.jsonl").read_text()
             self.assertIn("filtered out before ranking", tape)
 
@@ -494,10 +501,12 @@ class Assayer(unittest.TestCase):
         t1 = lib.get("aie:T1")
         self.assertTrue(t1.parent_ids and all(lib.get(p) for p in t1.parent_ids))
         self.assertNotIn("C", {m.evidence_level for m in lib.all()})           # no Gobbler instrument ran on the library
+        diagnostics = {}
         w = compile_context(lib, Reader("weaver", "2026-11-19T00:00:00Z", {}), kinds=("procedure", "semantic_claim"), query="eval",
-                            journal=False)
+                            journal=False, diagnostics=diagnostics)
         self.assertEqual(w["memories"], [])
-        self.assertEqual(set(w["excluded"].values()), {"not_a_reader"})
+        self.assertEqual(w["excluded"], {})
+        self.assertEqual(set(diagnostics["excluded"].values()), {"not_a_reader"})
         a = compile_context(lib, Reader("assayer", "2026-11-19T00:00:00Z", {}), kinds=("procedure",), query="grader canary",
                             journal=False)
         self.assertTrue(a["memories"])

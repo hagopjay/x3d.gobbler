@@ -1,0 +1,15 @@
+{
+ "error_count": 0,
+ "errors": [],
+ "kinds": {
+  "evidence": 3,
+  "memory:counterexample": 3,
+  "memory:decision": 3,
+  "memory:episode": 35
+ },
+ "records": 44,
+ "restorable": false,
+ "schema_sha256": "916d65c335f4a562f6aebd90b971680cac604ab1a965e0305db2442c2a1f195a",
+ "valid": true,
+ "validation_scope": "JSON Schema and supplied content hashes only; reference closure, source authorization and semantics are not validated."
+}

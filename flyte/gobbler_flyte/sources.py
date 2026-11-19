@@ -11,6 +11,7 @@ import os
 from pathlib import Path
 import re
 import urllib.request
+from urllib.parse import urlsplit
 import xml.etree.ElementTree as ET
 
 UA = "gobbler-flyte/0.1 (+https://github.com/hagopjay/x3d.gobbler)"
@@ -22,13 +23,32 @@ ATOM = "{http://www.w3.org/2005/Atom}"
 MAX_FEED_BYTES = 2 * 1024 * 1024
 
 
+def fetch_url(source: dict) -> str:
+    return (f"https://api.github.com/repos/{source['repo']}/releases?per_page=5"
+            if source.get("kind") == "github-releases" else source.get("url", ""))
+
+
+def _https(url: str) -> bool:
+    parsed = urlsplit(url)
+    return parsed.scheme == "https" and bool(parsed.hostname) and parsed.username is None and parsed.password is None
+
+
+class _HTTPSRedirects(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        if not _https(newurl) or urlsplit(newurl).netloc != urlsplit(req.full_url).netloc:
+            raise ValueError("feed redirect leaves configured HTTPS origin")
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
 def _id(*parts: str) -> str:
     return hashlib.sha256("|".join(parts).encode()).hexdigest()[:16]
 
 
 def _get(url: str, timeout: int = 20, headers: dict | None = None) -> bytes:
+    if not _https(url):
+        raise ValueError("feed URL must be HTTPS without embedded credentials")
     req = urllib.request.Request(url, headers={"User-Agent": UA, **(headers or {})})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
+    with urllib.request.build_opener(_HTTPSRedirects()).open(req, timeout=timeout) as r:
         body = r.read(MAX_FEED_BYTES + 1)
         if len(body) > MAX_FEED_BYTES:
             raise ValueError('feed exceeds the 2 MiB input budget')
@@ -48,7 +68,8 @@ def parse(kind: str, source: dict, body: bytes) -> list[dict]:
         raise ValueError('feed exceeds the 2 MiB input budget')
     if kind not in ('hn', 'rss', 'atom', 'github-releases'):
         raise ValueError('unsupported feed kind')
-    return [{**i, "url": _clean(i["url"]), "summary": _clean(i.get("summary", ""))} for i in _parse(kind, source, body)]
+    return [{**i, "title": _clean(i["title"]), "url": _clean(i["url"]), "summary": _clean(i.get("summary", ""))}
+            for i in _parse(kind, source, body)]
 
 
 def _observed(items: list[dict], *, mode: str, transport: str, body: bytes, fixture: str | None = None,
@@ -93,7 +114,7 @@ def _parse(kind: str, source: dict, body: bytes) -> list[dict]:
     return out
 
 
-def fetch(source: dict, mode: str) -> dict:
+def _fetch(source: dict, mode: str) -> dict:
     """Return {'source', 'status', 'items', 'note'}; never raises (a dead feed is a tape row, not a crash)."""
     if mode not in ('offline', 'sim', 'live'):
         raise ValueError('mode must be live, offline or sim; unknown modes never fetch')
@@ -127,3 +148,17 @@ def fetch(source: dict, mode: str) -> dict:
                 mode=mode, transport='live', body=body), "note": source.get("url") or source.get("repo")}
     except Exception as e:  # noqa: BLE001 - every failure is reported on the tape
         return {"source": source["id"], "status": "error", "items": [], "note": f"{type(e).__name__}: {str(e)[:160]}"}
+
+
+def fetch(source: dict, mode: str) -> dict:
+    """Fetch attempt receipt, including failures and fixtures; fixtures are never live observations."""
+    if mode not in ("offline", "sim", "live"):
+        raise ValueError("mode must be live, offline or sim")
+    url = fetch_url(source)
+    receipt = {"fetch_url": url, "transport": "fixture" if mode in ("offline", "sim") else "live",
+               "request_policy": "configured-https-origin; cross-origin redirects refused"}
+    if not _https(url):
+        return {"source": source["id"], "status": "error", "items": [],
+                "note": "fetch refused before request: invalid configured HTTPS URL", **receipt}
+    result = _fetch(source, mode)
+    return {**result, **receipt}

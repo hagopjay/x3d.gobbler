@@ -28,16 +28,24 @@ def _remember_refusal(ctx, state: dict, cand: dict, errors: list[dict]) -> None:
     """A refusal is a counterexample: executed instrument (grade C), bound to the exact fragment bytes.
     About one in five is sealed by its bytes and never reaches Weaver; the rest teach the next attempt."""
     import hashlib
+    import json
+    import re
     from ..memory import EvidenceRef, MemoryRecord, seal_bucket
+    from ..llm import untrusted_record
     sha = hashlib.sha256(cand["x3d"].encode("utf-8")).hexdigest()
     exposure = seal_bucket(sha)
-    codes = sorted({e["code"] for e in errors}) or ["UNSPECIFIED"]
+    codes = sorted({e["code"] for e in errors if re.fullmatch(r"[A-Z][A-Z0-9_]{0,79}", e.get("code", ""))}) or ["UNSPECIFIED"]
     eid = f"witness:{sha[:24]}"
     ctx.mem.put_evidence(EvidenceRef(evidence_id=eid, exposure=exposure, sha256=sha,
                                      instrument=f"accrete gate {accrete.identity().get('gate_version')} + x3d_mcp + loom traps"))
-    first = errors[0]["message"][:160] if errors else ""
+    # Instrument execution is C; text echoed from a model-authored XML name
+    # remains untrusted. Keep raw diagnostics in the verdict/tape, not as prose
+    # instruction in a reusable lesson. Quote again when a legacy lesson is read.
+    first = errors[0]["message"] if errors else ""
+    lesson = json.dumps({"schema": "gobbler.refusal-lesson/1", "codes": codes,
+                         "validator_message": untrusted_record(first, cap=160)}, sort_keys=True)
     ctx.mem.put_once(MemoryRecord(memory_id=f"cx:{sha[:24]}", kind="counterexample", readers=["weaver"],
-                             text=f"Refused {', '.join(codes)}: {first}", evidence_ids=[eid], exposures=[exposure],
+                             text=lesson, evidence_ids=[eid], exposures=[exposure],
                              evidence_level="C", valid_from=ctx.now, recorded_by="witness",
                              scope={"world": ctx.world_id}, cycle=state["cycle"], subject_sha256=sha))
 

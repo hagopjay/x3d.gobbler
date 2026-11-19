@@ -34,7 +34,7 @@ Meta (book, repo, secondary reads): 13 / 0 / 0. Unthemed: 0 / 0 / 0.
 | T1 A score is a tuple, not a number | Store the full tuple with every score and diff tuples before comparing two numbers. | `score_tuple` | warn |
 | T2 Graders are software with bugs and an attack surface | Audit tasks, isolate the grader from the agent environment, and version the grader like code. | `canary` | stop |
 | T3 Grade state, not narrative | Query the system of record for outcomes and keep path checks for hard constraints only. | `state_of_record` | stop |
-| T4 Reliability is a distribution | Report k, variance and the worst-case category, not just a mean. | `daily:pass_hat_k` | daily report |
+| T4 Reliability is a distribution | Report k, variance and the worst-case category, not just a mean. | `daily:first_attempt_admission_rate` | descriptive report; same-signal reliability unmeasured |
 | T5 Judge validity comes before judge reliability | Validate against expert labels with kappa and decoys, and pin judge versions. | not tested: no model judge in the loop yet | - |
 | T6 Benchmarks have half-lives | Date every score, schedule re-audits and keep a private slice. | `pin_age` | warn |
 | T7 The sandbox is part of the system under test | Inventory permitted egress, remove shared writable stores and review containment before running capability evals. | `egress` | stop |
