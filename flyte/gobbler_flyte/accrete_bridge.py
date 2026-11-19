@@ -80,10 +80,22 @@ class World:
             raise RuntimeError("x3d.accrete not found (set ACCRETE_DIR)")
         from accretion.world import WorldStore
         self.store = WorldStore(Path(path))
+        # Secondary lookup index only; canonical entries and hashes stay untouched.
+        with self.store.connect() as db:
+            db.execute("CREATE INDEX IF NOT EXISTS flyte_operation_key ON entries(json_extract(payload, '$.generation.op'))")
+
+    @property
+    def world_id(self) -> str:
+        with self.store.connect() as db:
+            row = db.execute("SELECT value FROM meta WHERE key='world_id'").fetchone()
+        if row is None:
+            raise RuntimeError("world identity missing")
+        return row["value"]
 
     def head(self) -> dict:
-        s = self.store.snapshot()
-        return {"head": s["head"], "tail_hash": s["tail_hash"]}
+        with self.store.connect() as db:
+            row = db.execute("SELECT n,hash FROM entries ORDER BY n DESC LIMIT 1").fetchone()
+        return {"head": row["n"] if row else 0, "tail_hash": row["hash"] if row else self.store.genesis}
 
     def next_plan(self) -> dict:
         from accretion.world import plan_next
@@ -105,12 +117,16 @@ class World:
 
     def find_op(self, op: str) -> dict | None:
         """The committed entry whose generator carries this operation key, if any (crash/retry recovery)."""
-        for e in reversed(self.store.archive()["entries"]):
-            if (e.get("payload", {}).get("generation") or {}).get("op") == op:
-                return {"status": "committed", "n": e["n"], "hash": e["hash"], "recovered": True,
-                        "title": e["payload"].get("title"), "stages": [], "plan": e["payload"].get("plan"),
-                        "generator": e["payload"].get("generation")}
-        return None
+        import json
+        with self.store.connect() as db:
+            row = db.execute("SELECT n,hash,payload FROM entries WHERE json_extract(payload, '$.generation.op')=? ORDER BY n DESC LIMIT 1",
+                             (op,)).fetchone()
+        if row is None:
+            return None
+        payload = json.loads(row["payload"])
+        return {"status": "committed", "n": row["n"], "hash": row["hash"], "recovered": True,
+                "title": payload.get("title"), "stages": [], "plan": payload.get("plan"),
+                "generator": payload.get("generation")}
 
     def export_x3d(self) -> str:
         return self.store.export_x3d()

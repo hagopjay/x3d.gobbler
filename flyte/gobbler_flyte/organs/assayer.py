@@ -8,12 +8,12 @@ the line when a critical check fails.
 
     thesis  check            what it reads                                       on failure
     T1      score_tuple      the turn row: instrument pins, mode, attempts, utc   warn
-    T2      canary           once per UTC day: known-bad and known-good fragments  STOP
-                             through the same gate and pinned validator
+    T2      canary           daily per instrument/case identity: known controls   STOP
+                             through gate, pinned validator and trap stage
     T3      state_of_record  the world store, by this cycle's operation key        STOP
     T6      pin_age          days since the instrument pins were last audited     warn
-    T7      egress           the signal's source id against the configured list    STOP
-    T8      grader_opacity   the context journal: no held-out record ever sent     STOP
+    T7      egress           every configured source and Scout fetch receipt       STOP
+    T8      grader_opacity   contamination proxy; grader gaming remains untested    STOP
     T10     provenance       grade capped at Likely; source bytes hashed           warn
     T11     context_budget   tokens and dollars per step against the caps          warn
     T13     retry_cap        attempts never pass the inner-loop limit              STOP
@@ -25,13 +25,19 @@ have no subject in this loop yet; the library says so instead of passing them.
 from __future__ import annotations
 
 from datetime import datetime
+import hashlib
 import json
 from math import comb
+from pathlib import Path
+from urllib.parse import urlsplit
 
 from .. import accrete_bridge as accrete
+from ..loom import traps
+from ..sources import fetch_url
 from ..state import row
 
 STOP_FILE = "STOP-THE-LINE.json"
+_TRAPS_SHA_AT_IMPORT = hashlib.sha256(Path(traps.__file__).read_bytes()).hexdigest()
 
 # The canary set: the instruments must refuse what they refused before, and pass what they passed. Copies, not
 # imports from sim.py, so a change to the sim's script cannot quietly change the canary.
@@ -47,6 +53,23 @@ CANARY = [
      'roughness="0.25"/></Appearance><Sphere radius="0.35"/></Shape></Transform>', "fail"),
     ("plain-sphere", '<Transform><Shape><Appearance><Material diffuseColor="0.3 0.8 0.9"/></Appearance><Sphere radius="0.35"/>'
      '</Shape></Transform>', "pass"),
+    # A warning is admitted by Witness, but its presence proves that the trap stage ran.
+    ("white-emissive-warning", '<Shape><Appearance><Material diffuseColor="1 0 0" emissiveColor="1 1 1"/>'
+     '</Appearance><Sphere radius="0.35"/></Shape>', "pass"),
+]
+CANARY_EXPECTED = {
+    "nested-animation": ("gate", ["GATE_CONTAINMENT"], []),
+    "remote-texture": ("gate", ["GATE_NODE_FORBIDDEN"], []),
+    "physical-material-immersive": ("x3d_mcp", ["MCP_SEMANTIC_PROFILE_COMPONENT"], []),
+    "plain-sphere": ("loom_traps", [], []),
+    "white-emissive-warning": ("loom_traps", [], ["color-emissive-white"]),
+}
+# The fragment gate already rejects out-of-range colours before traps can see them. An isolated error control
+# therefore checks this otherwise masked part of the trap instrument; it is not claimed as a pipeline admission.
+TRAP_CANARY = [
+    ("color-range-error", '<Shape><Appearance><Material diffuseColor="1.2 0.2 0.2"/></Appearance><Sphere/></Shape>',
+     [("color-range", "error")]),
+    ("color-range-lawful-twin", '<Shape><Appearance><Material diffuseColor="0.9 0.2 0.2"/></Appearance><Sphere/></Shape>', []),
 ]
 
 
@@ -60,22 +83,58 @@ def _days(a: str, b: str) -> float:
 
 
 def run_canary() -> dict:
-    """The same two instruments Witness uses, on fixed bytes. Returns per-fragment outcomes."""
+    """Run gate, pinned validator and traps, including a trap-stage positive control."""
     out = []
     for name, x3d, want in CANARY:
         g = accrete.gate(x3d, prefix="CANARY")
         got = "pass" if g["status"] == "pass" else "fail"
-        stage, errors = "gate", g.get("errors", [])
+        stage, errors, trap_rules = "gate", g.get("errors", []), []
         if got == "pass":
             v = accrete.prevalidate(g["canonical_x3d"])
+            stage = "x3d_mcp"
             if v["status"] != "pass":
                 got, stage, errors = "fail", "x3d_mcp", v.get("errors") or [{"code": "MCP_FAIL"}]
+            else:
+                from accretion.world import wrap_scene
+                stage = "loom_traps"
+                hits = traps.check(wrap_scene(g["canonical_x3d"]).encode())
+                trap_rules = sorted({h.rule for h in hits})
+                errors = [{"code": "TRAP_" + h.rule.upper().replace("-", "_")} for h in hits if h.severity == "error"]
+                if errors:
+                    got = "fail"
         if g["status"] == "not_run":
             got = "not_run"
+        codes = sorted({e["code"] for e in errors})[:4]
+        expected = CANARY_EXPECTED.get(name)
+        matches = got == want and (expected is None or (stage, codes, trap_rules) == expected)
         out.append({"fragment": name, "want": want, "got": got, "stage": stage,
-                    "codes": sorted({e["code"] for e in errors})[:4]})
-    return {"fragments": out, "held": all(o["got"] == o["want"] for o in out),
+                    "codes": codes, "trap_rules": trap_rules, "matches": matches})
+    controls = []
+    if accrete.available():
+        from accretion.world import wrap_scene
+        for name, fragment, expected in TRAP_CANARY:
+            got = sorted({(h.rule, h.severity) for h in traps.check(wrap_scene(fragment).encode())})
+            controls.append({"control": name, "want": expected, "got": got, "matches": got == expected,
+                             "scope": "isolated trap instrument, not full pipeline admission"})
+    return {"fragments": out, "trap_controls": controls,
+            "held": all(o["matches"] for o in out) and all(o["matches"] for o in controls),
             "not_run": any(o["got"] == "not_run" for o in out)}
+
+
+def _canary_key() -> str:
+    """Bind daily reuse to the actual loaded instruments and canary definition."""
+    identity = {"bridge": accrete.identity(), "traps_sha256": _TRAPS_SHA_AT_IMPORT}
+    if hashlib.sha256(Path(traps.__file__).read_bytes()).hexdigest() != _TRAPS_SHA_AT_IMPORT:
+        raise RuntimeError("loom trap source changed after import; restart before re-audit")
+    if accrete.available():
+        from accretion import gate, mcp_adapter
+        gate_sha = hashlib.sha256(Path(gate.__file__).read_bytes()).hexdigest()
+        if gate_sha != gate._IMPORTED_CODE_SHA256:
+            raise RuntimeError("accrete gate source changed after import; restart before re-audit")
+        identity["gate_sha256"] = gate_sha
+        identity["validator"] = mcp_adapter.instrument_identity()["code_sha256"]
+    payload = {"instruments": identity, "canary": CANARY, "expected": CANARY_EXPECTED, "isolated_trap_controls": TRAP_CANARY}
+    return hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
 
 def assay_cycle(state: dict, ctx) -> list[dict]:
@@ -95,7 +154,7 @@ def assay_cycle(state: dict, ctx) -> list[dict]:
                              f"gate {inst['gate_version']}, x3d_mcp {inst['x3d_mcp_commit']}, accrete {inst['accrete_commit']}, {turn['mode']}, {turn['utc']}"))
 
     # T3: grade state, not narrative. What Keeper says it admitted must be what the world store holds.
-    if turn and ctx.world is not None:
+    if ctx.world is not None:
         op = f"{ctx.world_id}:cycle-{state['cycle']}"
         held = ctx.world.find_op(op)
         if turn.get("admitted"):
@@ -103,48 +162,78 @@ def assay_cycle(state: dict, ctx) -> list[dict]:
             detail = f"world holds {op} as #{held['n']} {held['hash'][:12]}" if ok else f"turn says admitted, world {'disagrees' if held else 'has no entry for ' + op}"
         else:
             ok = held is None
-            detail = "nothing admitted, and the world holds nothing for this cycle" if ok else f"turn says not admitted, but the world holds #{held['n']}"
+            detail = "nothing admitted, and the world holds nothing for this cycle" if ok else f"no admitted turn, but the world holds #{held['n']}"
         checks.append(_check("state_of_record", "T3", "pass" if ok else "fail", "stop", detail))
 
-    # T2: graders are software with bugs. Once per UTC day, the instruments must still refuse known failures.
+    # T2: a successful daily audit is reusable only for these instrument and canary bytes.
     day = ctx.now[:10]
     seen = ctx.memory.setdefault("assay", {})
-    if seen.get("canary_day") != day:
-        c = run_canary()
-        seen["canary_day"] = day
-        seen["canary"] = c
-        if c["not_run"]:
-            checks.append(_check("canary", "T2", "not_run", "warn", "x3d.accrete missing: canary not run"))
-        else:
-            bad = [f"{o['fragment']} want {o['want']} got {o['got']}" for o in c["fragments"] if o["got"] != o["want"]]
-            checks.append(_check("canary", "T2", "fail" if bad else "pass", "stop",
-                                 "; ".join(bad) if bad else f"{len(c['fragments'])}/{len(c['fragments'])} held: "
-                                 + ", ".join(f"{o['fragment']}={o['got']}({o['stage']})" for o in c["fragments"])))
+    try:
+        canary_key = _canary_key()
+    except Exception as error:
+        checks.append(_check("canary", "T2", "fail", "stop", f"instrument identity unavailable: {type(error).__name__}: {error}"))
+    else:
+        cached = seen.get("canary") or {}
+        if seen.get("canary_day") != day or seen.get("canary_key") != canary_key or not cached.get("held") or cached.get("not_run"):
+            try:
+                c = run_canary()
+            except Exception as error:
+                c = {"held": False, "not_run": False, "fragments": [], "error": f"{type(error).__name__}: {error}"}
+            seen.update(canary_day=day, canary_key=canary_key, canary=c)
+            if c["not_run"]:
+                checks.append(_check("canary", "T2", "not_run", "warn", "x3d.accrete missing: canary not run"))
+            else:
+                bad = [f"{o['fragment']} want {o['want']} got {o['got']} ({o['stage']}, {o['codes']})"
+                       for o in c["fragments"] if not o.get("matches", o["got"] == o["want"])]
+                bad += [f"isolated trap control {o['control']} disagreed" for o in c.get("trap_controls", []) if not o["matches"]]
+                checks.append(_check("canary", "T2", "pass" if c["held"] else "fail", "stop",
+                                     c.get("error") or "; ".join(bad) or (f"{len(c['fragments'])}/{len(c['fragments'])} held across gate, validator and traps"
+                                     if c["held"] else "canary expectations disagreed")))
 
     # T6: benchmarks (and instruments) have half-lives. Pins must have been re-audited recently.
     audited = cfg.get("pins_audited_utc")
     if audited:
-        age = _days(audited, ctx.now)
-        limit = cfg.get("pin_max_age_days", 30)
-        checks.append(_check("pin_age", "T6", "fail" if age > limit else "pass", "warn",
-                             f"instrument pins audited {audited[:10]}, {age:.1f} days ago (limit {limit})"))
+        try:
+            age = _days(audited, ctx.now)
+            limit = cfg.get("pin_max_age_days", 30)
+            checks.append(_check("pin_age", "T6", "fail" if age < 0 or age > limit else "pass", "warn",
+                                 f"self-reported pin audit {audited[:10]}, {age:.1f} days ago (limit {limit}); not a re-audit receipt"))
+        except (TypeError, ValueError):
+            checks.append(_check("pin_age", "T6", "fail", "warn", "invalid self-reported pin audit date"))
+    else:
+        checks.append(_check("pin_age", "T6", "not_run", "warn", "no pin audit date or re-audit receipt supplied"))
 
-    # T7: the sandbox is part of the system. Work may come only from a configured source.
-    if sig:
-        # What is checked is where Scout fetched from, not the link an item points at (that is data, never fetched).
-        src = next((s for s in ctx.config["sources"] if s["id"] == sig.get("source")), None)
-        fetched = (src or {}).get("url") or (f"https://api.github.com/repos/{src['repo']}/releases" if src and src.get("repo") else "")
-        ok = bool(src) and fetched.startswith("https://")
-        checks.append(_check("egress", "T7", "pass" if ok else "fail", "stop",
-                             f"fetched from configured source {src['id']} over https" if ok
-                             else f"source {sig.get('source')!r} is not a configured https source"))
+    # T7: check every source, not only the winner. Item links are data and are never egress receipts.
+    sources = {s["id"]: s for s in ctx.config["sources"]}
+    def https(url):
+        try:
+            parsed = urlsplit(url)
+            return parsed.scheme == "https" and bool(parsed.hostname) and not parsed.username and not parsed.password
+        except (TypeError, ValueError):
+            return False
+    bad_sources = [sid for sid, src in sources.items() if not https(fetch_url(src))]
+    if sig and sig.get("source") not in sources:
+        bad_sources.append(str(sig.get("source")))
+    sweeps = [r for r in state.get("log", []) if r.get("node") == "scout" and r.get("kind") == "sweep"]
+    receipts = [p for r in sweeps for p in (r.get("data") or {}).get("per_source", [])]
+    if sweeps:
+        bad_sources += sorted(set(sources) - {p.get("source") for p in receipts})
+    for receipt in receipts:
+        src = sources.get(receipt.get("source"))
+        actual = receipt.get("fetch_url")
+        if not src or not https(actual) or actual != fetch_url(src):
+            bad_sources.append(str(receipt.get("source")))
+    checks.append(_check("egress", "T7", "fail" if bad_sources else "pass", "stop",
+                         f"non-https, unconfigured or mismatched fetch source(s): {', '.join(sorted(set(bad_sources)))}" if bad_sources
+                         else f"{len(sources)} configured https sources; {len(receipts)} fetch receipts checked"
+                         + (" (configuration only; no fetch receipts)" if not receipts else "")))
 
     # T8: agents optimize the grader they imagine. Weaver sees refusal codes, never a held-out record.
     if getattr(ctx, "mem", None) is not None:
         from ..memory import audit_contamination
         a = audit_contamination(ctx.mem)
         checks.append(_check("grader_opacity", "T8", "fail" if a["leaks"] else "pass", "stop",
-                             f"{a['contexts']} contexts journaled, {a['held_out']} held out, {len(a['leaks'])} leak(s)"))
+                             f"contamination audit only: {a['contexts']} contexts journaled, {a['held_out']} held-out records, {len(a['leaks'])} leak(s); grader gaming untested"))
 
     # T10: evidence needs provenance. No turn claims more than Likely, and archived sources carry their bytes' hash.
     if turn:
@@ -235,12 +324,16 @@ def assay_day(tape: list[dict], turns: list[dict]) -> dict:
         for ch in (r.get("data") or {}).get("checks", []):
             by_check.setdefault(f"{ch['thesis']} {ch['check']}", {}).setdefault(ch["status"], 0)
             by_check[f"{ch['thesis']} {ch['check']}"][ch["status"]] += 1
-    return {"schema": "gobbler.assay-day/1",
-            "attempts": {"n": n, "witness_pass": c, "pass_at_1": round(pass_at_k(n, c, 1), 4) if n else None,
-                         "pass_hat_3": round(pass_hat_k(n, c, 3), 4) if n >= 3 else None,
-                         "note": "pooled over attempts on different tasks: a reliability profile of the loop, not K5's per-task estimate"},
+    return {"schema": "gobbler.assay-day/2",
+            "attempts": {"n": n, "witness_pass": c, "witness_pass_fraction": round(c / n, 4) if n else None,
+                         "note": "descriptive fraction over adaptive attempts, including procedural fallback; not task pass@1"},
             "turns": {"n": len(turns), "admitted": sum(bool(t.get("admitted")) for t in turns),
-                      "admitted_first_attempt": first, "attempts_histogram": dict(sorted(attempts.items()))},
+                      "admitted_first_attempt": first,
+                      "first_attempt_admission_rate": round(first / len(turns), 4) if turns else None,
+                      "rate_scope": "turn ledger only; held/no-signal cycles without turns are excluded",
+                      "attempts_histogram": dict(sorted(attempts.items()))},
+            "same_signal_reliability": {"estimate": None,
+                                        "reason": "requires independent repeated trials of each fixed signal with fixed instruments and policy; this adaptive trace cannot identify pass^3"},
             "refusal_codes": dict(sorted(codes.items(), key=lambda kv: -kv[1])),
             "most_frequent_refusal": sorted(codes, key=lambda c: (-codes[c], c))[0] if codes else None,
             "assayed_cycles": len(assays), "checks": dict(sorted(by_check.items())),

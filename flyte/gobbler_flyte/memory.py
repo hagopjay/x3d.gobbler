@@ -11,8 +11,8 @@ What changed, with the probe that motivated it (flyte/tests/test_flyte.py::Memor
     Here a memory's effective exposure is the union over its lineage AND every evidence id it cites.
   * A memory citing an evidence id the registry does not know was also included. Here it is excluded
     ("unknown_evidence"): unresolvable provenance is not development evidence.
-  * Every exclusion is returned with its reason, and every compiled context is journaled, so a later audit can prove
-    that no sealed record ever reached a model prompt.
+  * Exclusion diagnostics are available only through an explicit trusted sink, separate from the reader packet.
+    Compiled contexts are journaled for the audit's stated current-label coverage; external prompt assembly is not covered.
 
 Only trusted organ code writes memory (Witness, Keeper). A model reply never writes a record or an exposure label.
 """
@@ -215,8 +215,15 @@ def _eligible(store: MemoryStore, m: MemoryRecord, reader: Reader) -> str | None
 
 
 def compile_context(store: MemoryStore, reader: Reader, *, kinds: tuple[str, ...], query: str,
-                    max_bytes: int = 6000, journal: bool = True) -> dict:
-    """Filter, then rank, then pack. Contradicting records travel together or not at all."""
+                    max_bytes: int = 6000, journal: bool = True, diagnostics: dict | None = None) -> dict:
+    """Filter, rank, then cap the final reader packet. Contradictions travel together.
+
+    ``diagnostics`` is an explicit trusted operator sink. Its excluded IDs and
+    reasons must not be appended to a model prompt or included in this packet's
+    hash: even a rejected record's ID can contain restricted information.
+    """
+    if type(max_bytes) is not int or max_bytes < 1:
+        raise ValueError("max_bytes must be a positive integer")
     views = store.all()
     excluded, ok = {}, {}
     for m in views:
@@ -237,7 +244,14 @@ def compile_context(store: MemoryStore, reader: Reader, *, kinds: tuple[str, ...
         0 if m.kind == "counterexample" else 1 if adj.get(m.memory_id) else 2,
         -len(words & set(m.text.casefold().split())), m.memory_id))
     packet = {"schema": "gobbler.context/1", "reader": reader.organ, "now": reader.now, "scope": reader.scope,
-              "memories": [], "policy": {"retrieved_text_is_data": True, "filtered_before_ranking": True}}
+              "memories": [], "excluded": {},
+              "policy": {"retrieved_text_is_data": True, "filtered_before_ranking": True}}
+
+    def sealed_packet(value):
+        return {**value, "context_sha256": digest(value)}
+
+    if len(wire(sealed_packet(packet)).encode("utf-8")) > max_bytes:
+        raise ValueError("max_bytes cannot fit the context envelope")
     used = set()
     for m in seeds:
         if m.memory_id in used:
@@ -256,17 +270,23 @@ def compile_context(store: MemoryStore, reader: Reader, *, kinds: tuple[str, ...
         rows = [{"memory_id": x, "kind": ok[x].kind, "text": ok[x].text, "evidence_level": ok[x].evidence_level,
                  "contradicts": sorted(adj.get(x, set()))} for x in sorted(bundle - used)]
         trial = {**packet, "memories": packet["memories"] + rows}
-        if len(wire(trial).encode()) <= max_bytes:
+        if len(wire(sealed_packet(trial)).encode("utf-8")) <= max_bytes:
             packet, used = trial, used | bundle
-    packet["excluded"] = dict(sorted(excluded.items()))
-    packet["context_sha256"] = digest(packet)
+        else:
+            for x in bundle:
+                excluded.setdefault(x, "context_budget")
+    if diagnostics is not None:
+        diagnostics["excluded"] = dict(sorted(excluded.items()))
+        diagnostics["eligible_count"] = len(ok)
+        diagnostics["selected_count"] = len(used)
+    packet = sealed_packet(packet)
     if journal:
         store.journal_context(packet)
     return packet
 
 
 def audit_contamination(store: MemoryStore) -> dict:
-    """Prove from the journal that no held-out record, and no record leaning on held-out evidence, reached a prompt."""
+    """Check selected journal IDs against current exposure labels; not an audit of every prompt byte."""
     held = {m.memory_id for m in store.all() if effective_exposures(store, m)[0] & {"sealed", "selection"}}
     leaks = []
     snaps = store.contexts()

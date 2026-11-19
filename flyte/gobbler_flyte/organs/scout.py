@@ -12,7 +12,9 @@ def scout(state: dict, ctx) -> dict:
     for src in ctx.sources:
         res = fetch(src, ctx.mode)
         visible = [i for i in res["items"] if ctx.visible(i)]
-        per_source.append({"source": src["id"], "status": res["status"], "items": len(visible), "note": res["note"]})
+        per_source.append({"source": src["id"], "status": res["status"], "items": len(visible), "note": res["note"],
+                           "fetch_url": res.get("fetch_url"), "transport": res.get("transport"),
+                           "request_policy": res.get("request_policy")})
         for it in visible:
             it["trust"] = src.get("trust", "open")
             items.append(it)
