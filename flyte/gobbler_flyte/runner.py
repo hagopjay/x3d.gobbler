@@ -22,6 +22,7 @@ from .budget import Budget, _time
 from .gobbler import build
 from .hitl import FileChannel, GitHubIssues
 from .llm import HaikuLLM
+from .memory import MemoryStore                   # imported here so its sqlite binding is the real one
 
 HERE = Path(__file__).resolve().parents[1]
 
@@ -46,8 +47,12 @@ class Ctx:
         self.world = accrete.World(self.state_dir / "world.sqlite") if accrete.available() else None
         self.world_id = (self.world.archive().get("world_id") or "world")[:16] if self.world else "no-world"
         self.outbox = self.state_dir / "outbox"
-        from .memory import MemoryStore
         self.mem = MemoryStore(self.state_dir / "memory.sqlite")
+        # The library (AI Engineering Atlas) is knowledge, kept apart from the world's experience; seeded once, idempotent.
+        self.library = MemoryStore(self.state_dir / "library.sqlite")
+        if self.library.get("aie:T13") is None:
+            from .atlas import seed_library
+            seed_library(self.library)
         self.loom_dir = loom_dir
         self.channel = channel
         self._llm_factory = llm_factory
@@ -135,7 +140,23 @@ def tick(state_dir: str | Path, *, mode: str = "offline", now: str | None = None
     except BlockingIOError:
         lock.close()
         ctx.mem.close()
+        ctx.library.close()
         raise RuntimeError(f"another tick holds {state_dir / '.tick.lock'}")
+    stop = state_dir / "STOP-THE-LINE.json"
+    if stop.exists():                      # Atlas thesis T12: a failed critical check halts work until a human clears it
+        try:
+            held = json.loads(stop.read_text())
+        except ValueError:
+            held = {"unreadable": True}
+        with (state_dir / "tape.jsonl").open("a") as f:
+            f.write(json.dumps({"t": now, "cycle": None, "node": "gobbler", "kind": "stopped",
+                                "text": f"line stopped by the Assayer since {held.get('utc')}: no cycle started, no sleeper resumed"},
+                               sort_keys=True) + "\n")
+        ctx.mem.close()
+        ctx.library.close()
+        fcntl.flock(lock, fcntl.LOCK_UN)
+        lock.close()
+        return {"utc": now, "stopped": held, "resumed": [], "started": None, "waiting": []}
     conn = sqlite3.connect(state_dir / "checkpoints.sqlite", check_same_thread=False)
     try:
         saver = SqliteSaver(conn)
@@ -188,5 +209,6 @@ def tick(state_dir: str | Path, *, mode: str = "offline", now: str | None = None
         conn.close()
         if ctx is not None:
             ctx.mem.close()
+            ctx.library.close()
         fcntl.flock(lock, fcntl.LOCK_UN)
         lock.close()

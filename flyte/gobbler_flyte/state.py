@@ -20,6 +20,7 @@ class FlyteState(TypedDict, total=False):
     decision: dict              # human decision record (asked, answered or timed out)
     entry: dict                 # world entry Keeper committed (n, hash, title)
     turn: dict                  # flywheel turn record
+    assay: dict                 # Assayer: thesis checks for this cycle (AI Engineering Atlas)
     spend: Annotated[list[dict], operator.add]   # every priced call this cycle
     log: Annotated[list[dict], operator.add]     # the run tape: one row per organ action
 

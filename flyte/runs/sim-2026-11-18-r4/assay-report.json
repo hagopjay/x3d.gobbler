@@ -1,0 +1,57 @@
+{
+ "assayed_cycles": 48,
+ "attempts": {
+  "n": 61,
+  "note": "pooled over attempts on different tasks: a reliability profile of the loop, not K5's per-task estimate",
+  "pass_at_1": 0.5738,
+  "pass_hat_3": 0.1819,
+  "witness_pass": 35
+ },
+ "checks": {
+  "T1 score_tuple": {
+   "pass": 35
+  },
+  "T10 provenance": {
+   "pass": 35
+  },
+  "T11 context_budget": {
+   "pass": 35
+  },
+  "T13 retry_cap": {
+   "pass": 35
+  },
+  "T2 canary": {
+   "pass": 1
+  },
+  "T3 state_of_record": {
+   "pass": 35
+  },
+  "T6 pin_age": {
+   "pass": 48
+  },
+  "T7 egress": {
+   "pass": 35
+  },
+  "T8 grader_opacity": {
+   "pass": 48
+  }
+ },
+ "most_frequent_refusal": "GATE_CONTAINMENT",
+ "refusal_codes": {
+  "GATE_CONTAINMENT": 9,
+  "GATE_NODE_FORBIDDEN": 8,
+  "MCP_SEMANTIC_PROFILE_COMPONENT": 9
+ },
+ "schema": "gobbler.assay-day/1",
+ "stops": 0,
+ "turns": {
+  "admitted": 35,
+  "admitted_first_attempt": 18,
+  "attempts_histogram": {
+   "1": 18,
+   "2": 8,
+   "3": 9
+  },
+  "n": 35
+ }
+}

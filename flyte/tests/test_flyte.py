@@ -461,5 +461,116 @@ class MemoryInTheLoop(unittest.TestCase):
             self.assertIn("filtered out before ranking", tape)
 
 
+class Assayer(unittest.TestCase):
+    """The AI Engineering agent: the Atlas as a library, and every cycle tested against its theses."""
+
+    def test_atlas_is_pinned_and_complete(self):
+        from gobbler_flyte import atlas
+        a = atlas.load()
+        self.assertEqual((a["rev"], len(a["S"]), len(a["N"]), len(a["K"]), len(a["G"]), len(a["THEMES"]), len(a["THESES"])),
+                         (28, 129, 218, 67, 51, 16, 13))
+        self.assertEqual(set(atlas.ONTOLOGY), {t[0] for t in a["THEMES"]})          # every theme has a home or an honest n/a
+        self.assertEqual(set(atlas.THESIS_CHECKS), {t[0] for t in a["THESES"]})
+        from gobbler_flyte.organs import assayer
+        import inspect
+        src = inspect.getsource(assayer)
+        for tid, names in atlas.THESIS_CHECKS.items():
+            if not names:
+                self.assertIn(tid, atlas.NOT_TESTED)
+            for n in names:
+                self.assertIn(n.split(":")[-1], src)
+        with tempfile.NamedTemporaryFile(suffix=".json") as f:
+            f.write(b"{}"); f.flush()
+            with self.assertRaises(ValueError):
+                atlas.load(Path(f.name))
+
+    def test_library_seed_is_idempotent_cited_and_hidden_from_weaver(self):
+        from gobbler_flyte.atlas import seed_library
+        from gobbler_flyte.memory import MemoryStore, Reader, compile_context
+        lib = MemoryStore()
+        first = seed_library(lib)
+        self.assertEqual(first, {"evidence": 129, "semantic_claim": 218, "procedure": 13 + 67, "open_question": 51})
+        self.assertEqual(seed_library(lib), {"evidence": 0, "semantic_claim": 0, "procedure": 0, "open_question": 0})
+        t1 = lib.get("aie:T1")
+        self.assertTrue(t1.parent_ids and all(lib.get(p) for p in t1.parent_ids))
+        self.assertNotIn("C", {m.evidence_level for m in lib.all()})           # no Gobbler instrument ran on the library
+        w = compile_context(lib, Reader("weaver", "2026-11-19T00:00:00Z", {}), kinds=("procedure", "semantic_claim"), query="eval",
+                            journal=False)
+        self.assertEqual(w["memories"], [])
+        self.assertEqual(set(w["excluded"].values()), {"not_a_reader"})
+        a = compile_context(lib, Reader("assayer", "2026-11-19T00:00:00Z", {}), kinds=("procedure",), query="grader canary",
+                            journal=False)
+        self.assertTrue(a["memories"])
+        lib.close()
+
+    def test_pass_hat_k_matches_the_atlas_sketch(self):
+        from gobbler_flyte.organs.assayer import pass_at_k, pass_hat_k
+        self.assertAlmostEqual(pass_at_k(10, 3, 1), 0.3)
+        self.assertAlmostEqual(pass_hat_k(10, 3, 3), 1 / 120)
+        self.assertEqual(pass_at_k(5, 5, 3), 1.0)
+        self.assertEqual(pass_hat_k(2, 2, 3), 0.0)
+
+    def test_canary_holds_on_the_pinned_instruments(self):
+        from gobbler_flyte.organs.assayer import run_canary
+        c = run_canary()
+        if c["not_run"]:
+            self.skipTest("x3d.accrete not available")
+        self.assertTrue(c["held"], c)
+        self.assertEqual({o["fragment"]: o["codes"] for o in c["fragments"] if o["want"] == "fail"},
+                         {"nested-animation": ["GATE_CONTAINMENT"], "remote-texture": ["GATE_NODE_FORBIDDEN"],
+                          "physical-material-immersive": ["MCP_SEMANTIC_PROFILE_COMPONENT"]})
+
+    def test_a_broken_grader_stops_the_line_and_the_next_tick_starts_nothing(self):
+        broken = {"fragments": [{"fragment": "remote-texture", "want": "fail", "got": "pass", "stage": "gate", "codes": []}],
+                  "held": False, "not_run": False}
+        with tempfile.TemporaryDirectory() as d:
+            with patch("gobbler_flyte.organs.assayer.run_canary", return_value=broken):
+                tick(d, mode="offline", now="2026-11-18T00:00:00Z", config=CFG)
+            stop = json.loads((Path(d) / "STOP-THE-LINE.json").read_text())
+            self.assertEqual([f["check"] for f in stop["failed"]], ["canary"])
+            self.assertEqual(stop["failed"][0]["library"], "aie:T2")
+            s = tick(d, mode="offline", now="2026-11-18T00:30:00Z", config=CFG)
+            self.assertIsNone(s["started"]); self.assertIn("stopped", s)
+            self.assertEqual(json.loads((Path(d) / "memory.json").read_text())["cycles"], 1)
+            (Path(d) / "STOP-THE-LINE.json").unlink()                   # the human clears it
+            self.assertEqual(tick(d, mode="offline", now="2026-11-18T01:00:00Z", config=CFG)["started"]["cycle"], 2)
+
+    def test_state_of_record_catches_a_turn_that_lies(self):
+        from gobbler_flyte.organs.assayer import assay_cycle
+        with tempfile.TemporaryDirectory() as d:
+            tick(d, mode="offline", now="2026-11-18T00:00:00Z", config=CFG)
+            ctx = Ctx(state_dir=Path(d), mode="offline", now="2026-11-18T00:30:00Z", config=CFG, allowance={})
+            ctx.memory["assay"] = {"canary_day": "2026-11-18"}
+            turn = json.loads((Path(d) / "turns.jsonl").read_text().splitlines()[0])
+            honest = assay_cycle({"cycle": 1, "turn": turn}, ctx)
+            lie = assay_cycle({"cycle": 1, "turn": {**turn, "entry_hash": "0" * 64}}, ctx)
+            ghost = assay_cycle({"cycle": 2, "turn": {**turn, "cycle": 2}}, ctx)
+            ctx.mem.close(); ctx.library.close()
+            status = lambda cs: next(c["status"] for c in cs if c["check"] == "state_of_record")
+            self.assertEqual((status(honest), status(lie), status(ghost)), ("pass", "fail", "fail"))
+
+    def test_unconfigured_source_fails_egress(self):
+        from gobbler_flyte.organs.assayer import assay_cycle
+        with tempfile.TemporaryDirectory() as d:
+            ctx = Ctx(state_dir=Path(d), mode="offline", now="2026-11-18T00:00:00Z", config=CFG, allowance={})
+            ctx.memory["assay"] = {"canary_day": "2026-11-18"}
+            ok = assay_cycle({"cycle": 1, "signal": {"source": "web3d-news", "url": "http://example.org/x"}}, ctx)
+            bad = assay_cycle({"cycle": 1, "signal": {"source": "pastebin", "url": "https://pastebin.com/x"}}, ctx)
+            ctx.mem.close(); ctx.library.close()
+            self.assertEqual([c["status"] for c in ok if c["check"] == "egress"], ["pass"])    # an item's link is data, not egress
+            self.assertEqual([c["status"] for c in bad if c["check"] == "egress"], ["fail"])
+
+    def test_simulated_day_is_assayed_every_cycle(self):
+        with tempfile.TemporaryDirectory() as d:
+            r = run_day(Path(d) / "day", ticks=48, allowance_usd=0.03)
+            a = r["assay"]
+            self.assertEqual(a["stops"], 0)
+            self.assertGreaterEqual(a["assayed_cycles"], 48)
+            self.assertEqual(a["checks"]["T2 canary"], {"pass": 1})
+            self.assertNotIn("fail", a["checks"]["T3 state_of_record"])
+            self.assertEqual(a["turns"]["admitted"], sum(t["admitted"] for t in r["turns"]))
+            self.assertTrue((Path(d) / "day" / "assay-report.json").exists())
+
+
 if __name__ == "__main__":
     unittest.main()
