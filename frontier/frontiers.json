@@ -1,0 +1,2403 @@
+{
+ "schema": "gobbler.frontier-registry/1",
+ "date": "2026-11-23",
+ "note": "Hand-written by the thread's model in the Assayer's persona. The five judged scores (1 to 5) are opinions, graded Suspected; effort 1 is one session, 5 is many sessions or needs hardware. Flags and graders are claims the assay tests; evidence paths are checked against local checkouts.",
+ "families": {
+  "A": "Abstract and algorithmic",
+  "G": "Generative art",
+  "E": "AI engineering",
+  "S": "Adversarial and security",
+  "D": "Domain"
+ },
+ "frontiers": [
+  {
+   "id": "qd-evolve",
+   "family": "A",
+   "status": "unexplored",
+   "title": "Quality-diversity evolution of X3D scenes (MAP-Elites, novelty search)",
+   "gain": "An archive of valid-but-strange scenes that no person would write: every cell that one reader accepts and another breaks is a new receipt, found without a model call.",
+   "first_step": "Evolve 200 generations over a 12-node vocabulary; fitness is admitted by the gate and renders non-black; keep one judge held out so the search cannot learn it.",
+   "judged": {
+    "relevance": 5,
+    "flywheel": 5,
+    "gravitas": 4,
+    "visual": 5,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "code",
+    "name": "x3d_mcp validator + loom traps + render non-black check"
+   },
+   "flags": {
+    "optimizer": true,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "hack",
+    "rl",
+    "bench"
+   ],
+   "evidence": [
+    "x3d.loom:kit/loomkit/traps.py",
+    "x3d-blender-io:tools/chaos/mutations.py"
+   ]
+  },
+  {
+   "id": "grammar-gen",
+   "family": "A",
+   "status": "touched",
+   "title": "Shape grammars and L-systems as scene programs",
+   "gain": "A scene becomes a short program with a known answer, so every generated file carries its own exact reference.",
+   "first_step": "Write a 5-rule L-system turtle to X3D; witness = predicted segment count equals counted Shape nodes at depths 1 to 7.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 3,
+    "gravitas": 3,
+    "visual": 5,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "code",
+    "name": "exact symbol counts and Euler characteristic of the derivation"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.loom:x3d.mandala/README.md",
+    "x3d.mathslab:yantra"
+   ]
+  },
+  {
+   "id": "canon-egraph",
+   "family": "A",
+   "status": "unexplored",
+   "title": "Canonical form for X3D (equality saturation: one scene, one spelling)",
+   "gain": "Byte identity stops lying: two files that mean the same scene hash the same, which every dedupe, cache and receipt needs.",
+   "first_step": "Define 12 rewrite rules (default-field removal, DEF renaming, transform folding); prove the canoniser is idempotent on the 514-file sweep corpus.",
+   "judged": {
+    "relevance": 5,
+    "flywheel": 4,
+    "gravitas": 4,
+    "visual": 2,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "code",
+    "name": "round-trip fixed point + semantic hash equality"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "bench",
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.loom:LEARNINGS-chaos-round-2-20261122.md",
+    "x3d.gobbler:evidence-lab/cases.json"
+   ]
+  },
+  {
+   "id": "smt-laws",
+   "family": "A",
+   "status": "touched",
+   "title": "Solver-checked laws: prove the 44 laws and the r2r rules do not contradict",
+   "gain": "A contradiction between two rules is found by proof before a project trips on it; each rule gets a machine-readable form.",
+   "first_step": "Encode the 28 r2r candidate rules as SMT constraints and ask for any file that two rules grade differently.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 4,
+    "gravitas": 4,
+    "visual": 2,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "code",
+    "name": "solver SAT and UNSAT certificates (Z3, pySHACL)"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalops",
+    "bench"
+   ],
+   "evidence": [
+    "x3d_mcp:evaluation/build_cardinality_shapes.py",
+    "x3d.loom:kit/loomkit/r2r/rule.py"
+   ]
+  },
+  {
+   "id": "coverage-fuzz",
+   "family": "A",
+   "status": "explored",
+   "title": "Coverage-guided fuzzing of every X3D reader (Atheris, cargo-fuzz)",
+   "gain": "Chaos rounds found 68 crashes with blind one-edit mutants; coverage guidance reaches the branches blind mutation never touches.",
+   "first_step": "Wrap the x3d_mcp parser and the add-on's field coercion in Atheris harnesses; seed from tests/golden; 1 CPU-hour.",
+   "judged": {
+    "relevance": 5,
+    "flywheel": 5,
+    "gravitas": 3,
+    "visual": 1,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "cross-impl",
+    "name": "crash oracle + six differential judges"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "bench",
+    "evalsec"
+   ],
+   "evidence": [
+    "x3d-blender-io:tools/chaos/differential.py",
+    "x3d.wgpu:fuzz/fuzz_targets",
+    "x3d.loom:LEARNINGS-chaos-round-20261122.md"
+   ]
+  },
+  {
+   "id": "cross-render",
+   "family": "A",
+   "status": "touched",
+   "title": "Cross-engine differential rendering as the oracle",
+   "gain": "Six renderers vote on every scene; a lone dissenter is a bug report with a picture, and agreement is evidence no single engine can give.",
+   "first_step": "Render the 30 conformance scenes in 3 engines with a fixed rig; publish the disagreement matrix and the 5 largest pixel gaps.",
+   "judged": {
+    "relevance": 5,
+    "flywheel": 5,
+    "gravitas": 4,
+    "visual": 4,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "cross-impl",
+    "name": "X_ITE, three.js, Babylon, Castle, x3d.wgpu and Blender pixel difference"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "bench",
+    "agev"
+   ],
+   "evidence": [
+    "x3d.wgpu:conformance",
+    "x3d.castle:castle-render",
+    "x3d.loom:LEARNINGS-blender-io-gates-1-2.md"
+   ]
+  },
+  {
+   "id": "geom-witness",
+   "family": "A",
+   "status": "touched",
+   "title": "Geometry-processing witnesses (manifold, Euler characteristic, self-intersection)",
+   "gain": "Mesh truth that a validator never checks: a schema-valid IndexedFaceSet can still be inside out, open or self-crossing.",
+   "first_step": "Add `kit/loom mesh`: 6 identities with 12 planted defects; sweep every IndexedFaceSet in x3d.demo.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 4,
+    "gravitas": 3,
+    "visual": 3,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "code",
+    "name": "exact topological identities (V - E + F, closed manifold, winding)"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.loom:runs/manifold-20261106"
+   ]
+  },
+  {
+   "id": "implicit-ca",
+   "family": "A",
+   "status": "touched",
+   "title": "Implicit fields and cellular automata to mesh (SDF, marching cubes, reaction-diffusion)",
+   "gain": "Organic form with an exact discrete reference: the automaton's own state is the answer the mesh must match.",
+   "first_step": "3D Gray-Scott to marching cubes to X3D; witness = voxel count above threshold equals enclosed-cell count.",
+   "judged": {
+    "relevance": 3,
+    "flywheel": 3,
+    "gravitas": 3,
+    "visual": 5,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "code",
+    "name": "conserved quantity and step hash of the automaton"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.loom:runs/turing-garden-20261105",
+    "x3d.stem:studies/turing-garden"
+   ]
+  },
+  {
+   "id": "stigmergy",
+   "family": "A",
+   "status": "unexplored",
+   "title": "Stigmergic builders: simple agents weaving a scene by local rules",
+   "gain": "Shows emergence under receipts, and gives the Gobbler's shell its tenders; little new law.",
+   "first_step": "500 agents lay threads on a sphere by pheromone rule; Node and Chromium must agree on every step hash.",
+   "judged": {
+    "relevance": 3,
+    "flywheel": 2,
+    "gravitas": 2,
+    "visual": 5,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "code",
+    "name": "deterministic step hash replayed in two hosts"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "rl",
+    "agdes"
+   ],
+   "evidence": [
+    "x3d.loom:PHYSICS-PLAYBOOK.md"
+   ]
+  },
+  {
+   "id": "active-design",
+   "family": "A",
+   "status": "touched",
+   "title": "Active experiment design: the r2r needs list picks the next run (bandits, expected information gain)",
+   "gain": "The flywheel chooses its own next experiment by what would settle the most open rules per minute of instrument time.",
+   "first_step": "Rank the current `r2r needs` list by expected rules settled; run the top 5 and the bottom 5; compare rules settled.",
+   "judged": {
+    "relevance": 5,
+    "flywheel": 5,
+    "gravitas": 3,
+    "visual": 2,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "code",
+    "name": "candidate rules closed or promoted per instrument-hour"
+   },
+   "flags": {
+    "optimizer": true,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalops",
+    "agev",
+    "reason"
+   ],
+   "evidence": [
+    "x3d.loom:kit/loomkit/r2r/probe.py",
+    "x3d.loom:R2R.md"
+   ]
+  },
+  {
+   "id": "tda-corpus",
+   "family": "A",
+   "status": "unexplored",
+   "title": "Topological data analysis of scene corpora (persistent homology)",
+   "gain": "A shape fingerprint for whole corpora; interesting, but few receipts flow back.",
+   "first_step": "Persistence diagrams for 50 demo meshes; plant 5 topology changes and check each moves the diagram.",
+   "judged": {
+    "relevance": 2,
+    "flywheel": 2,
+    "gravitas": 3,
+    "visual": 4,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "code",
+    "name": "persistence diagram equality against a reference library (GUDHI)"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalops"
+   ],
+   "evidence": []
+  },
+  {
+   "id": "text2x3d-loop",
+   "family": "G",
+   "status": "explored",
+   "title": "Text to X3D with the validator in the loop (repair from refusal codes)",
+   "gain": "Each refusal code a model cannot repair is a missing hint; each repaired one is a tested technique. Already the Gobbler's inner loop.",
+   "first_step": "Run the 35-signal sim day with a real model, memory on and off; report first-attempt admission with 3 trials per signal.",
+   "judged": {
+    "relevance": 5,
+    "flywheel": 5,
+    "gravitas": 4,
+    "visual": 3,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "code",
+    "name": "x3d_mcp validator + loom traps on every attempt"
+   },
+   "flags": {
+    "optimizer": true,
+    "model_required": true,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "hack",
+    "agev",
+    "found"
+   ],
+   "evidence": [
+    "x3d_mcp:evaluation/exact_fix_eval.py",
+    "x3d.gobbler:flyte/gobbler_flyte/organs/weaver.py"
+   ]
+  },
+  {
+   "id": "grammar-decode",
+   "family": "G",
+   "status": "unexplored",
+   "title": "Grammar-constrained decoding: compile the X3D schema into a grammar so a small model cannot emit an invalid scene",
+   "gain": "Moves validity from repair to construction, and measures exactly which rules a grammar can carry (containment) and which it cannot (ROUTE types, DEF before USE).",
+   "first_step": "Compile the Interchange profile to GBNF; run a small open model 200 times with and without it; count validator passes.",
+   "judged": {
+    "relevance": 5,
+    "flywheel": 4,
+    "gravitas": 5,
+    "visual": 2,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "code",
+    "name": "validity rate with and without the grammar, same model and seed"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": true,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "found",
+    "serve",
+    "bench"
+   ],
+   "evidence": [
+    "x3d_mcp:evaluation/build_verified_containment.py"
+   ]
+  },
+  {
+   "id": "image-to-3d",
+   "family": "G",
+   "status": "unexplored",
+   "title": "Image and text to 3D models (TRELLIS, Hunyuan3D, TripoSR class) into X3D with receipts",
+   "gain": "Generative meshes are the dirtiest input the Loom will ever see: non-manifold, baked light, no scale. Each defect class becomes a trap.",
+   "first_step": "Take 20 open-licence generated GLBs through Loom-for-glTF to X3D; census the defects by class.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 4,
+    "gravitas": 4,
+    "visual": 5,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "code",
+    "name": "geometry witnesses + loss receipt on the converted mesh"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": true,
+    "model_optional": false,
+    "data_open": true,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "found",
+    "bench",
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.loom:formats/gltf/SPEC.md"
+   ]
+  },
+  {
+   "id": "splat-x3d",
+   "family": "G",
+   "status": "explored",
+   "title": "Gaussian splats and radiance fields into X3D 4.1",
+   "gain": "Photoreal capture inside the accountable format; the open question is what a receipt for a splat even counts.",
+   "first_step": "Define 5 splat witnesses (count, bounds, SH degree, opacity histogram, transform carried) with planted defects.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 3,
+    "gravitas": 4,
+    "visual": 5,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "cross-impl",
+    "name": "splat render agreement across two viewers"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": true,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "bench",
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.loom:docs/MARBLE-SPLATS.md",
+    "x3d-blender-io:docs"
+   ]
+  },
+  {
+   "id": "shader-art",
+   "family": "G",
+   "status": "explored",
+   "title": "Generative shader art behind a compile-and-render guard (GLSL, WGSL)",
+   "gain": "Shaders are where validators go blind; a guard that compiles, links and renders closes the gap the shader fixture guard admits it leaves.",
+   "first_step": "Extend the 5-fixture shader guard to compile and render; evolve 100 fragment shaders under it.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 4,
+    "gravitas": 3,
+    "visual": 5,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "code",
+    "name": "glslang and naga compile + lavapipe render hash"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalops",
+    "bench"
+   ],
+   "evidence": [
+    "x3d.loom:LEARNINGS-shader-vulkan.md",
+    "x3d.loom:LEARNINGS-xite-inline-shaders-20261123.md"
+   ]
+  },
+  {
+   "id": "material-gen",
+   "family": "G",
+   "status": "unexplored",
+   "title": "Generated PBR materials and textures",
+   "gain": "Pretty, but narrow: one witness (energy conservation) and a licence question per texture.",
+   "first_step": "Generate 20 materials; run the white furnace; count the ones that create light.",
+   "judged": {
+    "relevance": 3,
+    "flywheel": 2,
+    "gravitas": 2,
+    "visual": 4,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "code",
+    "name": "white-furnace energy test on every generated material"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": true,
+    "model_optional": false,
+    "data_open": true,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "found"
+   ],
+   "evidence": [
+    "x3d.loom:LEARNINGS-shader-vulkan.md"
+   ]
+  },
+  {
+   "id": "breed-judge",
+   "family": "G",
+   "status": "unexplored",
+   "title": "Interactive evolution: you breed scenes by eye and your picks become the judge's labels",
+   "gain": "Turns your taste into data. Thirty picks is the label set the Assayer says a picture judge needs before it may grade anything (thesis T5).",
+   "first_step": "A 3 by 3 breeding page over the mascot's own genome; every click writes one signed preference row.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 5,
+    "gravitas": 3,
+    "visual": 5,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "human",
+    "name": "your picks, recorded as labels with position swapped"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": false,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "judge",
+    "prod"
+   ],
+   "evidence": [
+    "x3d.gobbler:flyte/ATLAS-MAP.md"
+   ]
+  },
+  {
+   "id": "video-world",
+   "family": "G",
+   "status": "touched",
+   "title": "Video and world models to X3D (the 8-second stage)",
+   "gain": "Largest wow, weakest grip: no code grader exists yet and licences are restrictive.",
+   "first_step": "Hold until a judge passes kappa; then one 8-second clip to a staged scene.",
+   "judged": {
+    "relevance": 3,
+    "flywheel": 3,
+    "gravitas": 4,
+    "visual": 5,
+    "effort": 5
+   },
+   "grader": {
+    "kind": "model",
+    "name": "picture judge, not yet validated"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": true,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": true,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": false,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "judge",
+    "found"
+   ],
+   "evidence": [
+    "x3d.loom:docs/MARBLE-SPLATS.md"
+   ]
+  },
+  {
+   "id": "audio-reactive",
+   "family": "G",
+   "status": "explored",
+   "title": "Audio-reactive generative scenes",
+   "gain": "A solved pattern here; re-use more than new learning.",
+   "first_step": "Bind the mascot's fan to the existing Loomsong onsets.",
+   "judged": {
+    "relevance": 3,
+    "flywheel": 2,
+    "gravitas": 2,
+    "visual": 5,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "code",
+    "name": "onset alignment between score and keyframes"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.music:witnesses",
+    "x3d.loom:runs/vortex-sound-20261105"
+   ]
+  },
+  {
+   "id": "proc-worlds",
+   "family": "G",
+   "status": "touched",
+   "title": "Procedural worlds: wave function collapse, noise terrain, erosion, cities",
+   "gain": "A generator whose every output is checkable by its own constraints; feeds Accrete with admitted worlds.",
+   "first_step": "WFC with 12 tiles on a 20 cubed grid; witness = 0 illegal adjacencies; admit through the Accrete gate.",
+   "judged": {
+    "relevance": 3,
+    "flywheel": 3,
+    "gravitas": 3,
+    "visual": 5,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "code",
+    "name": "constraint satisfaction count (every tile adjacency legal)"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.accrete:accretion",
+    "x3d.loom:runs/data-city-20261104"
+   ]
+  },
+  {
+   "id": "x3d-bench",
+   "family": "E",
+   "status": "unexplored",
+   "title": "A public scoreboard of models on Loom tasks",
+   "gain": "The Loom's failure modes become an exam any model can sit. It is the one artefact outsiders can cite, and each model's misses are fresh receipts.",
+   "first_step": "Freeze 60 tasks from failure modes that have a code grader; hold 12 private; score 3 trials per task.",
+   "judged": {
+    "relevance": 5,
+    "flywheel": 5,
+    "gravitas": 5,
+    "visual": 3,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "code",
+    "name": "validator + traps + hidden reference answers"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": true,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "bench",
+    "agev",
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.loom:LOOM-v1.md",
+    "x3d_mcp:evaluation/ablation_matrix.py"
+   ]
+  },
+  {
+   "id": "dspy-gepa",
+   "family": "E",
+   "status": "touched",
+   "title": "DSPy and GEPA optimisation of the rule proposer",
+   "gain": "An optimiser writes better prompts than we do, but it optimises whatever the grader rewards, so the grader must stay hidden.",
+   "first_step": "Switch on the r2r proposer seam for the `needs` list only; cap at Suspected; under $10.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 4,
+    "gravitas": 3,
+    "visual": 1,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "code",
+    "name": "r2r self-test (hidden rules recovered word for word)"
+   },
+   "flags": {
+    "optimizer": true,
+    "model_required": true,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "found",
+    "hack"
+   ],
+   "evidence": [
+    "x3d.loom:kit/dspy_pilots",
+    "x3d.loom:DSPY-SWEEP-2026-11-18.md"
+   ]
+  },
+  {
+   "id": "rag-loom",
+   "family": "E",
+   "status": "unexplored",
+   "title": "Retrieval over the Loom: the right law and failure mode on the page before the first line is written",
+   "gain": "213 failure modes are useless unread. Retrieval at kickoff makes every past receipt pay again; lexical first, so no model call.",
+   "first_step": "Build BM25 over laws, failure modes and LEARNINGS; write 40 questions from real incidents; measure recall at 5.",
+   "judged": {
+    "relevance": 5,
+    "flywheel": 5,
+    "gravitas": 3,
+    "visual": 2,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "code",
+    "name": "recall at 5 on held-out failure-mode questions"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "rag",
+    "mem"
+   ],
+   "evidence": [
+    "x3d.gobbler:flyte/gobbler_flyte/memory.py",
+    "x3d.loom:GLOSSARY.md"
+   ]
+  },
+  {
+   "id": "finetune",
+   "family": "E",
+   "status": "touched",
+   "title": "Fine-tune a small open model on validator-labelled Loom data",
+   "gain": "Every receipt is a labelled training row. A small model that writes valid X3D on your own GPU is the flywheel with no rented model in it.",
+   "first_step": "Export 5,000 (prompt, scene, verdict) rows with the dataset tools; LoRA on the G4; compare to the base model on 60 held tasks.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 5,
+    "gravitas": 5,
+    "visual": 2,
+    "effort": 5
+   },
+   "grader": {
+    "kind": "code",
+    "name": "validator pass rate on a held-out task split"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": true,
+    "model_optional": false,
+    "data_open": true,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "ft",
+    "bench"
+   ],
+   "evidence": [
+    "x3d_mcp:dataset/generate.py"
+   ]
+  },
+  {
+   "id": "picture-judge",
+   "family": "E",
+   "status": "unexplored",
+   "title": "A picture judge calibrated against your eye",
+   "gain": "Beauty is your top criterion and the one thing no code grader sees. A judge is allowed only after it agrees with you.",
+   "first_step": "Collect 30 pair labels (see breed-judge); measure Cohen's kappa and a position-swap test before any use.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 4,
+    "gravitas": 3,
+    "visual": 3,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "model",
+    "name": "vision model, valid only after kappa against your labels"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": true,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": false,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "judge",
+    "bench"
+   ],
+   "evidence": [
+    "x3d.gobbler:flyte/ATLAS-MAP.md"
+   ]
+  },
+  {
+   "id": "agent-swarm",
+   "family": "E",
+   "status": "unexplored",
+   "title": "Builder, breaker and referee: a small swarm arguing over one scene",
+   "gain": "Tests the one thesis the Gobbler never has (T9: swarms change the threat model). Costly, and easy to fool yourself.",
+   "first_step": "Simulate first with scripted agents; measure whether a peer's instruction can override the referee.",
+   "judged": {
+    "relevance": 3,
+    "flywheel": 3,
+    "gravitas": 3,
+    "visual": 3,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "code",
+    "name": "validator on the final scene; group behaviour unmeasured"
+   },
+   "flags": {
+    "optimizer": true,
+    "model_required": true,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": true,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": false
+   },
+   "atlas_themes": [
+    "agdes",
+    "sec",
+    "hack"
+   ],
+   "evidence": [
+    "x3d.gobbler:flyte/DESIGN.md"
+   ]
+  },
+  {
+   "id": "scene-embed",
+   "family": "E",
+   "status": "unexplored",
+   "title": "Scene embeddings and graph networks: similarity, dedupe and a map of every scene",
+   "gain": "A map of the corpus you can fly through; useful once the corpus is big.",
+   "first_step": "Hand-built 64-number structural fingerprint (node histogram, depth, ROUTE motifs); plant 50 near-duplicates.",
+   "judged": {
+    "relevance": 3,
+    "flywheel": 3,
+    "gravitas": 3,
+    "visual": 4,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "code",
+    "name": "retrieval of 50 planted near-duplicates"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": true,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "rag",
+    "found"
+   ],
+   "evidence": [
+    "x3d.loom:runs/traps-corpus-20261103"
+   ]
+  },
+  {
+   "id": "synth-vision",
+   "family": "E",
+   "status": "unexplored",
+   "title": "X3D as a synthetic-data factory for vision models",
+   "gain": "The scene graph knows every label for free. This is how X3D earns a seat in machine-learning pipelines.",
+   "first_step": "Render 1,000 randomised scenes with per-pixel node ids; witness = label image matches a second renderer.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 3,
+    "gravitas": 5,
+    "visual": 4,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "code",
+    "name": "labels exact by construction (segmentation, depth, pose from the scene graph)"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "ft",
+    "bench"
+   ],
+   "evidence": [
+    "x3d.wgpu:scenes"
+   ]
+  },
+  {
+   "id": "rl-gym",
+   "family": "E",
+   "status": "unexplored",
+   "title": "X3D worlds as reinforcement-learning environments",
+   "gain": "X3D as the level format for agents. Reward hacking is the known hazard, which is why it teaches.",
+   "first_step": "Wrap the Rapier marble scene as a Gymnasium environment; random policy; 1,000 episodes replay bit-identically.",
+   "judged": {
+    "relevance": 3,
+    "flywheel": 3,
+    "gravitas": 4,
+    "visual": 4,
+    "effort": 4
+   },
+   "grader": {
+    "kind": "code",
+    "name": "step-hash determinism + reward from simulator state"
+   },
+   "flags": {
+    "optimizer": true,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": false
+   },
+   "atlas_themes": [
+    "rl",
+    "hack"
+   ],
+   "evidence": [
+    "x3d.loom:x3d.physics/README.md"
+   ]
+  },
+  {
+   "id": "token-economy",
+   "family": "E",
+   "status": "unexplored",
+   "title": "The token economy of X3D: which encoding can a model afford",
+   "gain": "Tells every agent how much scene fits in a context, and which encoding (XML, JSON, ClassicVRML, DEF/USE folded) costs least for the same scene.",
+   "first_step": "Count tokens for 100 scenes in 5 encodings with an open tokenizer; check each decodes to the same canonical scene.",
+   "judged": {
+    "relevance": 5,
+    "flywheel": 4,
+    "gravitas": 3,
+    "visual": 2,
+    "effort": 1
+   },
+   "grader": {
+    "kind": "code",
+    "name": "open-tokenizer counts + round-trip equality"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "found",
+    "agdes",
+    "reason"
+   ],
+   "evidence": [
+    "x3d.mashtots:armenian-tokenizer-census"
+   ]
+  },
+  {
+   "id": "mcp-loom",
+   "family": "E",
+   "status": "touched",
+   "title": "The Loom as an MCP server: laws, failure modes and r2r check as tools any agent can call",
+   "gain": "Any agent, in any product, gets the Loom's memory at the moment it needs it. The widest reuse per line of code.",
+   "first_step": "Expose 4 read-only tools (law, failure mode, trap check, r2r check) beside the validator; 20 contract tests.",
+   "judged": {
+    "relevance": 5,
+    "flywheel": 5,
+    "gravitas": 4,
+    "visual": 1,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "code",
+    "name": "tool-call contract tests + r2r check verdicts"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "agdes",
+    "sec"
+   ],
+   "evidence": [
+    "x3d_mcp:src/server.py",
+    "x3d.loom:kit/loomkit/r2r/cli.py"
+   ]
+  },
+  {
+   "id": "trace-receipts",
+   "family": "E",
+   "status": "unexplored",
+   "title": "Receipts as traces: one span per witness, one trace per run",
+   "gain": "Makes slow and flaky steps visible; modest new learning.",
+   "first_step": "Emit OpenTelemetry-shaped JSON from `kit/loom`; rebuild one receipt from its spans.",
+   "judged": {
+    "relevance": 3,
+    "flywheel": 4,
+    "gravitas": 2,
+    "visual": 2,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "code",
+    "name": "span tree reconstructs the receipt byte for byte"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "prod",
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.loom:kit/loomkit/receipt.py"
+   ]
+  },
+  {
+   "id": "memory-trial",
+   "family": "E",
+   "status": "touched",
+   "title": "Does agent memory help? The on/off trial with a real model",
+   "gain": "The Gobbler's memory is built but unproven; this is the measurement that says keep or cut.",
+   "first_step": "35 signals, 3 trials, memory on and off, one cheap model; needs your typed spend OK.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 4,
+    "gravitas": 3,
+    "visual": 1,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "code",
+    "name": "first-attempt admission, memory on versus off, 3 trials"
+   },
+   "flags": {
+    "optimizer": true,
+    "model_required": true,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "mem",
+    "agev"
+   ],
+   "evidence": [
+    "x3d.gobbler:flyte/gobbler_flyte/memory.py"
+   ]
+  },
+  {
+   "id": "c2pa-3d",
+   "family": "E",
+   "status": "touched",
+   "title": "Signed provenance for 3D: from hash chain to signature",
+   "gain": "A hash chain proves consistency, not authorship. A signature is what makes \"accountable\" hold outside the project.",
+   "first_step": "Sign one scene and its receipt; verify with an independent tool; plant 4 tampers.",
+   "judged": {
+    "relevance": 5,
+    "flywheel": 3,
+    "gravitas": 5,
+    "visual": 2,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "code",
+    "name": "signature verification by an independent tool (c2patool)"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalsec",
+    "prod"
+   ],
+   "evidence": [
+    "x3d.loom:LEARNINGS-blender-scivis.md",
+    "x3d.accrete:accretion"
+   ]
+  },
+  {
+   "id": "onto-reason",
+   "family": "E",
+   "status": "explored",
+   "title": "Ontology reasoning over scenes (OWL, SHACL)",
+   "gain": "Meaning-level checks the schema cannot state; waits on the x3d.onto fixes.",
+   "first_step": "Finish review items F10 to F14; 30 entailment goldens.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 3,
+    "gravitas": 4,
+    "visual": 3,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "code",
+    "name": "reasoner entailments against hand-checked goldens"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalops",
+    "bench"
+   ],
+   "evidence": [
+    "x3d_mcp:evaluation/cross_validate_ontology.py",
+    "x3d.loom:LEARNINGS-ontology-review-fixes.md"
+   ]
+  },
+  {
+   "id": "x3d-injection",
+   "family": "S",
+   "status": "unexplored",
+   "title": "Prompt injection through 3D files: Metadata, WorldInfo, Script, Anchor and Inline as attack channels",
+   "gain": "If X3D is the format an AI is held accountable to, a scene must not be able to instruct the AI reading it. Nobody has mapped this surface.",
+   "first_step": "List every X3D field that carries free text or a URL; build 40 hostile scenes; run them through the Gobbler's quoting lint.",
+   "judged": {
+    "relevance": 5,
+    "flywheel": 4,
+    "gravitas": 5,
+    "visual": 3,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "code",
+    "name": "static taint lint (which text fields reach a prompt) + planted canary strings"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": true,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "sec",
+    "evalsec"
+   ],
+   "evidence": [
+    "x3d.gobbler:flyte/gobbler_flyte/loom/untrusted.py"
+   ]
+  },
+  {
+   "id": "hostile-all",
+   "family": "S",
+   "status": "explored",
+   "title": "The hostile-file corpus against every reader, not only Blender",
+   "gain": "73 hostile files took the Blender add-on from 26 failures to 0. X_ITE, three.js, Castle and x3d.wgpu have never faced them.",
+   "first_step": "Run the 73 files against x3d.wgpu and the x3d_mcp parser under the same limits; count failures per reader.",
+   "judged": {
+    "relevance": 5,
+    "flywheel": 5,
+    "gravitas": 4,
+    "visual": 2,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "cross-impl",
+    "name": "sandboxed resource limits + crash and disclosure sentinels"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalsec",
+    "sec",
+    "bench"
+   ],
+   "evidence": [
+    "x3d-blender-io:tools/chaos/hostile.py",
+    "x3d.loom:LEARNINGS-chaos-round-3-20261123.md"
+   ]
+  },
+  {
+   "id": "mutate-graders",
+   "family": "S",
+   "status": "explored",
+   "title": "Red-team the Loom's own graders: mutation-test every witness",
+   "gain": "A witness that still passes after its own logic is broken is decoration. One number per witness says which ones are real.",
+   "first_step": "Mutate `traps.py` and `metalsite.py` 200 times each; report killed over made; fix the survivors.",
+   "judged": {
+    "relevance": 5,
+    "flywheel": 5,
+    "gravitas": 4,
+    "visual": 1,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "code",
+    "name": "mutation score of each witness (mutants killed over mutants made)"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "hack",
+    "bench"
+   ],
+   "evidence": [
+    "x3d.loom:COLLIDER.md",
+    "x3d.gobbler:flyte/gobbler_flyte/organs/assayer.py"
+   ]
+  },
+  {
+   "id": "bim-ifc",
+   "family": "D",
+   "status": "unexplored",
+   "title": "BIM and construction through IfcOpenShell",
+   "gain": "The richest typed 3D data on Earth, with its own rule language (IDS). The Loom meets a peer validator and a paying industry.",
+   "first_step": "One open sample building: IFC to X3D with a loss receipt; 10 quantities (areas, volumes, counts) against IfcOpenShell.",
+   "judged": {
+    "relevance": 5,
+    "flywheel": 5,
+    "gravitas": 5,
+    "visual": 4,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "reference",
+    "name": "IfcOpenShell geometry + buildingSMART IDS checks"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": true,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "bench",
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.loom:LEARNINGS-heritage-geo.md"
+   ]
+  },
+  {
+   "id": "molecules",
+   "family": "D",
+   "status": "deep",
+   "title": "Molecules and proteins (zinc fingers reborn)",
+   "gain": "Fertile and proven; the next gain is dynamics (trajectories) and density maps, where exact references still exist.",
+   "first_step": "Take 3 of the 9 red zinc sites through a second reader and a trajectory frame witness.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 4,
+    "gravitas": 5,
+    "visual": 5,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "reference",
+    "name": "deposited structures + the metal-site witness with 25 negative controls"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": true,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "bench",
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.loom:ZINC-FINGER.md",
+    "x3d.loom:x3d.mol/README.md",
+    "x3d.loom:kit/loomkit/metalsite.py"
+   ]
+  },
+  {
+   "id": "physics",
+   "family": "D",
+   "status": "deep",
+   "title": "Physics engines (PhysX, MuJoCo, Rapier; next Jolt and Bullet)",
+   "gain": "32 witness patterns already; a third and fourth engine turn cross-engine disagreement into the reference.",
+   "first_step": "Same marble scene in Rapier and Jolt; report the first step where they part and why.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 4,
+    "gravitas": 4,
+    "visual": 5,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "code",
+    "name": "step hash replayed in every host + analytic ladder"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "rl",
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.loom:PHYSICS-PLAYBOOK.md",
+    "x3d.loom:x3d.physics/README.md",
+    "x3d.loom:LEARNINGS-giza-summit-duel.md"
+   ]
+  },
+  {
+   "id": "xray",
+   "family": "D",
+   "status": "explored",
+   "title": "x3d.xray: binaries, code and captures as cities",
+   "gain": "Makes anything with structure a scene. New readers (pcap, MCAP) just landed in the validator fork.",
+   "first_step": "A packet capture as a city with every tower traceable to its bytes.",
+   "judged": {
+    "relevance": 5,
+    "flywheel": 4,
+    "gravitas": 4,
+    "visual": 5,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "code",
+    "name": "hypothesis ledger re-run as code against the native binary"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalops",
+    "sec"
+   ],
+   "evidence": [
+    "x3d.loom:LEARNINGS-xray-binary.md",
+    "x3d.docs:docs/binary-xray.md"
+   ]
+  },
+  {
+   "id": "geospatial",
+   "family": "D",
+   "status": "explored",
+   "title": "Terrain and geospatial (Giza, Accrete, 3D Tiles, CityGML)",
+   "gain": "Georeferencing is where precision budgets bite; Giza is the worthy study and has 63 graded claims already.",
+   "first_step": "One CityGML block to X3D GeoLocation; 20 control points within a stated tolerance.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 4,
+    "gravitas": 5,
+    "visual": 5,
+    "effort": 4
+   },
+   "grader": {
+    "kind": "reference",
+    "name": "PROJ and GDAL coordinate transforms + survey figures"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": true,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "bench",
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.loom:LEARNINGS-geotiling.md",
+    "x3d.loom:GIZA-EVIDENCE-ATLAS.md",
+    "x3d.loom:LEARNINGS-giza-atlas-v4.md"
+   ]
+  },
+  {
+   "id": "dicom-volume",
+   "family": "D",
+   "status": "touched",
+   "title": "Medical volumes (DICOM, NIfTI) in X3D volume rendering",
+   "gain": "Gravitas and a real standard (X3D is in the DICOM family story); needs volume nodes few engines draw.",
+   "first_step": "One open phantom to VolumeData; witness = voxel spacing, orientation and histogram carried.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 3,
+    "gravitas": 5,
+    "visual": 5,
+    "effort": 4
+   },
+   "grader": {
+    "kind": "reference",
+    "name": "pydicom and ITK voxel statistics on open phantoms"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": true,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "bench",
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.loom:LEARNINGS-medical-provenance.md"
+   ]
+  },
+  {
+   "id": "music",
+   "family": "D",
+   "status": "explored",
+   "title": "Music and time",
+   "gain": "Time as the fourth axis is well covered; steady, not new.",
+   "first_step": "Keep as an instrument for other demos.",
+   "judged": {
+    "relevance": 3,
+    "flywheel": 3,
+    "gravitas": 3,
+    "visual": 4,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "code",
+    "name": "score-to-keyframe onset alignment"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.music:witnesses",
+    "x3d.music:README.md"
+   ]
+  },
+  {
+   "id": "stem-maths",
+   "family": "D",
+   "status": "deep",
+   "title": "STEM, maths and PolyXandria",
+   "gain": "The cheapest exact references anywhere; best ground for testing new Loom organs.",
+   "first_step": "Use as the test bed for qd-evolve and geom-witness.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 4,
+    "gravitas": 4,
+    "visual": 5,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "reference",
+    "name": "exact identities and convergence orders"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.loom:SCIENCE-PLAYBOOK.md",
+    "x3d.loom:X3D-STEM.md",
+    "x3d.mathslab:mathlab"
+   ]
+  },
+  {
+   "id": "robotics",
+   "family": "D",
+   "status": "touched",
+   "title": "Robotics: URDF, MJCF and ROS bags",
+   "gain": "A robot description is a scene graph with joints; the MuJoCo bridge and the new MCAP reader are two thirds of the road.",
+   "first_step": "One open URDF arm to H-Anim-style joints; 100 random poses agree with MuJoCo to a stated tolerance.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 4,
+    "gravitas": 5,
+    "visual": 5,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "reference",
+    "name": "forward kinematics against MuJoCo on the same model"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": true,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "rl",
+    "bench"
+   ],
+   "evidence": [
+    "x3d.loom:x3d.physics/README.md",
+    "x3d_mcp:src/x3d_utils"
+   ]
+  },
+  {
+   "id": "cad-step",
+   "family": "D",
+   "status": "unexplored",
+   "title": "CAD: STEP and B-rep through OpenCascade",
+   "gain": "Exact surfaces against triangles; tessellation error becomes a measured, receipted number.",
+   "first_step": "10 open STEP parts; tessellate at 3 tolerances; volume error against the exact B-rep.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 4,
+    "gravitas": 5,
+    "visual": 4,
+    "effort": 4
+   },
+   "grader": {
+    "kind": "reference",
+    "name": "OpenCascade volume, area and tolerance"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": true,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "bench"
+   ],
+   "evidence": []
+  },
+  {
+   "id": "heritage",
+   "family": "D",
+   "status": "explored",
+   "title": "Cultural heritage with CIDOC-CRM (Shroud, Giza)",
+   "gain": "Claims with grades are the Loom's own idea applied to history; the Shroud Atlas proved the speed.",
+   "first_step": "Express the Giza 63 claims in CIDOC-CRM and check each resolves to a scene node.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 4,
+    "gravitas": 5,
+    "visual": 5,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "code",
+    "name": "evidence-tier ledger tied to scene bytes"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": true,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "bench",
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.loom:GIZA-EVIDENCE-ATLAS.md",
+    "x3d.loom:LEARNINGS-scale-ladder-atlas.md",
+    "x3d.loom:LEARNINGS-heritage-geo.md"
+   ]
+  },
+  {
+   "id": "collider",
+   "family": "D",
+   "status": "explored",
+   "title": "Particle collisions",
+   "gain": "A finished exemplar of mutation-tested witnessing; mine it for method, not new work.",
+   "first_step": "Reuse its mutation harness for mutate-graders.",
+   "judged": {
+    "relevance": 3,
+    "flywheel": 3,
+    "gravitas": 4,
+    "visual": 5,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "code",
+    "name": "hepevent witness with 206 negative controls"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": true,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.loom:COLLIDER.md",
+    "x3d.loom:kit/loomkit/hepevent.py"
+   ]
+  },
+  {
+   "id": "brain",
+   "family": "D",
+   "status": "touched",
+   "title": "Brain and connectome",
+   "gain": "Striking, with open atlases; receipts are thinner than molecules.",
+   "first_step": "One open atlas; region volumes carried within tolerance.",
+   "judged": {
+    "relevance": 3,
+    "flywheel": 3,
+    "gravitas": 4,
+    "visual": 5,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "reference",
+    "name": "atlas region volumes and tract counts"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": true,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.loom:x3d.brain",
+    "x3d.loom:runs/brain-20261106"
+   ]
+  },
+  {
+   "id": "sky",
+   "family": "D",
+   "status": "explored",
+   "title": "Sky and ephemerides",
+   "gain": "The Sky Machine has it; precession and proper motion give exact checks.",
+   "first_step": "Reuse for Giza claims only.",
+   "judged": {
+    "relevance": 3,
+    "flywheel": 3,
+    "gravitas": 4,
+    "visual": 5,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "reference",
+    "name": "ephemerides and star catalogues (Skyfield, JPL)"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": true,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.loom:LEARNINGS-giza-sky-machine-v6.md"
+   ]
+  },
+  {
+   "id": "mocap-hanim",
+   "family": "D",
+   "status": "touched",
+   "title": "Motion capture to H-Anim (BVH, retargeting)",
+   "gain": "H-Anim is X3D's least exercised standard; the two Schematron reports show how soft the ground is.",
+   "first_step": "5 open BVH clips to H-Anim; joint angles round trip within 0.5 degrees.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 4,
+    "gravitas": 4,
+    "visual": 5,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "reference",
+    "name": "joint-angle round trip against the source capture"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": true,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalops",
+    "bench"
+   ],
+   "evidence": [
+    "x3d.loom:x3d.anim/README.md",
+    "x3d.loom:LEARNINGS-giza-summit-duel.md"
+   ]
+  },
+  {
+   "id": "point-clouds",
+   "family": "D",
+   "status": "unexplored",
+   "title": "LiDAR and point clouds (LAS, E57, photogrammetry)",
+   "gain": "Real captured places at scale; tests precision and level of detail.",
+   "first_step": "One open LAS tile to PointSet with LOD; counts and bounds carried.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 3,
+    "gravitas": 4,
+    "visual": 5,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "reference",
+    "name": "PDAL point counts, bounds and classification histogram"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": true,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalops"
+   ],
+   "evidence": []
+  },
+  {
+   "id": "sci-fields",
+   "family": "D",
+   "status": "touched",
+   "title": "Fields and flows: VTK, NetCDF climate, CFD",
+   "gain": "Scientific visualisation is X3D's home crowd (ParaView exports X3D); volumes and streamlines are thinly tested.",
+   "first_step": "One open NetCDF field to an isosurface; min, max and integral against VTK.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 3,
+    "gravitas": 5,
+    "visual": 5,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "reference",
+    "name": "VTK field statistics on the same grid"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": true,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.loom:LEARNINGS-blender-scivis.md"
+   ]
+  },
+  {
+   "id": "graphs-3d",
+   "family": "D",
+   "status": "explored",
+   "title": "Knowledge graphs and hypergraphs in 3D",
+   "gain": "Done three times; reuse.",
+   "first_step": "Keep as the Gobbler's body.",
+   "judged": {
+    "relevance": 3,
+    "flywheel": 3,
+    "gravitas": 3,
+    "visual": 4,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "code",
+    "name": "node and edge counts + layout determinism hash"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.loom:LEARNINGS-hypergraph-v3.md"
+   ]
+  },
+  {
+   "id": "openusd",
+   "family": "D",
+   "status": "touched",
+   "title": "OpenUSD conformance bridge",
+   "gain": "USD is where the industry's money is. A measured, two-way loss table between X3D and USD is the document both camps lack.",
+   "first_step": "20 golden scenes through Blender to USD and back; loss receipt per field; usdchecker on each.",
+   "judged": {
+    "relevance": 5,
+    "flywheel": 5,
+    "gravitas": 5,
+    "visual": 3,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "cross-impl",
+    "name": "usdchecker + a loss receipt in both directions"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "bench",
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.loom:LEARNINGS-blenderizer-nexus.md",
+    "x3d-blender-io:mapping"
+   ]
+  },
+  {
+   "id": "games",
+   "family": "D",
+   "status": "deep",
+   "title": "Games as deterministic proofs (chess, platformer, drift)",
+   "gain": "Determinism patterns are mature; play is the best stress test for interaction nodes.",
+   "first_step": "Use as the audience-facing skin for qd-evolve.",
+   "judged": {
+    "relevance": 3,
+    "flywheel": 3,
+    "gravitas": 2,
+    "visual": 5,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "code",
+    "name": "proof-of-play tapes replayed bit for bit"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "agev",
+    "evalops"
+   ],
+   "evidence": [
+    "x3d.loom:PLATFORMER.md",
+    "x3d.loom:DRIFT.md",
+    "x3d.loom:LEARNINGS-chess.md"
+   ]
+  },
+  {
+   "id": "live-twins",
+   "family": "D",
+   "status": "touched",
+   "title": "Live digital twins: sensor streams and time series into a scene",
+   "gain": "A twin that can be replayed is a twin that can be audited.",
+   "first_step": "Replay one open sensor log into ROUTEd fields; frame hashes equal across two runs.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 3,
+    "gravitas": 4,
+    "visual": 4,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "code",
+    "name": "replayed stream reproduces every frame hash"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": true,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalops",
+    "prod"
+   ],
+   "evidence": [
+    "x3d_mcp:src/x3d_utils"
+   ]
+  },
+  {
+   "id": "language",
+   "family": "D",
+   "status": "touched",
+   "title": "Script and language geometry (Mashtots)",
+   "gain": "A social art project first; the Loom gains little until a reader can grade it.",
+   "first_step": "Wait for the reader check.",
+   "judged": {
+    "relevance": 2,
+    "flywheel": 2,
+    "gravitas": 4,
+    "visual": 4,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "human",
+    "name": "a Western Armenian reader"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": true,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": false,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "judge"
+   ],
+   "evidence": [
+    "x3d.mashtots:README.md"
+   ]
+  },
+  {
+   "id": "unreal",
+   "family": "D",
+   "status": "touched",
+   "title": "Unreal 5 bridge",
+   "gain": "High ceiling; parked on a GPU session.",
+   "first_step": "Resume when a G4 is connected.",
+   "judged": {
+    "relevance": 4,
+    "flywheel": 4,
+    "gravitas": 4,
+    "visual": 5,
+    "effort": 5
+   },
+   "grader": {
+    "kind": "cross-impl",
+    "name": "Unreal render against the X3D master"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": false
+   },
+   "atlas_themes": [
+    "bench"
+   ],
+   "evidence": []
+  },
+  {
+   "id": "fabrication",
+   "family": "D",
+   "status": "unexplored",
+   "title": "Fabrication: 3MF and STL printability",
+   "gain": "A physical object is the hardest witness there is; small and concrete.",
+   "first_step": "10 demo meshes to 3MF; watertight, wall thickness and overhang checks.",
+   "judged": {
+    "relevance": 3,
+    "flywheel": 3,
+    "gravitas": 3,
+    "visual": 3,
+    "effort": 2
+   },
+   "grader": {
+    "kind": "reference",
+    "name": "slicer and manifold checks (printability)"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": true,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "evalops"
+   ],
+   "evidence": []
+  },
+  {
+   "id": "xr-headset",
+   "family": "D",
+   "status": "touched",
+   "title": "WebXR and headsets",
+   "gain": "Presence sells the work; it teaches the Loom little without a code grader.",
+   "first_step": "Frame-time budget witness first, headset second.",
+   "judged": {
+    "relevance": 3,
+    "flywheel": 2,
+    "gravitas": 3,
+    "visual": 5,
+    "effort": 3
+   },
+   "grader": {
+    "kind": "human",
+    "name": "a person in a headset"
+   },
+   "flags": {
+    "optimizer": false,
+    "model_required": false,
+    "model_optional": false,
+    "data_open": false,
+    "data_restricted": false,
+    "swarm": false,
+    "seeded": true,
+    "neg_controls": false,
+    "holdout": true
+   },
+   "atlas_themes": [
+    "prod"
+   ],
+   "evidence": [
+    "x3d.loom:LEARNINGS-masonic-lodge-xr.md"
+   ]
+  }
+ ]
+}

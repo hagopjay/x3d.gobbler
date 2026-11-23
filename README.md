@@ -17,6 +17,16 @@ placement checks. Lighting, materials and readable typography are authored
 studio presentation; see [receipt](receipts/review-blender.json). This image is
 separate from native browser acceptance.*
 
+## Where next: the frontier board, and two new Gobblers
+
+[frontier/](frontier/README.md) is the Assayer's map of where the Loom could go: 64 frontiers put through the
+Atlas's thirteen theses with no model call, ranked five ways, each rank with the range it moves over when the
+opinions behind it are wrong. [mascot/](mascot/README.md) holds two drafts of the next Gobbler. Gobbler 5, the
+Loomwright, wears that board as its tail fan; Gobbler 6, the Demiurge, has a woven body and a fan bred by a small
+evolutionary search, whose first run gamed its own score and is kept as a record.
+
+![Gobbler 5, the Loomwright: one feather per frontier](mascot/stills/gobbler-v5-wide.webp)
+
 ## Open locally
 
 ```bash

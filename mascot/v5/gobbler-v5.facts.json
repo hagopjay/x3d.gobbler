@@ -1,0 +1,21 @@
+{
+ "version": "v5",
+ "title": "Gobbler 5, the Loomwright",
+ "feathers": 64,
+ "beads": 459,
+ "gems": 64,
+ "faces": 6196,
+ "lattice_edges": 120,
+ "thesis_studs": 13,
+ "genome": {
+  "spread": 200.0,
+  "curl": 0.0,
+  "twist": 0.0,
+  "taper": 0.6,
+  "tiers": 1,
+  "profile": 1.0,
+  "width": 0.46,
+  "tilt": 12.0
+ },
+ "bytes": 671344
+}
