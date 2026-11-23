@@ -54,7 +54,7 @@ Rows 11 to 64 are in `BOARD.md`.
 ### Four things the run says
 
 1. **The order is soft; the tier is not.** Across the top 20 the rank range is 31 places wide on average. No
-   frontier is in the top 10 in more than 81 percent of draws. Read the board as tiers: a first tier of about 14
+   frontier is in the top 10 in more than 81 percent of draws. Read the board as tiers: a first tier of 15
    (those whose 5th-percentile rank is 3 or better), not as an ordered list. The top-10 set is the same on the
    held-out seed 23 (10 of 10).
 2. **Changing the question changes the answer.** Top three by weighting: flywheel-first gives cross-render,
