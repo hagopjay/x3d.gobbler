@@ -14,6 +14,19 @@ Open them with `python3 serve.py` and `http://localhost:8831/mascot/` (U hides t
 | Scene | `v5/gobbler-v5.x3d`, 671 KB, 6,196 faces | `v6/gobbler-v6.x3d`, 780 KB, 5,716 faces plus 1,364 ribbon faces |
 | Spend to build | $0 | $0 for the mascot; every new organ needs a typed spend OK |
 
+## The frame (his words, 23 Nov 2026)
+
+The Loom is the knowledge graph, the meta-agent's memory. The Gobbler is the meta-agent: it turns the data, bridge
+and rendering-engine flywheels. In the bird: the woven body is the Loom (44 laws as warp, 13 theses as weft), the
+heart is the validator, the ring under its feet is the flywheel, and the fan is where it could go next.
+
+| Wheel | What turns it | Frontiers on the board (rank) |
+|---|---|---|
+| **Memory (the Loom itself)** | What the Gobbler remembers: laws, failure modes, receipts, rules. | rag-loom (15), mcp-loom (17), mutate-graders (18), active-design (28), canon-egraph (30), x3d-bench (8) |
+| **Data flywheel** | New kinds of world come in, each with its own ground truth. | xray (1), bim-ifc (3), stem-maths (6), heritage (12), molecules (13), robotics (14), geospatial (19) |
+| **Bridge flywheel** | Every format crossed leaves a measured loss table. | openusd (4), image-to-3d (27), splat-x3d (33), cad-step (34), text2x3d-loop (16), grammar-decode (21) |
+| **Render flywheel** | Every engine that draws a scene is one more witness. | cross-render (2), shader-art (11), hostile-all (9), physics (10), x3d-injection (7), qd-evolve (5) |
+
 ## Reading the fan
 
 One feather per frontier, 64 in all, grouped by family with the largest family in the middle and each family's
