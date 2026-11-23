@@ -1,0 +1,21 @@
+{
+ "version": "v6",
+ "title": "Gobbler 6, the Demiurge",
+ "feathers": 64,
+ "beads": 459,
+ "gems": 64,
+ "faces": 5716,
+ "lattice_edges": 120,
+ "thesis_studs": 13,
+ "genome": {
+  "spread": 185.4473,
+  "curl": -0.35,
+  "twist": -0.0196,
+  "taper": 0.4428,
+  "tiers": 1,
+  "profile": 1.0,
+  "width": 0.7497,
+  "tilt": 7.3119
+ },
+ "bytes": 780320
+}

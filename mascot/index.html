@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gobbler 5 and 6, mascot drafts</title>
+<link rel="stylesheet" href="../vendor/x_ite/x_ite.css">
+<style>
+:root{color-scheme:dark}html,body{margin:0;height:100%;background:#05030b;color:#e9e4d6;font:14px/1.4 system-ui,sans-serif}
+x3d-canvas{position:fixed;inset:0;width:100vw;height:100vh;display:block}
+#ui{position:fixed;left:14px;top:12px;display:flex;gap:6px;flex-wrap:wrap;max-width:calc(100vw - 28px);z-index:2}
+button{background:#1a1426cc;color:inherit;border:1px solid #6b5a2e;border-radius:6px;padding:6px 10px;font:inherit;cursor:pointer}
+button[aria-pressed=true]{background:#c9a23a;color:#120c02;border-color:#f3d77a}
+#legend{position:fixed;right:14px;bottom:12px;background:#0d0a16d9;border:1px solid #3a2f52;border-radius:8px;padding:10px 12px;max-width:310px;z-index:2}
+#legend b{color:#f3d77a}.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px}
+#state{position:fixed;left:14px;bottom:12px;opacity:.75;z-index:2}body.bare #ui,body.bare #legend,body.bare #state{display:none}
+</style>
+<script src="../vendor/x_ite/x_ite.min.js"></script></head>
+<body>
+<x3d-canvas id="world" splashScreen="false" notifications="false" contentScale="auto" aria-label="The Gobbler mascot; its tail fan is the Loom frontier board"></x3d-canvas>
+<div id="ui" role="toolbar" aria-label="Scene and view">
+ <button data-scene="v5/gobbler-v5.x3d">Gobbler 5, Loomwright</button><button data-scene="v6/gobbler-v6.x3d">Gobbler 6, Demiurge</button>
+ <span style="width:10px"></span>
+ <button data-view="Face">Face</button><button data-view="Wide">Wide</button><button data-view="Fan">Fan</button><button data-view="Heart">Heart</button><button data-view="Above">Above</button>
+ <button id="bare" title="Hide the interface (press U to bring it back)">UI off</button>
+</div>
+<div id="legend"><b>Reading the fan.</b> One feather per frontier (64). Length is the balanced score. Colour is the family:
+ <div><span class="sw" style="background:#59e680"></span>domain <span class="sw" style="background:#40d9f2"></span>algorithmic <span class="sw" style="background:#fab833"></span>AI engineering <span class="sw" style="background:#f259cc"></span>generative art <span class="sw" style="background:#f23833"></span>adversarial</div>
+ Tip gem is the worst Assayer check: gold clean, amber warning, blue gated on you, red stop. Beads count checks passed. Ranks are one model's opinion (Suspected).</div>
+<div id="state" role="status">loading</div>
+<script>
+const c=document.getElementById('world'),state=document.getElementById('state'),q=new URLSearchParams(location.search);
+let token=0;
+async function load(scene,view){const mine=++token;state.textContent='loading '+scene;
+  try{await c.browser.loadURL(new X3D.MFString(new URL(scene,location.href).href));if(mine!==token)return;
+    document.querySelectorAll('[data-scene]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.scene===scene));
+    bind(view||'Face');state.textContent=c.browser.name+' '+c.browser.version+' · '+scene;document.body.dataset.ready=scene;
+  }catch(e){if(mine===token){state.textContent='could not load '+scene+': '+e.message;document.body.dataset.ready='error';}}}
+function bind(v){const n=c.browser.currentScene.getNamedNode('V_'+v);n.set_bind=true;
+  document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.view===v));}
+document.querySelectorAll('[data-scene]').forEach(b=>b.onclick=()=>load(b.dataset.scene));
+document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>bind(b.dataset.view));
+document.getElementById('bare').onclick=()=>document.body.classList.add('bare');
+addEventListener('keydown',e=>{if(e.key==='u'||e.key==='U')document.body.classList.toggle('bare');});
+if(q.has('bare'))document.body.classList.add('bare');
+(function wait(){if(window.X3D&&c.browser)load(q.get('scene')||'v5/gobbler-v5.x3d',q.get('view'));else setTimeout(wait,50);})();
+</script></body></html>
