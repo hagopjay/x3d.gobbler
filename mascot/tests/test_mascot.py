@@ -136,3 +136,42 @@ class Glass(unittest.TestCase):
         self.assertEqual(a["by_type"]["MESH"] + a["by_type"]["CURVE"], s["Shape"])
         self.assertEqual(a["mesh_polys"] - 256 * s["Sphere"], s["ifs_faces"])
         self.assertEqual((a["by_type"]["CAMERA"], a["by_type"]["LIGHT"]), (s["Viewpoint"], s["lights"]))
+
+
+class Baked(unittest.TestCase):
+    """Gobbler 6.2: the glass bird drawn with light computed once in Cycles."""
+    BAKE = json.loads((HERE / "baked" / "bake.json").read_text(encoding="utf-8"))
+    FACTS = json.loads((HERE / "baked" / "gobbler-baked.facts.json").read_text(encoding="utf-8"))
+
+    def test_baked_rebuilds_from_the_committed_bake(self):
+        x, _ = bm.build("baked", BOARD, self.FACTS["genome"], counts=self.FACTS["counts"], bake=self.BAKE["colours"])
+        self.assertEqual(x, (HERE / "baked" / "gobbler-baked.x3d").read_text(encoding="utf-8"))
+
+    def test_every_baked_colour_is_a_legal_colour(self):
+        n = 0
+        for name, cols in self.BAKE["colours"].items():
+            self.assertEqual(len(cols), self.BAKE["meshes"][name]["faces"], name)
+            for col in cols:
+                self.assertTrue(all(0.0 <= ch <= 1.0 for ch in col), (name, col)); n += 1
+        self.assertEqual(n, 11616)
+
+    def test_blender_polygon_order_matched_the_x3d(self):
+        self.assertTrue(all(m["order_check_max_m"] <= 2e-3 for m in self.BAKE["meshes"].values()))
+
+    def test_baked_parts_are_unlit_and_the_rest_still_glow(self):
+        x = (HERE / "baked" / "gobbler-baked.x3d").read_text(encoding="utf-8")
+        self.assertEqual(x.count("<UnlitMaterial"), len(self.BAKE["colours"]))
+        for name in self.BAKE["colours"]:
+            self.assertIn("<UnlitMaterial", x.split(f"<Shape DEF='{name}'>")[1][:120], name)
+        self.assertIn("<Transform DEF='Heart'", x)
+
+    def test_a_bake_of_the_wrong_length_is_refused(self):
+        bad = dict(self.BAKE["colours"], Beak=[[0.5, 0.5, 0.5]])
+        with self.assertRaises(SystemExit):
+            bm.build("baked", BOARD, self.FACTS["genome"], counts=self.FACTS["counts"], bake=bad)
+
+    def test_glass_is_untouched_by_the_baked_version(self):
+        g = json.loads((HERE / "glass" / "gobbler-glass.facts.json").read_text(encoding="utf-8"))
+        x, _ = bm.build("glass", BOARD, g["genome"], counts=g["counts"])
+        self.assertEqual(x, (HERE / "glass" / "gobbler-glass.x3d").read_text(encoding="utf-8"))
+        self.assertNotIn("UnlitMaterial", x); self.assertNotIn("DEF='Floor'", x)

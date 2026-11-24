@@ -65,6 +65,9 @@ def look_at(eye, target):
     return (*norm(raw), ang)
 
 
+_BAKE: dict | None = None      # set by build(): shape name -> one baked display colour per face (see mascot/baked)
+
+
 class Mesh:
     """Faces with one colour each, written as a single flat-shaded IndexedFaceSet."""
     def __init__(self): self.p, self.faces, self.cols = [], [], []
@@ -74,6 +77,12 @@ class Mesh:
         if not self.faces: return ""
         tag = f"<Shape DEF='{name}'>" if name else "<Shape>"
         idx = " ".join(" ".join(map(str, fc)) + " -1" for fc in self.faces)
+        if _BAKE is not None and name in _BAKE:     # light already computed in Cycles: draw the colours as they are
+            cols = _BAKE[name]
+            if len(cols) != len(self.faces): raise SystemExit(f"bake for {name}: {len(cols)} colours for {len(self.faces)} faces")
+            return (f"{tag}<Appearance><UnlitMaterial emissiveColor='1 1 1' transparency='{f(transparency)}'/></Appearance>"
+                    f"<IndexedFaceSet solid='{'true' if solid else 'false'}' creaseAngle='0' colorPerVertex='false' coordIndex='{idx}'>"
+                    f"<Coordinate point='{' '.join(v3(p) for p in self.p)}'/><Color color='{' '.join(v3(tuple(min(1.0, max(0.0, c)) for c in col)) for col in cols)}'/></IndexedFaceSet></Shape>\n")
         return (f"{tag}<Appearance><Material diffuseColor='0.6 0.6 0.6' specularColor='{v3((spec,) * 3)}' shininess='{f(shin)}' "
                 f"emissiveColor='{v3(emissive)}' transparency='{f(transparency)}'/></Appearance>"
                 f"<IndexedFaceSet solid='{'true' if solid else 'false'}' creaseAngle='0' colorPerVertex='false' coordIndex='{idx}'>"
@@ -248,6 +257,18 @@ def halo(n: int) -> Mesh:
     return m
 
 
+def floor(radius=14.0, sectors=96, rings=28) -> Mesh:
+    """baked only: a dark disc under the bird, cut fine enough to hold pools of baked light and soft shadow."""
+    m = Mesh(); c = (0, -0.02, 0.2)
+    for j in range(rings):
+        r0, r1 = radius * (j / rings) ** 1.4, radius * ((j + 1) / rings) ** 1.4
+        for i in range(sectors):
+            a0, a1 = 2 * math.pi * i / sectors, 2 * math.pi * (i + 1) / sectors
+            pts = [add(c, (r * math.cos(a), 0, r * math.sin(a))) for a, r in ((a0, r0), (a0, r1), (a1, r1), (a1, r0))]
+            m.face(pts[::-1], (0.035, 0.04, 0.065))
+    return m
+
+
 def lattice(radius=15.0, centre=(0, 6, 0)):
     V, F = icosphere(1); edges = set()
     for a, b, c in F:
@@ -282,16 +303,20 @@ def sine_light(name, col, centre, amp, period, phase):
             f"<ROUTE fromNode='P_{name}' fromField='value_changed' toNode='B_{name}' toField='set_translation'/>\n")
 
 
-def build(version: str, board: dict, genome: dict, seed: int = 5, counts: dict | None = None) -> tuple[str, dict]:
+def build(version: str, board: dict, genome: dict, seed: int = 5, counts: dict | None = None, bake: dict | None = None) -> tuple[str, dict]:
     """version 'glass' is the v6 bird with translucent vanes, named shapes for a Blender pass, and a body and a
     failure-mode spiral sized by `counts` (laws, theses, failure_modes) instead of typed numbers."""
     rng = random.Random(seed)
-    glass = version == "glass"
+    global _BAKE
+    baked = version == "baked"          # the glass bird plus a floor; with `bake` given, the named shapes are drawn unlit
+    glass = version in ("glass", "baked")
+    _BAKE = bake if baked else None
     nm = (lambda n: n) if glass else (lambda n: None)
     counts = counts or {"laws": 44, "theses": len(board["theses"]), "failure_modes": 0}
     rows = board["rows"]; g = dict(DEFAULT_GENOME, **genome)
     vane, shaft, beads, gems, _ = build_fan(rows, g)
-    title = {"v5": "Gobbler 5, the Loomwright", "v6": "Gobbler 6, the Demiurge", "glass": "Gobbler 6.1, the Glass Demiurge"}[version]
+    title = {"v5": "Gobbler 5, the Loomwright", "v6": "Gobbler 6, the Demiurge", "glass": "Gobbler 6.1, the Glass Demiurge",
+             "baked": "Gobbler 6.2, the Glass Demiurge with its light baked in"}[version]
     t = board["score_tuple"]
     S = ["<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE X3D PUBLIC \"ISO//Web3D//DTD X3D 4.0//EN\" \"https://www.web3d.org/specifications/x3d-4.0.dtd\">\n"
          "<X3D profile='Immersive' version='4.0' xmlns:xsd='http://www.w3.org/2001/XMLSchema-instance' xsd:noNamespaceSchemaLocation='https://www.web3d.org/specifications/x3d-4.0.xsd'>\n"
@@ -317,7 +342,7 @@ def build(version: str, board: dict, genome: dict, seed: int = 5, counts: dict |
             blob(body, (sx * 1.55, 3.45, -0.1), (0.5, 1.05, 1.75), 1, [(0.30, 0.22, 0.30), (0.20, 0.28, 0.36), (0.42, 0.28, 0.14)], rng)
     head = head_and_neck(body, rng, palette)
     S.append("<Transform>\n" + body.x3d(spec=0.35, shin=0.45, name=nm("Body")))
-    woven = version in ("v6", "glass")
+    woven = version in ("v6", "glass", "baked")
     if version == "v6":
         S.append(warp_body().x3d(emissive=(0.22, 0.14, 0.03), solid=False, spec=0.5, shin=0.6))
     if glass:
@@ -346,6 +371,7 @@ def build(version: str, board: dict, genome: dict, seed: int = 5, counts: dict |
         octa(wheel, (3.6 * math.cos(a), 0.3, 0.2 + 3.6 * math.sin(a)), 0.2, (1.0, 0.85, 0.35))
     spiral = halo(counts["failure_modes"]) if glass else Mesh()
     S.append(spiral.x3d(emissive=(0.35, 0.3, 0.2), name="FailureModes"))
+    if baked: S.append(floor().x3d(spec=0.1, shin=0.2, name="Floor"))
     S.append("<Transform DEF='Wheel' center='0 0 0.2'>\n" + wheel.x3d(emissive=(0.2, 0.15, 0.05), solid=False, name=nm("WheelRing")) + "</Transform>\n"
              "<TimeSensor DEF='T_wheel' cycleInterval='40' loop='true'/><OrientationInterpolator DEF='O_wheel' key='0 0.25 0.5 0.75 1' keyValue='0 1 0 0 0 1 0 1.5708 0 1 0 3.1416 0 1 0 4.7124 0 1 0 6.2832'/>\n"
              "<ROUTE fromNode='T_wheel' fromField='fraction_changed' toNode='O_wheel' toField='set_fraction'/><ROUTE fromNode='O_wheel' fromField='value_changed' toNode='Wheel' toField='set_rotation'/>\n")
@@ -368,7 +394,8 @@ def build(version: str, board: dict, genome: dict, seed: int = 5, counts: dict |
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("version", choices=["v5", "v6", "glass"])
+    ap.add_argument("version", choices=["v5", "v6", "glass", "baked"])
+    ap.add_argument("--bake", type=Path, help="bake.json from mascot/baked/blender/bake_light.py (baked only)")
     ap.add_argument("--counts", type=Path, help="loom_counts.py output (glass only)")
     ap.add_argument("--board", type=Path, required=True)
     ap.add_argument("--genome", type=Path); ap.add_argument("--cell", type=int, default=0)
@@ -379,7 +406,8 @@ def main(argv=None) -> int:
     if a.genome:
         genome = json.loads(a.genome.read_text(encoding="utf-8"))["elites"][a.cell]["genome"]
     counts = json.loads(a.counts.read_text(encoding="utf-8")) if a.counts else None
-    x, facts = build(a.version, board, genome, counts=counts)
+    bake = json.loads(a.bake.read_text(encoding="utf-8"))["colours"] if a.bake else None
+    x, facts = build(a.version, board, genome, counts=counts, bake=bake)
     a.out.parent.mkdir(parents=True, exist_ok=True)
     a.out.write_text(x, encoding="utf-8")
     a.out.with_suffix(".facts.json").write_text(json.dumps(facts, indent=1) + "\n", encoding="utf-8")
