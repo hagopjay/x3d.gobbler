@@ -94,6 +94,14 @@ the x3d-blender-io importer, Cycles stills, out to glTF and USD with a count at 
 
 ![Gobbler 6.1 in Cycles](glass/stills/glass-low.webp)
 
+## Gobbler 6.2: the Cycles light baked into the X3D
+
+[`baked/`](baked/README.md) is the glass bird with its light computed once in Cycles and stored as one colour per
+face (11 parts, 11,616 faces), drawn unlit in the browser, plus a floor that holds the pool of light. `glass/` is
+untouched.
+
+![browser before, browser after, Cycles](baked/stills/before-after-cycles.webp)
+
 ## The breeding record (the first real try of `qd-evolve`)
 
 `evolve.py` is MAP-Elites over 8 fan genes with a 3 x 3 archive (spread by curl). Fitness shown to the search:

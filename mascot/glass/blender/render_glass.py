@@ -135,6 +135,13 @@ def shade():
     fl = bpy.context.object; fl.name = "MirrorFloor"
     assign(fl, principled("G_Floor", attr=False, base=(0.004, 0.005, 0.01), metallic=0.0, rough=0.07, coat=1.0))
     fl.data.materials[0].node_tree.nodes["Principled BSDF"].inputs["Specular IOR Level"].default_value = 1.0
+    light_rig()
+    return {"gem_materials": gems}
+
+
+def light_rig():
+    """The lights and sky of the Blender pass, apart from the materials, so the bake (mascot/baked) uses the same light."""
+    D = bpy.data.objects
     # the imported point lights keep their colours; soften them and bring them into a film range
     for n, e in (("L_red", 900), ("L_blue", 900), ("L_gold", 700), ("PointLight", 420)):
         D[n].data.energy = e; D[n].data.shadow_soft_size = 0.35
@@ -143,7 +150,6 @@ def shade():
     area("Key_warm", (-6, -14, 15), (0, -1, 5), 14, 2200, (1.0, 0.86, 0.7))
     area("Face_fill", (2.5, -9, 8.5), (0, -2.6, 7.1), 2.5, 500, (1.0, 0.9, 0.8)).visible_glossy = False
     world()
-    return {"gem_materials": gems}
 
 
 def camera(name, w, h):
@@ -183,4 +189,5 @@ def main():
     (a.out / "blender-render.json").write_text(json.dumps(rec, indent=1) + "\n")
 
 
-main()
+if __name__ == "__main__":
+    main()

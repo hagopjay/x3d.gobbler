@@ -1,0 +1,36 @@
+{
+ "scene": "baked/gobbler-baked.x3d",
+ "rig": {
+  "engine": "X_ITE 16.7.0",
+  "gl": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+  "chromium": "157.0.8103.78",
+  "viewport": [
+   1600,
+   900
+  ],
+  "scale": 1
+ },
+ "stills": [
+  {
+   "view": "Hero",
+   "file": "baked-hero.webp",
+   "lit_fraction": 0.3998,
+   "bytes": 458442
+  },
+  {
+   "view": "Heart",
+   "file": "baked-heart.webp",
+   "lit_fraction": 0.8333,
+   "bytes": 471012
+  },
+  {
+   "view": "Low",
+   "file": "baked-low.webp",
+   "lit_fraction": 0.4058,
+   "bytes": 469224
+  }
+ ],
+ "errors": [],
+ "status": "pass",
+ "patch": "none (X_ITE as vendored)"
+}
