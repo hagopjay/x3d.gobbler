@@ -1,0 +1,55 @@
+{
+ "schema": "gobbler.blender-spin/1",
+ "blender": "5.3.0",
+ "engine": "Cycles",
+ "device": "CPU",
+ "frames": 120,
+ "resolution": [
+  960,
+  540
+ ],
+ "samples_max": 64,
+ "adaptive_threshold": 0.03,
+ "denoiser": "OpenImageDenoise",
+ "seed": 7,
+ "camera": {
+  "radius_m": 22.5,
+  "height_m": 7.6,
+  "target": [
+   0.0,
+   0.0,
+   7.0
+  ],
+  "lens_mm": 26.9,
+  "fstop": 4.0
+ },
+ "scene_clock": "216 scene frames over the turn",
+ "added_in_blender": [
+  "Principled glass and metal materials driven by the imported per-corner colours",
+  "weld + 0.035 m Solidify on the vanes so the glass has two surfaces",
+  "mirror floor disc (radius 70 m)",
+  "four area lights (back-left magenta, back-right cyan, front warm key, small face fill)",
+  "camera rays pass through lattice bars nearer than 9 m (fading in to 17 m)",
+  "procedural noise night sky in the world shader",
+  "bevel 0.018 m on the imported lattice curve",
+  "geometry-node spheres on the imported star points",
+  "depth of field on the cameras",
+  "AgX view transform",
+  "the orbit camera"
+ ],
+ "seconds_this_run": {
+  "frames_rendered": 93,
+  "total": 3370.0,
+  "mean": 36.2
+ },
+ "seconds_all_frames": {
+  "frames": 120,
+  "total": 4269.3,
+  "mean": 35.6,
+  "min": 25.6,
+  "max": 43.1
+ },
+ "interrupted": "the cloud machine restarted after frame 26; frames 0-26 were kept and the render resumed at 27 with the same script and seed; seconds_this_run covers only the second part",
+ "post": "per-frame glow as in finish_stills.py; H.264 yuv420p crf 18, 24 frames a second",
+ "raw_frames_sha256": "33252c8df83efd6ff7c9ecd5c2be3a7aff97f1264b8a27590798ec854c60bbfa"
+}
