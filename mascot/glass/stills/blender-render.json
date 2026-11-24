@@ -1,0 +1,60 @@
+{
+ "schema": "gobbler.blender-render/1",
+ "blender": "5.3.0",
+ "engine": "Cycles",
+ "device": "CPU",
+ "samples_max": 160,
+ "adaptive_threshold": 0.02,
+ "denoiser": "OpenImageDenoise",
+ "resolution": [
+  1920,
+  1080
+ ],
+ "frame": 1,
+ "view_transform": "AgX, Medium High Contrast",
+ "exposure": 0.0,
+ "added_in_blender": [
+  "Principled glass and metal materials driven by the imported per-corner colours",
+  "weld + 0.035 m Solidify on the vanes so the glass has two surfaces",
+  "mirror floor disc (radius 70 m)",
+  "four area lights (back-left magenta, back-right cyan, front warm key, small face fill)",
+  "camera rays pass through lattice bars nearer than 9 m (fading in to 17 m)",
+  "procedural noise night sky in the world shader",
+  "bevel 0.018 m on the imported lattice curve",
+  "geometry-node spheres on the imported star points",
+  "depth of field on the cameras",
+  "AgX view transform"
+ ],
+ "renders": [
+  {
+   "view": "V_Hero",
+   "file": "glass-hero.webp",
+   "seconds": 270.1,
+   "raw_sha256": "ced63736f6f8e37f1b0a12eb413df9bec392a252a0317525275e62caf6a071b1",
+   "bytes": 294702
+  },
+  {
+   "view": "V_Heart",
+   "file": "glass-heart.webp",
+   "seconds": 493.2,
+   "raw_sha256": "82e1ca3577908588e4b8d3af195e54181bd93ce5620170b7aab8c6ed7e1b1220",
+   "bytes": 371596
+  },
+  {
+   "view": "V_Wide",
+   "file": "glass-wide.webp",
+   "seconds": 275.5,
+   "raw_sha256": "86006236df97004a7325b3a5e16742f2c812751e71b6dec747268d41b9e53f5a",
+   "bytes": 310814
+  },
+  {
+   "view": "V_Low",
+   "file": "glass-low.webp",
+   "seconds": 328.0,
+   "raw_sha256": "5b9dad95913de2ab92a040dc2f87e9a73a5d3dcf4357e7fc7939d46adfe10f35",
+   "bytes": 323206
+  }
+ ],
+ "gem_materials": 5,
+ "post": "glow: screen blend of two Gaussian blurs of pixels above 0.72 luminance (finish_stills.py); WebP quality 90"
+}

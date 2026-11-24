@@ -86,6 +86,14 @@ Each new organ switches on only after a measured gate. None is built; each first
 | **Examiner** | a public scoreboard of models on Loom tasks | 60 frozen tasks with code graders, 12 held private, 3 trials each | x3d-bench | a typed spend OK |
 | **Chorus** | builder, breaker and referee as separate agents | a scripted run shows no peer message can override the referee (thesis T9) | agent-swarm | simulation first, then spend |
 
+## Gobbler 6.1, the Glass Demiurge: counted from the Loom, rendered in Blender
+
+[`glass/`](glass/README.md) takes Gobbler 6 through Blender: translucent vanes, a name on every part, a body and a
+floor spiral sized by `loom_counts.py` (44 laws, 228 failure modes at x3d.loom `139896f`; 13 theses), in through
+the x3d-blender-io importer, Cycles stills, out to glTF and USD with a count at each door.
+
+![Gobbler 6.1 in Cycles](glass/stills/glass-low.webp)
+
 ## The breeding record (the first real try of `qd-evolve`)
 
 `evolve.py` is MAP-Elites over 8 fan genes with a 3 x 3 archive (spread by curl). Fitness shown to the search:

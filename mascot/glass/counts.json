@@ -1,0 +1,20 @@
+{
+ "schema": "gobbler.loom-counts/1",
+ "laws": 44,
+ "failure_modes": 228,
+ "theses": 13,
+ "highest": {
+  "laws": 44,
+  "failure_modes": 228
+ },
+ "gaps": {
+  "laws": [],
+  "failure_modes": []
+ },
+ "source": {
+  "loom_commit": "139896fab2fe6c8eca70832d73397e82cb0b9cf9",
+  "loom_file": "LOOM-v1.md",
+  "loom_file_sha256": "bbdfab2524371784a4d84907399a47dfe92b09997ef8451a8e8b5764bfd6017c",
+  "atlas_rev": 28
+ }
+}

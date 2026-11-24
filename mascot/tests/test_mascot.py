@@ -89,3 +89,50 @@ class Breeding(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Glass(unittest.TestCase):
+    """Gobbler 6.1: the same bird, sized by the Loom's own counts and named for a Blender pass."""
+    COUNTS = json.loads((HERE / "glass" / "counts.json").read_text(encoding="utf-8"))
+    FACTS = json.loads((HERE / "glass" / "gobbler-glass.facts.json").read_text(encoding="utf-8"))
+
+    def test_glass_rebuilds_to_the_committed_bytes(self):
+        x, facts = bm.build("glass", BOARD, self.FACTS["genome"], counts=self.COUNTS)
+        self.assertEqual(x, (HERE / "glass" / "gobbler-glass.x3d").read_text(encoding="utf-8"))
+        self.assertEqual((facts["warp_ribbons"], facts["weft_rings"], facts["failure_mode_beads"]),
+                         (self.COUNTS["laws"], self.COUNTS["theses"], self.COUNTS["failure_modes"]))
+
+    def test_the_bird_grows_when_the_loom_does(self):
+        more = dict(self.COUNTS, laws=47, failure_modes=240, theses=14)
+        _, facts = bm.build("glass", BOARD, self.FACTS["genome"], counts=more)
+        self.assertEqual((facts["warp_ribbons"], facts["weft_rings"], facts["failure_mode_beads"]), (47, 14, 240))
+        self.assertEqual(len(bm.warp_body(47, 14).faces), 47 * 18 + 14 * 44)
+
+    def test_counter_reads_tables_reports_gaps_and_refuses_repeats(self):
+        import tempfile
+        import loom_counts
+        with tempfile.TemporaryDirectory() as d:
+            doc = "## 3. Laws\n| # | law |\n|---|---|\n| 1 | a |\n| 2 | b |\n## 4. x\n## 8. Failure modes\n| # | m |\n|---|---|\n| 1 | a |\n| 2 | b |\n| 3 | c |\n## 9. y\n"
+            (Path(d) / "LOOM-v1.md").write_text(doc, encoding="utf-8")
+            c = loom_counts.count(Path(d))
+            self.assertEqual((c["laws"], c["failure_modes"], c["theses"]), (2, 3, 13))
+            (Path(d) / "LOOM-v1.md").write_text(doc.replace("| 3 | c |", "| 4 | c |"), encoding="utf-8")
+            self.assertEqual(loom_counts.count(Path(d))["gaps"]["failure_modes"], [3])
+            (Path(d) / "LOOM-v1.md").write_text(doc.replace("| 3 | c |", "| 2 | c |"), encoding="utf-8")
+            with self.assertRaises(SystemExit):
+                loom_counts.count(Path(d))
+
+    def test_glass_shapes_are_named_and_vanes_are_translucent(self):
+        import re
+        x = (HERE / "glass" / "gobbler-glass.x3d").read_text(encoding="utf-8")
+        for name in ("Vanes", "Shafts", "Beads", "Loom", "Body", "FailureModes", "WheelRing"):
+            self.assertEqual(x.count(f"<Shape DEF='{name}'>"), 1, name)
+        self.assertEqual(len(re.findall(r"<Shape DEF='Gem_", x)), len(BOARD["rows"]))
+        self.assertRegex(x.split("<Shape DEF='Vanes'>")[1][:300], r"transparency='0\.45'")
+
+    def test_blender_receipt_says_everything_arrived(self):
+        r = json.loads((HERE / "glass" / "receipts" / "blender-import.json").read_text(encoding="utf-8"))
+        s, a = r["source"], r["arrived"]
+        self.assertEqual(a["by_type"]["MESH"] + a["by_type"]["CURVE"], s["Shape"])
+        self.assertEqual(a["mesh_polys"] - 256 * s["Sphere"], s["ifs_faces"])
+        self.assertEqual((a["by_type"]["CAMERA"], a["by_type"]["LIGHT"]), (s["Viewpoint"], s["lights"]))

@@ -1,0 +1,84 @@
+{
+ "schema": "gobbler.blender-exports/1",
+ "blender": "5.3.0",
+ "in_blender": {
+  "objects": 102,
+  "by_type": {
+   "CAMERA": 7,
+   "CURVE": 1,
+   "EMPTY": 2,
+   "LIGHT": 8,
+   "MESH": 84
+  },
+  "mesh_polys": 28897,
+  "meshes_with_colour_attribute": 10,
+  "materials_in_use": 25,
+  "materials_with_transmission": 10,
+  "materials_with_emission": 23,
+  "animated_objects": 7,
+  "actions": 7,
+  "nla_tracks": 0,
+  "transform_cache_constraints": 0
+ },
+ "formats": {
+  "glTF 2.0 binary": {
+   "file": "gobbler-glass.glb",
+   "bytes": 2727048,
+   "sha256": "f9876ea7548d9eac4b6f08a41d25cd97ab2b371323258918a8013c1175ea5407",
+   "export_result": [
+    "FINISHED"
+   ],
+   "import_result": [
+    "FINISHED"
+   ],
+   "read_back": {
+    "objects": 102,
+    "by_type": {
+     "CAMERA": 7,
+     "EMPTY": 9,
+     "LIGHT": 4,
+     "MESH": 82
+    },
+    "mesh_polys": 51478,
+    "meshes_with_colour_attribute": 10,
+    "materials_in_use": 23,
+    "materials_with_transmission": 10,
+    "materials_with_emission": 22,
+    "animated_objects": 1,
+    "actions": 7,
+    "nla_tracks": 7,
+    "transform_cache_constraints": 0
+   }
+  },
+  "OpenUSD crate": {
+   "file": "gobbler-glass.usdc",
+   "bytes": 1798004,
+   "sha256": "7cb53faefa0537200b9a590ad3911c7e680a7ec10d2a4f3fff5ca4e35d2288cd",
+   "export_result": [
+    "FINISHED"
+   ],
+   "import_result": [
+    "FINISHED"
+   ],
+   "read_back": {
+    "objects": 111,
+    "by_type": {
+     "CAMERA": 7,
+     "CURVES": 2,
+     "EMPTY": 7,
+     "LIGHT": 8,
+     "MESH": 87
+    },
+    "mesh_polys": 28897,
+    "meshes_with_colour_attribute": 10,
+    "materials_in_use": 23,
+    "materials_with_transmission": 10,
+    "materials_with_emission": 21,
+    "animated_objects": 0,
+    "actions": 0,
+    "nla_tracks": 0,
+    "transform_cache_constraints": 8
+   }
+  }
+ }
+}

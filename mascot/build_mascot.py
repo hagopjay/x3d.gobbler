@@ -70,10 +70,11 @@ class Mesh:
     def __init__(self): self.p, self.faces, self.cols = [], [], []
     def face(self, pts, col):
         i = len(self.p); self.p += pts; self.faces.append(list(range(i, i + len(pts)))); self.cols.append(col)
-    def x3d(self, *, emissive=(0, 0, 0), solid=True, spec=0.25, shin=0.3, transparency=0.0) -> str:
+    def x3d(self, *, emissive=(0, 0, 0), solid=True, spec=0.25, shin=0.3, transparency=0.0, name=None) -> str:
         if not self.faces: return ""
+        tag = f"<Shape DEF='{name}'>" if name else "<Shape>"
         idx = " ".join(" ".join(map(str, fc)) + " -1" for fc in self.faces)
-        return (f"<Shape><Appearance><Material diffuseColor='0.6 0.6 0.6' specularColor='{v3((spec,) * 3)}' shininess='{f(shin)}' "
+        return (f"{tag}<Appearance><Material diffuseColor='0.6 0.6 0.6' specularColor='{v3((spec,) * 3)}' shininess='{f(shin)}' "
                 f"emissiveColor='{v3(emissive)}' transparency='{f(transparency)}'/></Appearance>"
                 f"<IndexedFaceSet solid='{'true' if solid else 'false'}' creaseAngle='0' colorPerVertex='false' coordIndex='{idx}'>"
                 f"<Coordinate point='{' '.join(v3(p) for p in self.p)}'/><Color color='{' '.join(v3(c) for c in self.cols)}'/></IndexedFaceSet></Shape>\n")
@@ -235,6 +236,18 @@ def warp_body(n_warp=44, n_weft=13):
     return m
 
 
+def halo(n: int) -> Mesh:
+    """One bead per Loom failure mode, laid as three spiral arms on the floor around the wheel: oldest inside, gold;
+    newest outside, cyan. The count is read from the Loom (loom_counts.py), so the spiral grows with it."""
+    m = Mesh()
+    for i in range(n):
+        t = i / max(1, n - 1); arm = i % 3
+        r = 4.7 + 6.3 * t; a = 2 * math.pi * (arm / 3 + 1.15 * t)
+        col = (1.0 - 0.75 * t, 0.80 + 0.05 * t, 0.30 + 0.70 * t)
+        octa(m, (r * math.cos(a), 0.16 + 0.05 * (i % 2), 0.2 + r * math.sin(a)), 0.085 + 0.03 * (i % 5 == 0), col)
+    return m
+
+
 def lattice(radius=15.0, centre=(0, 6, 0)):
     V, F = icosphere(1); edges = set()
     for a, b, c in F:
@@ -269,11 +282,16 @@ def sine_light(name, col, centre, amp, period, phase):
             f"<ROUTE fromNode='P_{name}' fromField='value_changed' toNode='B_{name}' toField='set_translation'/>\n")
 
 
-def build(version: str, board: dict, genome: dict, seed: int = 5) -> tuple[str, dict]:
+def build(version: str, board: dict, genome: dict, seed: int = 5, counts: dict | None = None) -> tuple[str, dict]:
+    """version 'glass' is the v6 bird with translucent vanes, named shapes for a Blender pass, and a body and a
+    failure-mode spiral sized by `counts` (laws, theses, failure_modes) instead of typed numbers."""
     rng = random.Random(seed)
+    glass = version == "glass"
+    nm = (lambda n: n) if glass else (lambda n: None)
+    counts = counts or {"laws": 44, "theses": len(board["theses"]), "failure_modes": 0}
     rows = board["rows"]; g = dict(DEFAULT_GENOME, **genome)
     vane, shaft, beads, gems, _ = build_fan(rows, g)
-    title = {"v5": "Gobbler 5, the Loomwright", "v6": "Gobbler 6, the Demiurge"}[version]
+    title = {"v5": "Gobbler 5, the Loomwright", "v6": "Gobbler 6, the Demiurge", "glass": "Gobbler 6.1, the Glass Demiurge"}[version]
     t = board["score_tuple"]
     S = ["<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE X3D PUBLIC \"ISO//Web3D//DTD X3D 4.0//EN\" \"https://www.web3d.org/specifications/x3d-4.0.dtd\">\n"
          "<X3D profile='Immersive' version='4.0' xmlns:xsd='http://www.w3.org/2001/XMLSchema-instance' xsd:noNamespaceSchemaLocation='https://www.web3d.org/specifications/x3d-4.0.xsd'>\n"
@@ -284,9 +302,12 @@ def build(version: str, board: dict, genome: dict, seed: int = 5) -> tuple[str, 
          f"<WorldInfo title='{title}' info='\"feather length = balanced score\" \"feather colour = family\" \"tip gem = worst Assayer check\" \"beads = checks passed\"'/>\n"
          "<NavigationInfo type='\"EXAMINE\" \"FLY\" \"ANY\"' headlight='true' speed='6' transitionType='\"LINEAR\"' transitionTime='2'/>\n"
          "<Background skyColor='0 0 0.015 0.03 0.012 0.07 0.10 0.03 0.09' skyAngle='1.25 1.75' groundColor='0.02 0.01 0.04 0.10 0.03 0.09' groundAngle='1.4'/>\n"]
-    for name, desc, eye, tgt in (("Face", "Face", (0, 6.6, 16.5), (0, 6.9, 0)), ("Wide", "Wide", (7, 8, 22.5), (0, 6.9, 0)),
+    seats = (("Face", "Face", (0, 6.6, 16.5), (0, 6.9, 0)), ("Wide", "Wide", (7, 8, 22.5), (0, 6.9, 0)),
                                  ("Fan", "The fan, from behind", (0, 8.5, -26), (0, 7.5, 0)), ("Heart", "The heart", (5.5, 4.2, 7.5), (0, 3.4, 0.4)),
-                                 ("Above", "From above", (0, 34, 6), (0, 4, -1))):
+                                 ("Above", "From above", (0, 34, 6), (0, 4, -1)))
+    if glass:   # two more seats for the Blender pass: the whole fan with room to breathe, and a low seat over the mirror floor
+        seats += (("Hero", "The whole bird", (0, 7.6, 22.5), (0, 7.2, 0)), ("Low", "Low, over the floor", (-7.5, 1.6, 15.5), (0, 6.4, 0)))
+    for name, desc, eye, tgt in seats:
         S.append(f"<Viewpoint DEF='V_{name}' description='{desc}' position='{v3(eye)}' orientation='{' '.join(f(c) for c in look_at(eye, tgt))}' centerOfRotation='0 6 0' fieldOfView='0.72'/>\n")
     palette = [(0.36, 0.25, 0.16), (0.22, 0.20, 0.26), (0.48, 0.33, 0.14), (0.16, 0.30, 0.34), (0.30, 0.18, 0.30)]
     body = Mesh()
@@ -295,22 +316,27 @@ def build(version: str, board: dict, genome: dict, seed: int = 5) -> tuple[str, 
         for sx in (-1, 1):
             blob(body, (sx * 1.55, 3.45, -0.1), (0.5, 1.05, 1.75), 1, [(0.30, 0.22, 0.30), (0.20, 0.28, 0.36), (0.42, 0.28, 0.14)], rng)
     head = head_and_neck(body, rng, palette)
-    S.append("<Transform>\n" + body.x3d(spec=0.35, shin=0.45))
+    S.append("<Transform>\n" + body.x3d(spec=0.35, shin=0.45, name=nm("Body")))
+    woven = version in ("v6", "glass")
     if version == "v6":
         S.append(warp_body().x3d(emissive=(0.22, 0.14, 0.03), solid=False, spec=0.5, shin=0.6))
+    if glass:
+        S.append(warp_body(counts["laws"], counts["theses"]).x3d(emissive=(0.22, 0.14, 0.03), solid=False, spec=0.5, shin=0.6, name="Loom"))
     beak, wattle = beak_wattle(head)
-    S.append(beak.x3d(emissive=(0.25, 0.16, 0.02)) + wattle.x3d(emissive=(0.25, 0.0, 0.0)) + legs().x3d(solid=False))
+    S.append(beak.x3d(emissive=(0.25, 0.16, 0.02), name=nm("Beak")) + wattle.x3d(emissive=(0.25, 0.0, 0.0), name=nm("Wattle")) + legs().x3d(solid=False, name=nm("Legs")))
     for sx in (-0.26, 0.26):
         S.append(f"<Transform translation='{f(sx)} {f(head[1] + 0.12)} {f(head[2] + 0.42)}'><Shape><Appearance><Material diffuseColor='0 0 0' emissiveColor='1 0.9 0.5'/></Appearance><Sphere radius='0.085'/></Shape></Transform>\n")
-    heart_r = 0.62 if version == "v6" else 0.34
-    heart_pos = (0, 3.3, 0.1) if version == "v6" else (0, 3.55, 2.32)
+    heart_r = 0.62 if woven else 0.34
+    heart_pos = (0, 3.3, 0.1) if woven else (0, 3.55, 2.32)
     S.append(f"<Transform DEF='Heart' translation='{v3(heart_pos)}'><Shape><Appearance><Material diffuseColor='0 0 0' emissiveColor='1 0.78 0.25'/></Appearance><Sphere radius='{f(heart_r)}'/></Shape></Transform>\n"
              f"<PointLight color='1 0.75 0.35' intensity='0.8' radius='30' attenuation='1 0.05 0.01' location='{v3(add(heart_pos, (0, 0, 0.6 if version == 'v5' else 0)))}'/>\n"
              "<TimeSensor DEF='T_beat' cycleInterval='1.6' loop='true'/><PositionInterpolator DEF='P_beat' key='0 0.12 0.24 0.4 1' keyValue='1 1 1 1.28 1.28 1.28 1 1 1 1.14 1.14 1.14 1 1 1'/>\n"
              "<ROUTE fromNode='T_beat' fromField='fraction_changed' toNode='P_beat' toField='set_fraction'/><ROUTE fromNode='P_beat' fromField='value_changed' toNode='Heart' toField='set_scale'/>\n")
-    S.append(f"<Transform DEF='Fan' center='{v3(PIVOT)}'>\n" + vane.x3d(emissive=(0.05, 0.05, 0.05), solid=False, spec=0.4, shin=0.5) + shaft.x3d(emissive=(0.3, 0.27, 0.2), solid=False) + beads.x3d(emissive=(0.5, 0.42, 0.2)))
+    S.append(f"<Transform DEF='Fan' center='{v3(PIVOT)}'>\n" + vane.x3d(emissive=(0.05, 0.05, 0.05), solid=False, spec=0.4, shin=0.5, transparency=0.45 if glass else 0.0, name=nm("Vanes"))
+             + shaft.x3d(emissive=(0.3, 0.27, 0.2), solid=False, name=nm("Shafts")) + beads.x3d(emissive=(0.5, 0.42, 0.2), name=nm("Beads")))
     for p, col, r, _id in gems:
-        S.append(f"<Transform translation='{v3(p)}'><Shape><Appearance><Material diffuseColor='{v3(mul(col, 0.4))}' emissiveColor='{v3(col)}'/></Appearance><Sphere radius='{f(r)}'/></Shape></Transform>\n")
+        gem_tag = f"<Shape DEF='Gem_{_id.replace('-', '_')}'>" if glass else "<Shape>"
+        S.append(f"<Transform translation='{v3(p)}'>{gem_tag}<Appearance><Material diffuseColor='{v3(mul(col, 0.4))}' emissiveColor='{v3(col)}'/></Appearance><Sphere radius='{f(r)}'/></Shape></Transform>\n")
     S.append("</Transform>\n<TimeSensor DEF='T_fan' cycleInterval='9' loop='true'/><OrientationInterpolator DEF='O_fan' key='0 0.25 0.5 0.75 1' keyValue='0 0 1 0 0 0 1 0.035 0 0 1 0 0 0 1 -0.035 0 0 1 0'/>\n"
              "<ROUTE fromNode='T_fan' fromField='fraction_changed' toNode='O_fan' toField='set_fraction'/><ROUTE fromNode='O_fan' fromField='value_changed' toNode='Fan' toField='set_rotation'/>\n</Transform>\n")
     wheel = Mesh(); ring(wheel, (0, 0, 0.2), 3.6, 0.28, 52, (0.75, 0.55, 0.18)); ring(wheel, (0, -0.02, 0.2), 2.2, 0.08, 40, (0.3, 0.6, 0.9))
@@ -318,7 +344,9 @@ def build(version: str, board: dict, genome: dict, seed: int = 5) -> tuple[str, 
     for i in range(n_theses):
         a = 2 * math.pi * i / n_theses
         octa(wheel, (3.6 * math.cos(a), 0.3, 0.2 + 3.6 * math.sin(a)), 0.2, (1.0, 0.85, 0.35))
-    S.append("<Transform DEF='Wheel' center='0 0 0.2'>\n" + wheel.x3d(emissive=(0.2, 0.15, 0.05), solid=False) + "</Transform>\n"
+    spiral = halo(counts["failure_modes"]) if glass else Mesh()
+    S.append(spiral.x3d(emissive=(0.35, 0.3, 0.2), name="FailureModes"))
+    S.append("<Transform DEF='Wheel' center='0 0 0.2'>\n" + wheel.x3d(emissive=(0.2, 0.15, 0.05), solid=False, name=nm("WheelRing")) + "</Transform>\n"
              "<TimeSensor DEF='T_wheel' cycleInterval='40' loop='true'/><OrientationInterpolator DEF='O_wheel' key='0 0.25 0.5 0.75 1' keyValue='0 1 0 0 0 1 0 1.5708 0 1 0 3.1416 0 1 0 4.7124 0 1 0 6.2832'/>\n"
              "<ROUTE fromNode='T_wheel' fromField='fraction_changed' toNode='O_wheel' toField='set_fraction'/><ROUTE fromNode='O_wheel' fromField='value_changed' toNode='Wheel' toField='set_rotation'/>\n")
     lat, n_edges = lattice()
@@ -333,12 +361,15 @@ def build(version: str, board: dict, genome: dict, seed: int = 5) -> tuple[str, 
     facts = {"version": version, "title": title, "feathers": len(rows), "beads": len(beads.faces) // 8, "gems": len(gems),
              "faces": sum(len(m.faces) for m in (body, vane, shaft, beads, wheel, beak, wattle)), "lattice_edges": n_edges,
              "thesis_studs": n_theses, "genome": g, "bytes": len(x.encode())}
+    if glass:
+        facts.update(warp_ribbons=counts["laws"], weft_rings=counts["theses"], failure_mode_beads=len(spiral.faces) // 8, counts=counts)
     return x, facts
 
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("version", choices=["v5", "v6"])
+    ap.add_argument("version", choices=["v5", "v6", "glass"])
+    ap.add_argument("--counts", type=Path, help="loom_counts.py output (glass only)")
     ap.add_argument("--board", type=Path, required=True)
     ap.add_argument("--genome", type=Path); ap.add_argument("--cell", type=int, default=0)
     ap.add_argument("--out", type=Path, required=True)
@@ -347,7 +378,8 @@ def main(argv=None) -> int:
     genome = {}
     if a.genome:
         genome = json.loads(a.genome.read_text(encoding="utf-8"))["elites"][a.cell]["genome"]
-    x, facts = build(a.version, board, genome)
+    counts = json.loads(a.counts.read_text(encoding="utf-8")) if a.counts else None
+    x, facts = build(a.version, board, genome, counts=counts)
     a.out.parent.mkdir(parents=True, exist_ok=True)
     a.out.write_text(x, encoding="utf-8")
     a.out.with_suffix(".facts.json").write_text(json.dumps(facts, indent=1) + "\n", encoding="utf-8")

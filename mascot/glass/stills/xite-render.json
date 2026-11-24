@@ -1,0 +1,24 @@
+{
+ "scene": "glass/gobbler-glass.x3d",
+ "rig": {
+  "engine": "X_ITE 16.7.0",
+  "gl": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+  "chromium": "157.0.8103.78",
+  "viewport": [
+   1600,
+   900
+  ],
+  "scale": 1
+ },
+ "stills": [
+  {
+   "view": "Hero",
+   "file": "xite-hero.webp",
+   "lit_fraction": 0.2964,
+   "bytes": 463692
+  }
+ ],
+ "errors": [],
+ "status": "pass",
+ "patch": "none (X_ITE as vendored)"
+}
