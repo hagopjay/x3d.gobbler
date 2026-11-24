@@ -1,0 +1,44 @@
+{
+ "version": "glass",
+ "title": "Gobbler 6.1, the Glass Demiurge",
+ "feathers": 64,
+ "beads": 459,
+ "gems": 64,
+ "faces": 5716,
+ "lattice_edges": 120,
+ "thesis_studs": 13,
+ "genome": {
+  "spread": 185.4473,
+  "curl": -0.35,
+  "twist": -0.0196,
+  "taper": 0.4428,
+  "tiers": 1,
+  "profile": 1.0,
+  "width": 0.7497,
+  "tilt": 7.3119
+ },
+ "bytes": 945701,
+ "warp_ribbons": 44,
+ "weft_rings": 13,
+ "failure_mode_beads": 228,
+ "counts": {
+  "schema": "gobbler.loom-counts/1",
+  "laws": 44,
+  "failure_modes": 228,
+  "theses": 13,
+  "highest": {
+   "laws": 44,
+   "failure_modes": 228
+  },
+  "gaps": {
+   "laws": [],
+   "failure_modes": []
+  },
+  "source": {
+   "loom_commit": "139896fab2fe6c8eca70832d73397e82cb0b9cf9",
+   "loom_file": "LOOM-v1.md",
+   "loom_file_sha256": "bbdfab2524371784a4d84907399a47dfe92b09997ef8451a8e8b5764bfd6017c",
+   "atlas_rev": 28
+  }
+ }
+}

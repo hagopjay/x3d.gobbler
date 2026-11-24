@@ -1,0 +1,498 @@
+{
+ "schema": "gobbler.blender-import/1",
+ "blender": "5.3.0",
+ "addon_commit": "0eb4809",
+ "operator_result": [
+  "FINISHED"
+ ],
+ "scene": "gobbler-glass.x3d",
+ "scene_sha256": "14c93ad47330684fd2b4ae7180190935add293f836fc211822a022f06878806f",
+ "source": {
+  "Shape": 84,
+  "IndexedFaceSet": 10,
+  "ifs_faces": 8928,
+  "Sphere": 70,
+  "IndexedLineSet": 1,
+  "PointSet": 3,
+  "Viewpoint": 7,
+  "lights": 4,
+  "ROUTE": 17,
+  "TimeSensor": 7,
+  "Material": 81
+ },
+ "arrived": {
+  "objects": 97,
+  "by_type": {
+   "MESH": 83,
+   "EMPTY": 2,
+   "LIGHT": 4,
+   "CURVE": 1,
+   "CAMERA": 7
+  },
+  "mesh_polys": 26848,
+  "materials": 24,
+  "animated_objects": 7,
+  "actions": 7
+ },
+ "meshes": {
+  "B_blue": {
+   "verts": 242,
+   "polys": 256,
+   "color_attrs": [],
+   "materials": [
+    "B_blue"
+   ],
+   "parent": null
+  },
+  "B_gold": {
+   "verts": 242,
+   "polys": 256,
+   "color_attrs": [],
+   "materials": [
+    "B_gold"
+   ],
+   "parent": null
+  },
+  "B_red": {
+   "verts": 242,
+   "polys": 256,
+   "color_attrs": [],
+   "materials": [
+    "B_red"
+   ],
+   "parent": null
+  },
+  "Beads": {
+   "verts": 11016,
+   "polys": 3672,
+   "color_attrs": [
+    "ColorPerCorner:CORNER:FLOAT_COLOR"
+   ],
+   "materials": [
+    "Beads"
+   ],
+   "parent": "Fan"
+  },
+  "Beak": {
+   "verts": 12,
+   "polys": 4,
+   "color_attrs": [
+    "ColorPerCorner:CORNER:FLOAT_COLOR"
+   ],
+   "materials": [
+    "Beak"
+   ],
+   "parent": "Transform"
+  },
+  "Body": {
+   "verts": 1200,
+   "polys": 400,
+   "color_attrs": [
+    "ColorPerCorner:CORNER:FLOAT_COLOR"
+   ],
+   "materials": [
+    "Body"
+   ],
+   "parent": "Transform"
+  },
+  "FailureModes": {
+   "verts": 5472,
+   "polys": 1824,
+   "color_attrs": [
+    "ColorPerCorner:CORNER:FLOAT_COLOR"
+   ],
+   "materials": [
+    "FailureModes"
+   ],
+   "parent": null
+  },
+  "Heart": {
+   "verts": 242,
+   "polys": 256,
+   "color_attrs": [],
+   "materials": [
+    "Heart"
+   ],
+   "parent": "Transform"
+  },
+  "Legs": {
+   "verts": 80,
+   "polys": 24,
+   "color_attrs": [
+    "ColorPerCorner:CORNER:FLOAT_COLOR"
+   ],
+   "materials": [
+    "Legs"
+   ],
+   "parent": "Transform"
+  },
+  "Loom": {
+   "verts": 5456,
+   "polys": 1364,
+   "color_attrs": [
+    "ColorPerCorner:CORNER:FLOAT_COLOR"
+   ],
+   "materials": [
+    "Loom"
+   ],
+   "parent": "Transform"
+  },
+  "Shafts": {
+   "verts": 1792,
+   "polys": 448,
+   "color_attrs": [
+    "ColorPerCorner:CORNER:FLOAT_COLOR"
+   ],
+   "materials": [
+    "Shafts"
+   ],
+   "parent": "Fan"
+  },
+  "Shape": {
+   "verts": 242,
+   "polys": 256,
+   "color_attrs": [],
+   "materials": [
+    "Shape"
+   ],
+   "parent": "Transform"
+  },
+  "Shape.001": {
+   "verts": 242,
+   "polys": 256,
+   "color_attrs": [],
+   "materials": [
+    "Shape"
+   ],
+   "parent": "Transform"
+  },
+  "Shape.002": {
+   "verts": 1260,
+   "polys": 0,
+   "color_attrs": [
+    "Color:POINT:FLOAT_COLOR"
+   ],
+   "materials": [
+    "Material_lines"
+   ],
+   "parent": null
+  },
+  "Shape.003": {
+   "verts": 450,
+   "polys": 0,
+   "color_attrs": [
+    "Color:POINT:FLOAT_COLOR"
+   ],
+   "materials": [
+    "Material_lines"
+   ],
+   "parent": null
+  },
+  "Shape.004": {
+   "verts": 90,
+   "polys": 0,
+   "color_attrs": [
+    "Color:POINT:FLOAT_COLOR"
+   ],
+   "materials": [
+    "Material_lines"
+   ],
+   "parent": null
+  },
+  "Vanes": {
+   "verts": 3584,
+   "polys": 896,
+   "color_attrs": [
+    "ColorPerCorner:CORNER:FLOAT_COLOR"
+   ],
+   "materials": [
+    "Vanes"
+   ],
+   "parent": "Fan"
+  },
+  "Wattle": {
+   "verts": 300,
+   "polys": 100,
+   "color_attrs": [
+    "ColorPerCorner:CORNER:FLOAT_COLOR"
+   ],
+   "materials": [
+    "Wattle"
+   ],
+   "parent": "Transform"
+  },
+  "WheelRing": {
+   "verts": 680,
+   "polys": 196,
+   "color_attrs": [
+    "ColorPerCorner:CORNER:FLOAT_COLOR"
+   ],
+   "materials": [
+    "WheelRing"
+   ],
+   "parent": null
+  }
+ },
+ "gem_meshes": 64,
+ "materials": {
+  "B_blue": {
+   "alpha": 1.0,
+   "emission": [
+    0.051,
+    0.214,
+    1.0
+   ],
+   "emission_strength": 1.0
+  },
+  "B_gold": {
+   "alpha": 1.0,
+   "emission": [
+    1.0,
+    0.604,
+    0.073
+   ],
+   "emission_strength": 1.0
+  },
+  "B_red": {
+   "alpha": 1.0,
+   "emission": [
+    1.0,
+    0.051,
+    0.033
+   ],
+   "emission_strength": 1.0
+  },
+  "Beads": {
+   "alpha": 1.0,
+   "emission": [
+    0.214,
+    0.147,
+    0.033
+   ],
+   "emission_strength": 1.0
+  },
+  "Beak": {
+   "alpha": 1.0,
+   "emission": [
+    0.051,
+    0.022,
+    0.002
+   ],
+   "emission_strength": 1.0
+  },
+  "Body": {
+   "alpha": 1.0,
+   "emission": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "emission_strength": 0.0
+  },
+  "FailureModes": {
+   "alpha": 1.0,
+   "emission": [
+    0.1,
+    0.073,
+    0.033
+   ],
+   "emission_strength": 1.0
+  },
+  "Gem_audio_reactive": {
+   "alpha": 1.0,
+   "emission": [
+    1.0,
+    0.674,
+    0.073
+   ],
+   "emission_strength": 1.0
+  },
+  "Gem_material_gen": {
+   "alpha": 1.0,
+   "emission": [
+    0.073,
+    0.263,
+    1.0
+   ],
+   "emission_strength": 1.0
+  },
+  "Gem_splat_x3d": {
+   "alpha": 1.0,
+   "emission": [
+    1.0,
+    0.263,
+    0.01
+   ],
+   "emission_strength": 1.0
+  },
+  "Gem_tda_corpus": {
+   "alpha": 1.0,
+   "emission": [
+    0.692,
+    0.692,
+    0.787
+   ],
+   "emission_strength": 1.0
+  },
+  "Gem_video_world": {
+   "alpha": 1.0,
+   "emission": [
+    1.0,
+    0.01,
+    0.01
+   ],
+   "emission_strength": 1.0
+  },
+  "Heart": {
+   "alpha": 1.0,
+   "emission": [
+    1.0,
+    0.57,
+    0.051
+   ],
+   "emission_strength": 1.0
+  },
+  "Lattice": {
+   "alpha": 0.45,
+   "emission": [
+    0.051,
+    0.171,
+    0.787
+   ],
+   "emission_strength": 1.0
+  },
+  "Lattice_lines": {},
+  "Legs": {
+   "alpha": 1.0,
+   "emission": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "emission_strength": 0.0
+  },
+  "Loom": {
+   "alpha": 1.0,
+   "emission": [
+    0.04,
+    0.017,
+    0.002
+   ],
+   "emission_strength": 1.0
+  },
+  "Material": {
+   "alpha": 1.0,
+   "emission": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "emission_strength": 0.0
+  },
+  "Material_lines": {},
+  "Shafts": {
+   "alpha": 1.0,
+   "emission": [
+    0.073,
+    0.059,
+    0.033
+   ],
+   "emission_strength": 1.0
+  },
+  "Shape": {
+   "alpha": 1.0,
+   "emission": [
+    1.0,
+    0.787,
+    0.214
+   ],
+   "emission_strength": 1.0
+  },
+  "Vanes": {
+   "alpha": 0.55,
+   "emission": [
+    0.004,
+    0.004,
+    0.004
+   ],
+   "emission_strength": 1.0
+  },
+  "Wattle": {
+   "alpha": 1.0,
+   "emission": [
+    0.051,
+    0.0,
+    0.0
+   ],
+   "emission_strength": 1.0
+  },
+  "WheelRing": {
+   "alpha": 1.0,
+   "emission": [
+    0.033,
+    0.02,
+    0.004
+   ],
+   "emission_strength": 1.0
+  }
+ },
+ "other_objects": {
+  "Fan": "EMPTY",
+  "L_blue": "LIGHT",
+  "L_gold": "LIGHT",
+  "L_red": "LIGHT",
+  "Lattice": "CURVE",
+  "PointLight": "LIGHT",
+  "Transform": "EMPTY",
+  "V_Above": "CAMERA",
+  "V_Face": "CAMERA",
+  "V_Fan": "CAMERA",
+  "V_Heart": "CAMERA",
+  "V_Hero": "CAMERA",
+  "V_Low": "CAMERA",
+  "V_Wide": "CAMERA"
+ },
+ "cameras": {
+  "V_Above": {
+   "lens_mm": 26.9,
+   "sensor_mm": 36.0,
+   "fit": "AUTO"
+  },
+  "V_Face": {
+   "lens_mm": 26.9,
+   "sensor_mm": 36.0,
+   "fit": "AUTO"
+  },
+  "V_Fan": {
+   "lens_mm": 26.9,
+   "sensor_mm": 36.0,
+   "fit": "AUTO"
+  },
+  "V_Heart": {
+   "lens_mm": 26.9,
+   "sensor_mm": 36.0,
+   "fit": "AUTO"
+  },
+  "V_Hero": {
+   "lens_mm": 26.9,
+   "sensor_mm": 36.0,
+   "fit": "AUTO"
+  },
+  "V_Low": {
+   "lens_mm": 26.9,
+   "sensor_mm": 36.0,
+   "fit": "AUTO"
+  },
+  "V_Wide": {
+   "lens_mm": 26.9,
+   "sensor_mm": 36.0,
+   "fit": "AUTO"
+  }
+ },
+ "lost": [
+  "ROUTE P_red.value_changed -> L_red.set_location",
+  "ROUTE P_blue.value_changed -> L_blue.set_location",
+  "ROUTE P_gold.value_changed -> L_gold.set_location"
+ ],
+ "lost_note": "the three lines the importer itself printed as 'X3D import loss ... ROUTE not imported'; copied here by hand from its output"
+}
